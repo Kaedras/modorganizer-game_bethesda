@@ -1,7 +1,6 @@
-#include "skyrimSEscriptextender.h"
+#include "skyrimsescriptextender.h"
 
 #include <QString>
-#include <QStringList>
 
 SkyrimSEScriptExtender::SkyrimSEScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)

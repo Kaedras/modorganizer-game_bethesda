@@ -1,7 +1,5 @@
 #include "nehrimsavegame.h"
 
-#include <Windows.h>
-
 NehrimSaveGame::NehrimSaveGame(QString const& fileName, GameNehrim const* game)
     : GamebryoSaveGame(fileName, game)
 {

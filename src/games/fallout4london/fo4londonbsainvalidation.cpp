@@ -3,7 +3,8 @@
 #include "dummybsa.h"
 #include "iplugingame.h"
 #include "iprofile.h"
-#include "registry.h"
+
+#include <QSettings>
 #include <imoinfo.h>
 #include <utility.h>
 
@@ -37,27 +38,26 @@ bool Fallout4LondonBSAInvalidation::prepareProfile(MOBase::IProfile* profile)
                             ? profile->absolutePath()
                             : m_Game->documentsDirectory().absolutePath();
   QString iniFilePath = basePath + "/" + m_IniFileName;
-  WCHAR setting[MAX_PATH];
+
+  QSettings ini(iniFilePath, QSettings::IniFormat);
+
+  QString bInvalidateOlderFiles = QStringLiteral("Archive/bInvalidateOlderFiles");
+  QString sResourceDataDirsFinal = QStringLiteral("Archive/sResourceDataDirsFinal");
 
   if (profile->invalidationActive(nullptr)) {
     // write bInvalidateOlderFiles = 1, if needed
-    if (!::GetPrivateProfileStringW(L"Archive", L"bInvalidateOlderFiles", L"0", setting,
-                                    MAX_PATH, iniFilePath.toStdWString().c_str()) ||
-        wcstol(setting, nullptr, 10) != 1) {
+    if (ini.value(bInvalidateOlderFiles, "0").toString() != "1") {
       dirty = true;
-      if (!MOBase::WriteRegistryValue(L"Archive", L"bInvalidateOlderFiles", L"1",
-                                      iniFilePath.toStdWString().c_str())) {
+      ini.setValue(bInvalidateOlderFiles, "1");
+      if (ini.status() != QSettings::NoError) {
         qWarning("failed to override data directory in \"%s\"",
                  qUtf8Printable(m_IniFileName));
       }
     }
-    if (!::GetPrivateProfileStringW(L"Archive", L"sResourceDataDirsFinal", L"STRINGS\\",
-                                    setting, MAX_PATH,
-                                    iniFilePath.toStdWString().c_str()) ||
-        wcscmp(setting, L"") != 0) {
+    if (ini.value(sResourceDataDirsFinal, "STRINGS\\").toString() != "0") {
       dirty = true;
-      if (!MOBase::WriteRegistryValue(L"Archive", L"sResourceDataDirsFinal", L"",
-                                      iniFilePath.toStdWString().c_str())) {
+      ini.setValue(sResourceDataDirsFinal, "");
+      if (ini.status() != QSettings::NoError) {
         qWarning("failed to override data directory in \"%s\"",
                  qUtf8Printable(m_IniFileName));
       }

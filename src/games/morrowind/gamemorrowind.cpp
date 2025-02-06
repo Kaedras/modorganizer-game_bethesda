@@ -21,9 +21,6 @@
 
 #include <QtDebug>
 
-#include <Windows.h>
-#include <winver.h>
-
 #include <exception>
 #include <memory>
 #include <stdexcept>
@@ -194,37 +191,6 @@ MOBase::IPluginGame::SortMechanism GameMorrowind::sortMechanism() const
 {
   return SortMechanism::LOOT;
 }
-
-namespace
-{
-// Note: This is ripped off from shared/util. And in an upcoming move, the fomod
-// installer requires something similar. I suspect I should abstract this out
-// into gamebryo (or lower level)
-
-VS_FIXEDFILEINFO GetFileVersion(const std::wstring& fileName)
-{
-  DWORD handle = 0UL;
-  DWORD size   = ::GetFileVersionInfoSizeW(fileName.c_str(), &handle);
-  if (size == 0) {
-    throw std::runtime_error("failed to determine file version info size");
-  }
-
-  std::vector<char> buffer(size);
-  handle = 0UL;
-  if (!::GetFileVersionInfoW(fileName.c_str(), handle, size, buffer.data())) {
-    throw std::runtime_error("failed to determine file version info");
-  }
-
-  void* versionInfoPtr   = nullptr;
-  UINT versionInfoLength = 0;
-  if (!::VerQueryValue(buffer.data(), L"\\", &versionInfoPtr, &versionInfoLength)) {
-    throw std::runtime_error("failed to determine file version");
-  }
-
-  return *static_cast<VS_FIXEDFILEINFO*>(versionInfoPtr);
-}
-
-}  // namespace
 
 int GameMorrowind::nexusModOrganizerID() const
 {

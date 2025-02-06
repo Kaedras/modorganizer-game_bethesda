@@ -72,7 +72,7 @@ private:
   bool testFilePresent() const;
 
 private:
-  static const unsigned int PROBLEM_TEST_FILE = 1;
+  static constexpr unsigned int PROBLEM_TEST_FILE = 1;
 };
 
 #endif  // GAMEFallout4London_H

@@ -3,6 +3,10 @@
 
 #include "scriptextender.h"
 
+#ifdef __unix__
+#include "linux/windowsTypes.h"
+#endif
+
 class GameGamebryo;
 
 class GamebryoScriptExtender : public MOBase::ScriptExtender

@@ -30,6 +30,8 @@
 
 #include "utility.h"
 
+#include <QSettings>
+
 using namespace MOBase;
 
 GameStarfield::GameStarfield() {}
@@ -199,12 +201,11 @@ QStringList GameStarfield::testFilePlugins() const
       for (int i = 1; i <= 10; ++i) {
         QString setting("sTestFile");
         setting += std::to_string(i);
-        WCHAR value[MAX_PATH];
-        DWORD length = ::GetPrivateProfileStringW(
-            L"General", setting.toStdWString().c_str(), L"", value, MAX_PATH,
-            customIni.toStdWString().c_str());
-        if (length && wcscmp(value, L"") != 0) {
-          QString plugin = QString::fromWCharArray(value, length);
+
+        QSettings ini(customIni, QSettings::IniFormat);
+
+        QString plugin = ini.value("General/" + setting, "").toString();
+        if (plugin != "") {
           if (!plugin.isEmpty() && !plugins.contains(plugin))
             plugins.append(plugin);
         }

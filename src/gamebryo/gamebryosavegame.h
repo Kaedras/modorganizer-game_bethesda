@@ -122,9 +122,6 @@ protected:
       }
     }
 
-    template <>
-    void read<QString>(QString& value);
-
     void seek(unsigned long pos)
     {
       if (!m_File.seek(pos)) {
@@ -203,6 +200,7 @@ protected:
   };
 
   void setCreationTime(_SYSTEMTIME const& time);
+  void setCreationTime(const QDateTime& time);
 
   GameGamebryo const* m_Game;
   bool m_MediumEnabled;

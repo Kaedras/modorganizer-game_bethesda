@@ -1,6 +1,10 @@
 #include "skyrimsavegame.h"
 
+#ifdef __unix__
+#include "linux/windowsFunctionWrapper.h"
+#else
 #include <Windows.h>
+#endif
 
 #include "gameskyrim.h"
 

@@ -15,11 +15,17 @@ class UnmanagedMods;
 
 #include <QObject>
 #include <QString>
-#include <ShlObj.h>
-#include <dbghelp.h>
+
 #include <ipluginfilemapper.h>
 #include <iplugingame.h>
 #include <memory>
+
+#ifdef __unix__
+#include "linux/windowsTypes.h"
+#else
+#include <ShlObj.h>
+#include <dbghelp.h>
+#endif
 
 #include "gamebryosavegame.h"
 #include "igamefeatures.h"
@@ -134,6 +140,7 @@ protected:
 
   static QString parseSteamLocation(const QString& appid, const QString& directoryName);
 
+  static QString getFileVersion(const QString& fileName);
 protected:
   void registerFeature(std::shared_ptr<MOBase::GameFeature> feature);
 

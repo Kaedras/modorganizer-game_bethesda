@@ -2,6 +2,11 @@
 
 #include "gamefallout76.h"
 
+#ifdef __unix__
+#include <linux/windowsTypes.h>
+#include <linux/windowsFunctionWrapper.h>
+#endif
+
 Fallout76SaveGame::Fallout76SaveGame(QString const& fileName, GameFallout76 const* game)
     : GamebryoSaveGame(fileName, game, true)
 {

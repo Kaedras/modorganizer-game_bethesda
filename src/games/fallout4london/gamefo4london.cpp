@@ -27,6 +27,8 @@
 
 #include "scopeguard.h"
 
+#include <QSettings>
+
 using namespace MOBase;
 
 GameFallout4London::GameFallout4London() {}
@@ -188,14 +190,13 @@ QStringList GameFallout4London::testFilePlugins() const
       for (int i = 1; i <= 10; ++i) {
         QString setting("sTestFile");
         setting += std::to_string(i);
-        WCHAR value[MAX_PATH];
-        DWORD length = ::GetPrivateProfileStringW(
-            L"General", setting.toStdWString().c_str(), L"", value, MAX_PATH,
-            customIni.toStdWString().c_str());
-        if (length && wcscmp(value, L"") != 0) {
-          QString plugin = QString::fromWCharArray(value, length);
-          if (!plugin.isEmpty() && !plugins.contains(plugin))
-            plugins.append(plugin);
+
+        QSettings ini(customIni, QSettings::IniFormat);
+        QString value = ini.value("General/" + setting, "").toString();
+
+        if (value != "") {
+          if (!value.isEmpty() && !plugins.contains(value))
+            plugins.append(value);
         }
       }
     }

@@ -4,12 +4,12 @@
 <context>
     <name>GameMorrowind</name>
     <message>
-        <location filename="gamemorrowind.cpp" line="106"/>
+        <location filename="gamemorrowind.cpp" line="103"/>
         <source>Morrowind Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamemorrowind.cpp" line="116"/>
+        <location filename="gamemorrowind.cpp" line="113"/>
         <source>Adds support for the game Morrowind.
 Splash by %1</source>
         <translation type="unfinished"></translation>
@@ -61,7 +61,7 @@ Splash by %1</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="morrowindgameplugins.cpp" line="120"/>
+        <location filename="morrowindgameplugins.cpp" line="122"/>
         <source>Some of your plugins have invalid names! These plugins can not be loaded by the game. Please see mo_interface.log for a list of affected plugins and rename them.</source>
         <translation type="unfinished"></translation>
     </message>

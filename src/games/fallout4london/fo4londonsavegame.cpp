@@ -1,6 +1,11 @@
 #include "fo4londonsavegame.h"
 
+#ifdef __unix__
+#include "linux/windowsTypes.h"
+#include "linux/windowsFunctionWrapper.h"
+#else
 #include <Windows.h>
+#endif
 
 #include "gamefo4london.h"
 

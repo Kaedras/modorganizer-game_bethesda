@@ -1,6 +1,11 @@
 #include "fallout4savegame.h"
 
+#ifdef __unix__
+#include "linux/windowsTypes.h"
+#include "linux/windowsFunctionWrapper.h"
+#else
 #include <Windows.h>
+#endif
 
 #include "gamefallout4.h"
 

@@ -4,6 +4,12 @@ find_package(mo2-uibase CONFIG REQUIRED)
 find_package(lz4 CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
+if (UNIX)
+	set(OS_NAME linux)
+else ()
+	set(OS_NAME win32)
+endif ()
+
 add_library(game_gamebryo STATIC
 	dummybsa.cpp
 	dummybsa.h
@@ -31,16 +37,31 @@ add_library(game_gamebryo STATIC
 	gamebryounmanagedmods.cpp
 	gamebryounmanagedmods.h
 	gamegamebryo.cpp
+	${OS_NAME}/gamegamebryo_${OS_NAME}.cpp
 	gamegamebryo.h
 	vdf_parser.h
 )
+if (UNIX)
+target_sources(game_gamebryo
+		PRIVATE
+		linux/exiftool/ExifTool.cpp
+		linux/exiftool/ExifToolPipe.cpp
+		linux/exiftool/TagInfo.cpp
+)
+endif ()
+
 mo2_configure_target(game_gamebryo
 	WARNINGS 4
 	NO_SOURCES
 	TRANSLATIONS ON
 	EXTRA_TRANSLATIONS ${CMAKE_CURRENT_LIST_DIR}/../creation)
 mo2_default_source_group()
-target_link_libraries(game_gamebryo PUBLIC mo2::uibase PRIVATE ZLIB::ZLIB lz4::lz4 Dbghelp)
+target_link_libraries(game_gamebryo PUBLIC mo2::uibase PRIVATE ZLIB::ZLIB lz4::lz4)
+
+if (WIN32)
+	target_link_libraries(game_gamebryo PRIVATE Dbghelp)
+endif ()
+
 target_include_directories(game_gamebryo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 install(FILES $<TARGET_FILE:game_gamebryo> DESTINATION lib)

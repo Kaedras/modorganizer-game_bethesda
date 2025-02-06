@@ -3,7 +3,11 @@
 
 #include "gamebryosavegame.h"
 
+#ifdef __unix__
+#include "linux/windowsTypes.h"
+#else
 #include <Windows.h>
+#endif
 
 class GameFallout4VR;
 

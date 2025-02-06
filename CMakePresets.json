@@ -43,7 +43,12 @@
       "generator": "Visual Studio 17 2022",
       "inherits": ["cmake-dev", "vcpkg-dev"],
       "name": "vs2022-windows",
-      "toolset": "v143"
+      "toolset": "v143",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
     },
     {
       "cacheVariables": {
@@ -54,6 +59,34 @@
       },
       "inherits": "vs2022-windows",
       "name": "vs2022-windows-standalone"
+    },
+    {
+      "binaryDir": "${sourceDir}/linux-build",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -Wl,--no-undefined",
+        "VCPKG_TARGET_TRIPLET": {
+          "type": "STRING",
+          "value": "x64-linux"
+        }
+      },
+      "generator": "Ninja Multi-Config",
+      "inherits": ["cmake-dev", "vcpkg"],
+      "name": "linux",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "cacheVariables": {
+        "VCPKG_MANIFEST_FEATURES": {
+          "type": "STRING",
+          "value": "standalone"
+        }
+      },
+      "inherits": "linux",
+      "name": "linux-standalone"
     }
   ],
   "version": 4

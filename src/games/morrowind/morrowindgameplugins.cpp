@@ -1,6 +1,4 @@
 #include "morrowindgameplugins.h"
-#include "registry.h"
-#include <Windows.h>
 #include <imodinterface.h>
 #include <iplugingame.h>
 #include <ipluginlist.h>
@@ -10,6 +8,7 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QSettings>
 #include <QString>
 #include <QStringEncoder>
 #include <QStringList>
@@ -87,7 +86,11 @@ void MorrowindGamePlugins::writeList(const IPluginList* pluginList,
                                ? QStringEncoder(QStringConverter::Encoding::Utf8)
                                : QStringEncoder(QStringConverter::Encoding::System);
 
-  ::WritePrivateProfileSectionW(L"Game Files", NULL, filePath.toStdWString().c_str());
+  QSettings ini(filePath, QSettings::IniFormat);
+
+  // todo: check if this is required
+  ini.beginGroup("Game Files");
+  ini.endGroup();
 
   bool invalidFileNames = false;
   int writtenCount      = 0;
@@ -105,10 +108,8 @@ void MorrowindGamePlugins::writeList(const IPluginList* pluginList,
         invalidFileNames = true;
         qCritical("invalid plugin name %s", qUtf8Printable(pluginName));
       } else {
-        if (!MOBase::WriteRegistryValue(
-                L"Game Files",
-                (key + QString::number(writtenCount)).toStdWString().c_str(),
-                pluginName.toStdWString().c_str(), filePath.toStdWString().c_str())) {
+        ini.setValue(QString("Game Files/%1%2").arg(key, writtenCount), pluginName);
+        if (ini.status() != QSettings::NoError) {
           qWarning("failed to set game files in \"%s\"", qUtf8Printable(filePath));
         }
       }
@@ -179,9 +180,10 @@ QStringList MorrowindGamePlugins::readPluginList(MOBase::IPluginList* pluginList
   QStringList inactivePlugins;
   QString key = "GameFile";
   int i       = 0;
-  while (::GetPrivateProfileStringW(L"Game Files",
-                                    (key + QString::number(i)).toStdWString().c_str(),
-                                    L"", buffer, 256, iniFileW.c_str()) != 0) {
+
+  QSettings ini(filePath, QSettings::IniFormat);
+
+  while (ini.contains(QString("Game Files/%1%2").arg(key, i))) {
     QString pluginName;
     pluginName = QString::fromStdWString(buffer).trimmed();
     pluginList->setState(pluginName, IPluginList::STATE_ACTIVE);

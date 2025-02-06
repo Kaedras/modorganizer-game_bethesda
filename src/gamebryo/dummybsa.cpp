@@ -19,8 +19,8 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "dummybsa.h"
 #include <QFile>
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+
+static inline constexpr int MAX_PATH = 260;
 
 static void writeUlong(unsigned char* buffer, int offset, unsigned long value)
 {

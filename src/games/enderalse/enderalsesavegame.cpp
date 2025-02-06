@@ -1,6 +1,12 @@
 #include "enderalsesavegame.h"
 
+#include <utils.h>
+
+#ifdef __unix__
+#include "linux/windowsTypes.h"
+#else
 #include <Windows.h>
+#endif
 
 EnderalSESaveGame::EnderalSESaveGame(QString const& fileName, GameEnderalSE const* game)
     : GamebryoSaveGame(fileName, game, true)
@@ -18,17 +24,12 @@ EnderalSESaveGame::EnderalSESaveGame(QString const& fileName, GameEnderalSE cons
 
   // For some reason, the file time is off by about 6 hours.
   // So we need to subtract those 6 hours from the filetime.
-  _ULARGE_INTEGER time;
-  time.LowPart  = ftime.dwLowDateTime;
-  time.HighPart = ftime.dwHighDateTime;
-  time.QuadPart -= 2.16e11;
-  ftime.dwHighDateTime = time.HighPart;
-  ftime.dwLowDateTime  = time.LowPart;
+  QDateTime dt = fileTimeToQDateTime(ftime);
 
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&ftime, &ctime);
+  // add -6 hours
+  dt = dt.addSecs(-60 * 60 * 6);
 
-  setCreationTime(ctime);
+  setCreationTime(dt);
 }
 
 void EnderalSESaveGame::fetchInformationFields(

@@ -1,7 +1,10 @@
 #include "starfieldsavegame.h"
 
+#ifdef __unix__
+#include "linux/windowsFunctionWrapper.h"
+#else
 #include <Windows.h>
-
+#endif
 #include "gamestarfield.h"
 
 StarfieldSaveGame::StarfieldSaveGame(QString const& fileName, GameStarfield const* game)
