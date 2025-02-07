@@ -8,6 +8,12 @@ project(game_bethesda)
 find_package(mo2-cmake CONFIG REQUIRED)
 find_package(Qt6 COMPONENTS Widgets)
 
+if (UNIX)
+    # TODO: check why this is required
+    include(FindOpenGL)
+    find_package(OpenGL REQUIRED COMPONENTS OpenGL GLX)
+endif ()
+
 add_subdirectory(src/gamebryo)
 add_subdirectory(src/creation)
 
