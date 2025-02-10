@@ -41,14 +41,6 @@ add_library(game_gamebryo STATIC
 	gamegamebryo.h
 	vdf_parser.h
 )
-if (UNIX)
-target_sources(game_gamebryo
-		PRIVATE
-		linux/exiftool/ExifTool.cpp
-		linux/exiftool/ExifToolPipe.cpp
-		linux/exiftool/TagInfo.cpp
-)
-endif ()
 
 mo2_configure_target(game_gamebryo
 	WARNINGS 4

@@ -13,8 +13,9 @@
 #include "utility.h"
 #include "vdf_parser.h"
 
-#include "exiftool/ExifTool.h"
+#include <uibase/peextractor.h>
 
+#include <QBuffer>
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
@@ -30,8 +31,6 @@
 #include <optional>
 #include <string>
 #include <vector>
-
-
 
 #include "stub.h"
 
@@ -146,44 +145,17 @@ QString GameGamebryo::parseSteamLocation(const QString& appid,
 
 QString GameGamebryo::getFileVersion(const QString& fileName)
 {
-    // requires exiftool to be installed
-    // create our ExifTool object
-    ExifTool *et = new ExifTool();
-    // read metadata from the image
-    TagInfo *info = et->ImageInfo(QFileInfo(fileName).absoluteFilePath().toStdString().c_str(),NULL,5);
-
-    QString versionInfo;
-
-    if (info) {
-        // print returned information
-        for (TagInfo *i=info; i; i=i->next) {
-            if (strcmp(i->name, "FileVersion") == 0)
-            {
-                versionInfo = i->value;
-            }
-
-            // cout << i->name << " = " << i->value << endl;
-            // cout << "  group[0] = " << (i->group[0] ? i->group[0] : "<null>") << endl;// family 0 group name
-            // cout << "  group[1] = " << (i->group[1] ? i->group[1] : "<null>") << endl;// family 1 group name
-            // cout << "  group[2] = " << (i->group[2] ? i->group[2] : "<null>") << endl;// family 2 group name
-            // cout << "  name = " << (i->name ? i->name : "<null>") << endl;      // tag name
-            // cout << "  desc = " << (i->desc ? i->desc : "<null>") << endl;      // tag description
-            // cout << "  id = " << (i->id ? i->id : "<null>" ) << endl;           // tag ID
-            // cout << "  value = " << (i->value ? i->value : "<null>") << endl;   // converted value
-            // cout << "  valueLen = " << i->valueLen << endl;                     // length of value in bytes (not including null terminator)
-            // cout << "  num = " << (i->num ? i->num :"<null>") << endl;          // "numerical" value
-            // cout << "  numLen = " << i->numLen << endl;                         // length of numerical value
-            // cout << "  copyNum = " << i->copyNum << endl;                       // copy number for this tag name
-        }
-        // we are responsible for deleting the information when done
-        delete info;
-    } else if (et->LastComplete() <= 0) {
-        std::cerr << "Error executing exiftool!" << std::endl;
-    }
-    // print exiftool stderr messages
-    char *err = et->GetError();
-    if (err) std::cerr << err;
-    delete et;      // delete our ExifTool object
-
-    return versionInfo;
+  QFile f(fileName);
+  QBuffer buf;
+  if (!f.open(QIODeviceBase::ReadOnly) || !buf.open(QIODeviceBase::ReadWrite)) {
+    return {};
+  }
+  if (!PeExtractor::loadVersionData(&f, &buf)) {
+    return {};
+  }
+  buf.seek(0);
+  QDataStream stream(&buf);
+  QString fileVersion, productVersion;
+  stream >> fileVersion >> productVersion;
+  return fileVersion;
 }
