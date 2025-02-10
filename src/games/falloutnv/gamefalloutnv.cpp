@@ -57,8 +57,8 @@ void GameFalloutNV::setVariant(QString variant)
 
 void GameFalloutNV::checkVariants()
 {
-  QFileInfo gog_dll(m_GamePath + "\\Galaxy.dll");
-  QFileInfo epic_dll(m_GamePath + "\\EOSSDK-Win32-Shipping.dll");
+  QFileInfo gog_dll(m_GamePath + "/Galaxy.dll");
+  QFileInfo epic_dll(m_GamePath + "/EOSSDK-Win32-Shipping.dll");
   if (gog_dll.exists())
     setVariant("GOG");
   else if (epic_dll.exists())

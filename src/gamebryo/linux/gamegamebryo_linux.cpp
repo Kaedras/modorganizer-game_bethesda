@@ -92,8 +92,8 @@ QString GameGamebryo::determineMyGamesPath(const QString& gameName)
       return {};
     }
 
-    const auto path = pattern.arg(dir);
-    if (!QFileInfo(path).exists()) {
+    auto path = pattern.arg(dir);
+    if (!QFileInfo::exists(path)) {
       return {};
     }
 
@@ -125,7 +125,7 @@ QString GameGamebryo::parseSteamLocation(const QString& appid,
   if (QFile(steamLibraries).exists()) {
     std::ifstream file(steamLibraries.toStdString());
     auto root = tyti::vdf::read(file);
-    for (auto child : root.childs) {
+    for (const auto& child : root.childs) {
       tyti::vdf::object* library = child.second.get();
       auto apps                  = library->childs["apps"];
       if (apps->attribs.contains(appid.toStdString())) {

@@ -206,6 +206,6 @@ QString GameMorrowind::identifyGamePath() const
 {
   QString path = GameGamebryo::identifyGamePath();
   if (path.isEmpty())
-    path = MOBase::findSteamGame("Morrowind", "Data Files\\Morrowind.esm");
+    path = MOBase::findSteamGame("Morrowind", "Data Files/Morrowind.esm");
   return path;
 }

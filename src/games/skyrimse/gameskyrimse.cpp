@@ -39,8 +39,8 @@ void GameSkyrimSE::setVariant(QString variant)
 
 void GameSkyrimSE::checkVariants()
 {
-  QFileInfo gog_dll(m_GamePath + "\\Galaxy64.dll");
-  QFileInfo epic_dll(m_GamePath + "\\EOSSDK-Win64-Shipping.dll");
+  QFileInfo gog_dll(m_GamePath + "/Galaxy64.dll");
+  QFileInfo epic_dll(m_GamePath + "/EOSSDK-Win64-Shipping.dll");
   if (gog_dll.exists())
     setVariant("GOG");
   else if (epic_dll.exists())
@@ -118,7 +118,7 @@ bool GameSkyrimSE::init(IOrganizer* moInfo)
 
   registerFeature(std::make_shared<SkyrimSEScriptExtender>(this));
   registerFeature(std::make_shared<SkyrimSEDataArchives>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "Skyrimcustom.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "SkyrimCustom.ini"));
   registerFeature(std::make_shared<SkyrimSEModDataChecker>(this));
   registerFeature(
       std::make_shared<SkyrimSEModDataContent>(m_Organizer->gameFeatures()));
@@ -209,15 +209,15 @@ void GameSkyrimSE::initializeProfile(const QDir& path, ProfileSettings settings)
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/skyrim.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "skyrim_default.ini",
-                    "skyrim.ini");
+        !QFileInfo::exists(myGamesPath() + "/Skyrim.ini")) {
+      copyToProfile(gameDirectory().absolutePath(), path, "Skyrim_default.ini",
+                    "Skyrim.ini");
     } else {
-      copyToProfile(myGamesPath(), path, "skyrim.ini");
+      copyToProfile(myGamesPath(), path, "Skyrim.ini");
     }
 
-    copyToProfile(myGamesPath(), path, "skyrimprefs.ini");
-    copyToProfile(myGamesPath(), path, "skyrimcustom.ini");
+    copyToProfile(myGamesPath(), path, "SkyrimPrefs.ini");
+    copyToProfile(myGamesPath(), path, "SkyrimCustom.ini");
   }
 }
 
@@ -246,8 +246,8 @@ QString GameSkyrimSE::steamAPPId() const
 
 QStringList GameSkyrimSE::primaryPlugins() const
 {
-  QStringList plugins = {"skyrim.esm", "update.esm", "dawnguard.esm", "hearthfires.esm",
-                         "dragonborn.esm"};
+  QStringList plugins = {"Skyrim.esm", "Update.esm", "Dawnguard.esm", "HearthFires.esm",
+                         "Dragonborn.esm"};
 
   plugins.append(CCPlugins());
 
@@ -280,12 +280,12 @@ QString GameSkyrimSE::gameNexusName() const
 
 QStringList GameSkyrimSE::iniFiles() const
 {
-  return {"skyrim.ini", "skyrimprefs.ini", "skyrimcustom.ini"};
+  return {"Skyrim.ini", "SkyrimPrefs.ini", "skyrimcustom.ini"};
 }
 
 QStringList GameSkyrimSE::DLCPlugins() const
 {
-  return {"dawnguard.esm", "hearthfires.esm", "dragonborn.esm"};
+  return {"Dawnguard.esm", "HearthFires.esm", "Dragonborn.esm"};
 }
 
 QStringList GameSkyrimSE::CCPlugins() const
