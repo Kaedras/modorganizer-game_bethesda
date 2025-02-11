@@ -1,7 +1,8 @@
 #include "fallout76scriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 Fallout76ScriptExtender::Fallout76ScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -9,10 +10,10 @@ Fallout76ScriptExtender::Fallout76ScriptExtender(GameGamebryo const* game)
 
 QString Fallout76ScriptExtender::BinaryName() const
 {
-  return "f76se_loader.exe";
+  return u"f76se_loader.exe"_s;
 }
 
 QString Fallout76ScriptExtender::PluginPath() const
 {
-  return "f76se/plugins";
+  return u"f76se/plugins"_s;
 }

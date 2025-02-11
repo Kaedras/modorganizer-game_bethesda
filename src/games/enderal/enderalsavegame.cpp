@@ -9,10 +9,12 @@
 
 #include "gameenderal.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 EnderalSaveGame::EnderalSaveGame(QString const& fileName, GameEnderal const* game)
     : GamebryoSaveGame(fileName, game)
 {
-  FileWrapper file(getFilepath(), "TESV_SAVEGAME");
+  FileWrapper file(getFilepath(), u"TESV_SAVEGAME"_s);
 
   FILETIME ftime;
   fetchInformationFields(file, m_SaveNumber, m_PCName, m_PCLevel, m_PCLocation, ftime);
@@ -55,7 +57,7 @@ void EnderalSaveGame::fetchInformationFields(
 
 std::unique_ptr<GamebryoSaveGame::DataFields> EnderalSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "TESV_SAVEGAME");
+  FileWrapper file(getFilepath(), u"TESV_SAVEGAME"_s);
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();
 
   {

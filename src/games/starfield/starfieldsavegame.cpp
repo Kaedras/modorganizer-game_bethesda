@@ -7,10 +7,12 @@
 #endif
 #include "gamestarfield.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 StarfieldSaveGame::StarfieldSaveGame(QString const& fileName, GameStarfield const* game)
     : GamebryoSaveGame(fileName, game, true, true)
 {
-  FileWrapper file(getFilepath(), "BCPS");
+  FileWrapper file(getFilepath(), u"BCPS"_s);
 
   getData(file);
   FILETIME creationTime;
@@ -91,7 +93,7 @@ void StarfieldSaveGame::fetchInformationFields(
 
 std::unique_ptr<GamebryoSaveGame::DataFields> StarfieldSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "BCPS");  // 10bytes
+  FileWrapper file(getFilepath(), u"BCPS"_s);  // 10bytes
 
   getData(file);
   FILETIME creationTime;

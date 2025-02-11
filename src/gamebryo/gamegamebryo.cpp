@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 
+using namespace Qt::Literals::StringLiterals;
+
 GameGamebryo::GameGamebryo() {}
 
 void GameGamebryo::detectGame()
@@ -62,7 +64,7 @@ QDir GameGamebryo::gameDirectory() const
 
 QDir GameGamebryo::dataDirectory() const
 {
-  return gameDirectory().absoluteFilePath("Data");
+  return gameDirectory().absoluteFilePath(u"Data"_s);
 }
 
 void GameGamebryo::setGamePath(const QString& path)
@@ -77,17 +79,17 @@ QDir GameGamebryo::documentsDirectory() const
 
 QDir GameGamebryo::savesDirectory() const
 {
-  return QDir(myGamesPath() + "/Saves");
+  return QDir(myGamesPath() % u"/Saves"_s);
 }
 
 std::vector<std::shared_ptr<const MOBase::ISaveGame>>
 GameGamebryo::listSaves(QDir folder) const
 {
   QStringList filters;
-  filters << QString("*.") + savegameExtension();
+  filters << u"*."_s % savegameExtension();
 
   std::vector<std::shared_ptr<const MOBase::ISaveGame>> saves;
-  for (auto info : folder.entryInfoList(filters, QDir::Files)) {
+  for (const auto& info : folder.entryInfoList(filters, QDir::Files)) {
     try {
       saves.push_back(makeSaveGame(info.filePath()));
     } catch (std::exception& e) {
@@ -106,7 +108,7 @@ void GameGamebryo::setGameVariant(const QString& variant)
 
 QString GameGamebryo::binaryName() const
 {
-  return gameShortName() + ".exe";
+  return gameShortName() % u".exe"_s;
 }
 
 MOBase::IPluginGame::LoadOrderMechanism GameGamebryo::loadOrderMechanism() const
@@ -143,12 +145,12 @@ QString GameGamebryo::gameVersion() const
 
 QString GameGamebryo::getLauncherName() const
 {
-  return gameShortName() + "Launcher.exe";
+  return gameShortName() % u"Launcher.exe"_s;
 }
 
 QFileInfo GameGamebryo::findInGameFolder(const QString& relativePath) const
 {
-  return QFileInfo(m_GamePath + "/" + relativePath);
+  return QFileInfo(m_GamePath % '/' % relativePath);
 }
 
 bool GameGamebryo::prepareIni(const QString&)
@@ -161,14 +163,12 @@ bool GameGamebryo::prepareIni(const QString&)
 
   if (!iniFiles().isEmpty()) {
 
-    QString profileIni = basePath + "/" + iniFiles()[0];
+    QString profileIni = basePath % '/' % iniFiles()[0];
 
     QSettings ini(profileIni, QSettings::IniFormat);
 
-    QString bEnableFileSelection = QStringLiteral("Launcher/bEnableFileSelection");
-
-    if (ini.value(bEnableFileSelection, QStringLiteral("0")).toString() != "1") {
-      ini.setValue(bEnableFileSelection, QStringLiteral("1"));
+    if (ini.value(u"Launcher/bEnableFileSelection"_s, 0).toInt() != 1) {
+      ini.setValue(u"Launcher/bEnableFileSelection"_s, 1);
     }
   }
 
@@ -207,8 +207,8 @@ void GameGamebryo::copyToProfile(QString const& sourcePath,
                                  QString const& destinationFileName)
 {
   QString filePath = destinationDirectory.absoluteFilePath(destinationFileName);
-  if (!QFileInfo(filePath).exists()) {
-    if (!MOBase::shellCopy(sourcePath + "/" + sourceFileName, filePath)) {
+  if (!QFileInfo::exists(filePath)) {
+    if (!MOBase::shellCopy(sourcePath % '/' % sourceFileName, filePath)) {
       // if copy file fails, create the file empty
       QFile(filePath).open(QIODevice::WriteOnly);
     }
@@ -219,9 +219,9 @@ MappingType GameGamebryo::mappings() const
 {
   MappingType result;
 
-  for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
-    result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                      localAppFolder() + "/" + gameShortName() + "/" + profileFile,
+  for (const auto& profileFile : {u"plugins.txt"_s, u"loadorder.txt"_s}) {
+    result.push_back({m_Organizer->profilePath() % '/' % profileFile,
+                      localAppFolder() % '/' % gameShortName() % '/' % profileFile,
                       false});
   }
 

@@ -7,10 +7,12 @@
 #include <linux/windowsFunctionWrapper.h>
 #endif
 
+using namespace Qt::Literals::StringLiterals;
+
 Fallout76SaveGame::Fallout76SaveGame(QString const& fileName, GameFallout76 const* game)
     : GamebryoSaveGame(fileName, game, true)
 {
-  FileWrapper file(fileName, "FO76_SAVEGAME");
+  FileWrapper file(fileName, u"FO76_SAVEGAME"_s);
 
   FILETIME ftime;
   fetchInformationFields(file, m_PCName, m_PCLevel, m_PCLocation, m_SaveNumber, ftime);
@@ -56,7 +58,7 @@ void Fallout76SaveGame::fetchInformationFields(FileWrapper& file, QString player
 std::unique_ptr<GamebryoSaveGame::DataFields> Fallout76SaveGame::fetchDataFields() const
 {
 
-  FileWrapper file(getFilepath(), "TESV_SAVEGAME");  // 10bytes
+  FileWrapper file(getFilepath(), u"TESV_SAVEGAME"_s);  // 10bytes
   {
 
     FILETIME ftime;

@@ -5,74 +5,76 @@
 
 #include <QRegularExpression>
 
+using namespace Qt::Literals::StringLiterals;
+
 QStringList Fallout76DataArchives::vanillaArchives() const
 {
-  return {"SeventySix - Animations.ba2",
-          "SeventySix - ATX_Main.ba2",
-          "SeventySix - ATX_Textures.ba2",
-          "SeventySix - EnlightenExteriors01.ba2",
-          "SeventySix - EnlightenExteriors02.ba2",
-          "SeventySix - EnlightenInteriors.ba2",
-          "SeventySix - GeneratedMeshes.ba2",
-          "SeventySix - GeneratedTextures.ba2",
-          "SeventySix - Interface.ba2",
-          "SeventySix - Localization.ba2",
-          "SeventySix - Materials.ba2",
-          "SeventySix - Meshes01.ba2",
-          "SeventySix - Meshes02.ba2",
-          "SeventySix - MeshesExtra.ba2",
-          "SeventySix - MiscClient.ba2",
-          "SeventySix - Shaders.ba2",
-          "SeventySix - Sounds01.ba2",
-          "SeventySix - Sounds02.ba2",
-          "SeventySix - Startup.ba2",
-          "SeventySix - Textures01.ba2",
-          "SeventySix - Textures02.ba2",
-          "SeventySix - Textures03.ba2",
-          "SeventySix - Textures04.ba2",
-          "SeventySix - Textures05.ba2",
-          "SeventySix - Textures06.ba2",
-          "SeventySix - Voices.ba2"};
+  return {u"SeventySix - Animations.ba2"_s,
+          u"SeventySix - ATX_Main.ba2"_s,
+          u"SeventySix - ATX_Textures.ba2"_s,
+          u"SeventySix - EnlightenExteriors01.ba2"_s,
+          u"SeventySix - EnlightenExteriors02.ba2"_s,
+          u"SeventySix - EnlightenInteriors.ba2"_s,
+          u"SeventySix - GeneratedMeshes.ba2"_s,
+          u"SeventySix - GeneratedTextures.ba2"_s,
+          u"SeventySix - Interface.ba2"_s,
+          u"SeventySix - Localization.ba2"_s,
+          u"SeventySix - Materials.ba2"_s,
+          u"SeventySix - Meshes01.ba2"_s,
+          u"SeventySix - Meshes02.ba2"_s,
+          u"SeventySix - MeshesExtra.ba2"_s,
+          u"SeventySix - MiscClient.ba2"_s,
+          u"SeventySix - Shaders.ba2"_s,
+          u"SeventySix - Sounds01.ba2"_s,
+          u"SeventySix - Sounds02.ba2"_s,
+          u"SeventySix - Startup.ba2"_s,
+          u"SeventySix - Textures01.ba2"_s,
+          u"SeventySix - Textures02.ba2"_s,
+          u"SeventySix - Textures03.ba2"_s,
+          u"SeventySix - Textures04.ba2"_s,
+          u"SeventySix - Textures05.ba2"_s,
+          u"SeventySix - Textures06.ba2"_s,
+          u"SeventySix - Voices.ba2"_s};
 }
 
 QStringList Fallout76DataArchives::sResourceIndexFileList() const
 {
-  return {"SeventySix - Textures01.ba2", "SeventySix - Textures02.ba2",
-          "SeventySix - Textures03.ba2", "SeventySix - Textures04.ba2",
-          "SeventySix - Textures05.ba2", "SeventySix - Textures06.ba2"};
+  return {u"SeventySix - Textures01.ba2"_s, u"SeventySix - Textures02.ba2"_s,
+          u"SeventySix - Textures03.ba2"_s, u"SeventySix - Textures04.ba2"_s,
+          u"SeventySix - Textures05.ba2"_s, u"SeventySix - Textures06.ba2"_s};
 }
 
 QStringList Fallout76DataArchives::sResourceStartUpArchiveList() const
 {
-  return {"SeventySix - Interface.ba2", "SeventySix - Localization.ba2",
-          "SeventySix - Shaders.ba2", "SeventySix - Startup.ba2"};
+  return {u"SeventySix - Interface.ba2"_s, u"SeventySix - Localization.ba2"_s,
+          u"SeventySix - Shaders.ba2"_s, u"SeventySix - Startup.ba2"_s};
 }
 
 QStringList Fallout76DataArchives::SResourceArchiveMemoryCacheList() const
 {
-  return {"SeventySix - Interface.ba2", "SeventySix - Materials.ba2",
-          "SeventySix - MiscClient.ba2", "SeventySix - Shaders.ba2"};
+  return {u"SeventySix - Interface.ba2"_s, u"SeventySix - Materials.ba2"_s,
+          u"SeventySix - MiscClient.ba2"_s, u"SeventySix - Shaders.ba2"_s};
 }
 
 QStringList Fallout76DataArchives::SResourceArchiveList() const
 {
-  return {"SeventySix - GeneratedMeshes.ba2", "SeventySix - Materials.ba2",
-          "SeventySix - Meshes01.ba2",        "SeventySix - Meshes02.ba2",
-          "SeventySix - MeshesExtra.ba2",     "SeventySix - MiscClient.ba2",
-          "SeventySix - Sounds01.ba2",        "SeventySix - Sounds02.ba2",
-          "SeventySix - Startup.ba2",         "SeventySix - Voices.ba2"};
+  return {u"SeventySix - GeneratedMeshes.ba2"_s, u"SeventySix - Materials.ba2"_s,
+          u"SeventySix - Meshes01.ba2"_s,        u"SeventySix - Meshes02.ba2"_s,
+          u"SeventySix - MeshesExtra.ba2"_s,     u"SeventySix - MiscClient.ba2"_s,
+          u"SeventySix - Sounds01.ba2"_s,        u"SeventySix - Sounds02.ba2"_s,
+          u"SeventySix - Startup.ba2"_s,         u"SeventySix - Voices.ba2"_s};
 }
 
 QStringList Fallout76DataArchives::SResourceArchiveList2() const
 {
-  return {"SeventySix - Animations.ba2", "SeventySix - EnlightenInteriors.ba2",
-          "SeventySix - GeneratedTextures.ba2", "SeventySix - EnlightenExteriors01.ba2",
-          "SeventySix - EnlightenExteriors02.ba2"};
+  return {u"SeventySix - Animations.ba2"_s, u"SeventySix - EnlightenInteriors.ba2"_s,
+          u"SeventySix - GeneratedTextures.ba2"_s, u"SeventySix - EnlightenExteriors01.ba2"_s,
+          u"SeventySix - EnlightenExteriors02.ba2"_s};
 }
 
 QStringList Fallout76DataArchives::sResourceArchive2List() const
 {
-  return {"SeventySix - ATX_Main.ba2", "SeventySix - ATX_Textures.ba2"};
+  return {u"SeventySix - ATX_Main.ba2"_s, u"SeventySix - ATX_Textures.ba2"_s};
 }
 
 QStringList Fallout76DataArchives::archives(const MOBase::IProfile* profile) const
@@ -81,15 +83,15 @@ QStringList Fallout76DataArchives::archives(const MOBase::IProfile* profile) con
 
   QString iniFile =
       profile->localSettingsEnabled()
-          ? QDir(profile->absolutePath()).absoluteFilePath("Fallout76.ini")
-          : localGameDirectory().absoluteFilePath("Fallout76.ini");
+          ? QDir(profile->absolutePath()).absoluteFilePath(u"Fallout76.ini"_s)
+          : localGameDirectory().absoluteFilePath(u"Fallout76.ini"_s);
 
-  result.append(getArchivesFromKey(iniFile, "sResourceIndexFileList"));
-  result.append(getArchivesFromKey(iniFile, "sResourceStartUpArchiveList"));
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveMemoryCacheList"));
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList"));
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList2"));
-  result.append(getArchivesFromKey(iniFile, "sResourceArchive2List"));
+  result.append(getArchivesFromKey(iniFile, u"sResourceIndexFileList"_s));
+  result.append(getArchivesFromKey(iniFile, u"sResourceStartUpArchiveList"_s));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveMemoryCacheList"_s));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList"_s));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList2"_s));
+  result.append(getArchivesFromKey(iniFile, u"sResourceArchive2List"_s));
 
   return result;
 }
@@ -99,8 +101,8 @@ void Fallout76DataArchives::writeArchiveList(MOBase::IProfile* profile,
 {
   QString iniFile =
       profile->localSettingsEnabled()
-          ? QDir(profile->absolutePath()).absoluteFilePath("Fallout76.ini")
-          : localGameDirectory().absoluteFilePath("Fallout76.ini");
+          ? QDir(profile->absolutePath()).absoluteFilePath(u"Fallout76.ini"_s)
+          : localGameDirectory().absoluteFilePath(u"Fallout76.ini"_s);
 
   QStringList sResourceIndexFileList          = {};
   QStringList sResourceStartUpArchiveList     = {};
@@ -110,26 +112,26 @@ void Fallout76DataArchives::writeArchiveList(MOBase::IProfile* profile,
   QStringList sResourceArchive2List           = {};
 
   for (int i = 0; i < before.size(); ++i) {
-    QString archive = before[i];
-    if (archive.contains(QRegularExpression(" - Textures(\\d{2})\\.ba2$"))) {
+    const QString& archive = before[i];
+    if (archive.contains(QRegularExpression(u" - Textures(\\d{2})\\.ba2$"_s))) {
       sResourceIndexFileList.append(archive);
     } else if (archive.contains(QRegularExpression(
-                   " - (Interface|Localization|Shaders|Startup)\\.ba2$"))) {
+                   u" - (Interface|Localization|Shaders|Startup)\\.ba2$"_s))) {
       sResourceStartUpArchiveList.append(archive);
     } else if (archive.contains(QRegularExpression(
-                   " - (Interface|Materials|MiscClient|Shaders)\\.ba2$"))) {
+                   u" - (Interface|Materials|MiscClient|Shaders)\\.ba2$"_s))) {
       SResourceArchiveMemoryCacheList.append(archive);
     } else if (archive.contains(QRegularExpression(
-                   " - "
+                   u" - "
                    "(GeneratedMeshes|Materials|Meshes(\\d{2}|\\w+)?|MiscClient|"
-                   "Sounds\\d{2}|Startup|Voices)\\.ba2$"))) {
+                   "Sounds\\d{2}|Startup|Voices)\\.ba2$"_s))) {
       SResourceArchiveList.append(archive);
     } else if (archive.contains(
-                   QRegularExpression(" - "
+                   QRegularExpression(u" - "
                                       "(Animations|Enlighten(Interiors|Exteriors\\d{2})"
-                                      "|GeneratedTextures)\\.ba2$"))) {
+                                      "|GeneratedTextures)\\.ba2$"_s))) {
       SResourceArchiveList2.append(archive);
-    } else if (archive.contains(QRegularExpression(" - ATX_.*\\.ba2$"))) {
+    } else if (archive.contains(QRegularExpression(u" - ATX_.*\\.ba2$"_s))) {
       // if it is named after DLC, it has to go here
       sResourceArchive2List.append(archive);
     } else {
@@ -138,13 +140,13 @@ void Fallout76DataArchives::writeArchiveList(MOBase::IProfile* profile,
     }
   }
 
-  setArchivesToKey(iniFile, "sResourceIndexFileList",
-                   sResourceIndexFileList.join(", "));
-  setArchivesToKey(iniFile, "sResourceStartUpArchiveList",
-                   sResourceStartUpArchiveList.join(", "));
-  setArchivesToKey(iniFile, "SResourceArchiveMemoryCacheList",
-                   SResourceArchiveMemoryCacheList.join(", "));
-  setArchivesToKey(iniFile, "SResourceArchiveList", SResourceArchiveList.join(", "));
-  setArchivesToKey(iniFile, "SResourceArchiveList2", SResourceArchiveList2.join(", "));
-  setArchivesToKey(iniFile, "sResourceArchive2List", sResourceArchive2List.join(", "));
+  setArchivesToKey(iniFile, u"sResourceIndexFileList"_s,
+                   sResourceIndexFileList.join(u", "_s));
+  setArchivesToKey(iniFile, u"sResourceStartUpArchiveList"_s,
+                   sResourceStartUpArchiveList.join(u", "_s));
+  setArchivesToKey(iniFile, u"SResourceArchiveMemoryCacheList"_s,
+                   SResourceArchiveMemoryCacheList.join(u", "_s));
+  setArchivesToKey(iniFile, u"SResourceArchiveList"_s, SResourceArchiveList.join(u", "_s));
+  setArchivesToKey(iniFile, u"SResourceArchiveList2"_s, SResourceArchiveList2.join(u", "_s));
+  setArchivesToKey(iniFile, u"sResourceArchive2List"_s, sResourceArchive2List.join(u", "_s));
 }

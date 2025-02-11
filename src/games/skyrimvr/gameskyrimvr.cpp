@@ -26,6 +26,7 @@
 #include <memory>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameSkyrimVR::GameSkyrimVR() {}
 
@@ -41,14 +42,14 @@ QDir GameSkyrimVR::documentsDirectory() const
 
 QString GameSkyrimVR::identifyGamePath() const
 {
-  QString path = "Software\\Bethesda Softworks\\" + gameName();
+  QString path = u"Software\\Bethesda Softworks\\"_s % gameName();
   return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
                         L"Installed Path");
 }
 
 QDir GameSkyrimVR::savesDirectory() const
 {
-  return QDir(m_MyGamesPath + "/Saves");
+  return QDir(m_MyGamesPath % u"/Saves"_s);
 }
 
 QString GameSkyrimVR::myGamesPath() const
@@ -69,7 +70,7 @@ bool GameSkyrimVR::init(IOrganizer* moInfo)
 
   registerFeature(std::make_shared<SkyrimVRScriptExtender>(this));
   registerFeature(std::make_shared<SkyrimVRDataArchives>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "SkyrimVR.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, u"SkyrimVR.ini"_s));
   registerFeature(std::make_shared<SkyrimVRModDataChecker>(this));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
   registerFeature(
@@ -82,20 +83,20 @@ bool GameSkyrimVR::init(IOrganizer* moInfo)
 
 QString GameSkyrimVR::gameName() const
 {
-  return "Skyrim VR";
+  return u"Skyrim VR"_s;
 }
 
 QList<ExecutableInfo> GameSkyrimVR::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("SKSE",
+         << ExecutableInfo(u"SKSE"_s,
                            findInGameFolder(m_Organizer->gameFeatures()
                                                 ->gameFeature<MOBase::ScriptExtender>()
                                                 ->loaderName()))
-         << ExecutableInfo("Skyrim VR", findInGameFolder(binaryName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Skyrim VR\"");
+         << ExecutableInfo(u"Skyrim VR"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Creation Kit"_s, findInGameFolder(u"CreationKit.exe"_s))
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Skyrim VR\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameSkyrimVR::executableForcedLoads() const
@@ -105,12 +106,12 @@ QList<ExecutableForcedLoadSetting> GameSkyrimVR::executableForcedLoads() const
 
 QFileInfo GameSkyrimVR::findInGameFolder(const QString& relativePath) const
 {
-  return QFileInfo(m_GamePath + "/" + relativePath);
+  return QFileInfo(m_GamePath % '/' % relativePath);
 }
 
 QString GameSkyrimVR::name() const
 {
-  return "Skyrim VR Support Plugin";
+  return u"Skyrim VR Support Plugin"_s;
 }
 
 QString GameSkyrimVR::localizedName() const
@@ -120,7 +121,7 @@ QString GameSkyrimVR::localizedName() const
 
 QString GameSkyrimVR::author() const
 {
-  return "Brixified & MO2 Team";
+  return u"Brixified & MO2 Team"_s;
 }
 
 QString GameSkyrimVR::description() const
@@ -135,36 +136,36 @@ MOBase::VersionInfo GameSkyrimVR::version() const
 
 QList<PluginSetting> GameSkyrimVR::settings() const
 {
-  return {PluginSetting("enderal_downloads", "allow Enderal and Enderal SE downloads",
+  return {PluginSetting(u"enderal_downloads"_s, u"allow Enderal and Enderal SE downloads"_s,
                         QVariant(false))};
 }
 
 void GameSkyrimVR::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Skyrim VR", path, "plugins.txt");
+    copyToProfile(localAppFolder() % u"/Skyrim VR"_s, path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/skyrimvr.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "skyrim.ini", "skyrimvr.ini");
+        !QFileInfo::exists(myGamesPath() % u"/skyrimvr.ini"_s)) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"skyrim.ini"_s, u"skyrimvr.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "skyrimvr.ini");
+      copyToProfile(myGamesPath(), path, u"skyrimvr.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "skyrimprefs.ini");
+    copyToProfile(myGamesPath(), path, u"skyrimprefs.ini"_s);
   }
 }
 
 QString GameSkyrimVR::savegameExtension() const
 {
-  return "ess";
+  return u"ess"_s;
 }
 
 QString GameSkyrimVR::savegameSEExtension() const
 {
-  return "skse";
+  return u"skse"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -175,13 +176,13 @@ GameSkyrimVR::makeSaveGame(QString filePath) const
 
 QString GameSkyrimVR::steamAPPId() const
 {
-  return "611670";
+  return u"611670"_s;
 }
 
 QStringList GameSkyrimVR::primaryPlugins() const
 {
-  QStringList plugins = {"skyrim.esm",      "update.esm",     "dawnguard.esm",
-                         "hearthfires.esm", "dragonborn.esm", "skyrimvr.esm"};
+  QStringList plugins = {u"skyrim.esm"_s,      u"update.esm"_s,     u"dawnguard.esm"_s,
+                         u"hearthfires.esm"_s, u"dragonborn.esm"_s, u"skyrimvr.esm"_s};
 
   plugins.append(CCPlugins());
 
@@ -190,24 +191,24 @@ QStringList GameSkyrimVR::primaryPlugins() const
 
 QStringList GameSkyrimVR::gameVariants() const
 {
-  return {"Regular"};
+  return {u"Regular"_s};
 }
 
 QString GameSkyrimVR::gameShortName() const
 {
-  return "SkyrimVR";
+  return u"SkyrimVR"_s;
 }
 
 QStringList GameSkyrimVR::primarySources() const
 {
-  return {"SkyrimSE"};
+  return {u"SkyrimSE"_s};
 }
 
 QStringList GameSkyrimVR::validShortNames() const
 {
-  QStringList shortNames{"Skyrim", "SkyrimSE"};
-  if (m_Organizer->pluginSetting(name(), "enderal_downloads").toBool()) {
-    shortNames.append({"Enderal", "EnderalSE"});
+  QStringList shortNames{u"Skyrim"_s, u"SkyrimSE"_s};
+  if (m_Organizer->pluginSetting(name(), u"enderal_downloads"_s).toBool()) {
+    shortNames.append({u"Enderal"_s, u"EnderalSE"_s});
   }
   return shortNames;
 }
@@ -219,18 +220,18 @@ QString GameSkyrimVR::gameNexusName() const
 
 QStringList GameSkyrimVR::iniFiles() const
 {
-  return {"skyrimvr.ini", "skyrimprefs.ini"};
+  return {u"skyrimvr.ini"_s, u"skyrimprefs.ini"_s};
 }
 
 QStringList GameSkyrimVR::DLCPlugins() const
 {
-  return {"dawnguard.esm", "hearthfires.esm", "dragonborn.esm"};
+  return {u"dawnguard.esm"_s, u"hearthfires.esm"_s, u"dragonborn.esm"_s};
 }
 
 QStringList GameSkyrimVR::CCPlugins() const
 {
   QStringList plugins = {};
-  QFile file(gameDirectory().filePath("Skyrim.ccc"));
+  QFile file(gameDirectory().filePath(u"Skyrim.ccc"_s));
   if (file.open(QIODevice::ReadOnly)) {
     ON_BLOCK_EXIT([&file]() {
       file.close();
@@ -292,9 +293,9 @@ MappingType GameSkyrimVR::mappings() const
 {
   MappingType result;
 
-  for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
-    result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                      localAppFolder() + "/" + gameName() + "/" + profileFile, false});
+  for (const QString& profileFile : {u"plugins.txt"_s, u"loadorder.txt"_s}) {
+    result.push_back({m_Organizer->profilePath() % '/' % profileFile,
+                      localAppFolder() % '/' % gameName() % '/' % profileFile, false});
   }
 
   return result;

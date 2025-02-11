@@ -2,10 +2,12 @@
 
 #include "gamefalloutnv.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 FalloutNVSaveGame::FalloutNVSaveGame(QString const& fileName, GameFalloutNV const* game)
     : GamebryoSaveGame(fileName, game)
 {
-  FileWrapper file(getFilepath(), "FO3SAVEGAME");
+  FileWrapper file(getFilepath(), u"FO3SAVEGAME"_s);
   unsigned long width, height;
   fetchInformationFields(file, width, height, m_SaveNumber, m_PCName, m_PCLevel,
                          m_PCLocation);
@@ -49,7 +51,7 @@ void FalloutNVSaveGame::fetchInformationFields(FileWrapper& file, unsigned long&
 
 std::unique_ptr<GamebryoSaveGame::DataFields> FalloutNVSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "FO3SAVEGAME");
+  FileWrapper file(getFilepath(), u"FO3SAVEGAME"_s);
 
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();
 

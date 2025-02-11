@@ -5,9 +5,11 @@
 
 #include <QSettings>
 
+using namespace Qt::Literals::StringLiterals;
+
 QStringList MorrowindDataArchives::vanillaArchives() const
 {
-  return {"Morrowind.bsa"};
+  return {u"Morrowind.bsa"_s};
 }
 
 QStringList MorrowindDataArchives::getArchives(const QString& iniFile) const
@@ -18,12 +20,12 @@ QStringList MorrowindDataArchives::getArchives(const QString& iniFile) const
 
   errno = 0;
 
-  QString key = "Archive ";
+  QString key = u"Archive "_s;
   int i       = 0;
 
   QSettings ini(iniFile, QSettings::IniFormat);
 
-  while (ini.contains(QString("Archives/%1%2").arg(key, i))) {
+  while (ini.contains(QString(u"Archives/%1%2"_s).arg(key, i))) {
     result.append(QString::fromStdWString(buffer).trimmed());
     i++;
   }
@@ -35,10 +37,10 @@ void MorrowindDataArchives::setArchives(const QString& iniFile, const QStringLis
 {
   QSettings ini(iniFile, QSettings::IniFormat);
 
-  QString key      = "Archive ";
+  QString key      = u"Archive "_s;
 
   for (int i = 0; i < list.size(); i++) {
-    ini.setValue(QString("Archives/%1%2").arg(key, i), list.at(i));
+    ini.setValue(QString(u"Archives/%1%2"_s).arg(key, i), list.at(i));
     if (ini.status() != QSettings::NoError) {
       qWarning("failed to set archives in \"%s\"", qUtf8Printable(iniFile));
     }
@@ -51,8 +53,8 @@ QStringList MorrowindDataArchives::archives(const MOBase::IProfile* profile) con
 
   QString iniFile =
       profile->localSettingsEnabled()
-          ? QDir(profile->absolutePath()).absoluteFilePath("morrowind.ini")
-          : gameDirectory().absoluteFilePath("morrowind.ini");
+          ? QDir(profile->absolutePath()).absoluteFilePath(u"morrowind.ini"_s)
+          : gameDirectory().absoluteFilePath(u"morrowind.ini"_s);
   result.append(getArchives(iniFile));
 
   return result;
@@ -63,7 +65,7 @@ void MorrowindDataArchives::writeArchiveList(MOBase::IProfile* profile,
 {
   QString iniFile =
       profile->localSettingsEnabled()
-          ? QDir(profile->absolutePath()).absoluteFilePath("morrowind.ini")
-          : gameDirectory().absoluteFilePath("morrowind.ini");
+          ? QDir(profile->absolutePath()).absoluteFilePath(u"morrowind.ini"_s)
+          : gameDirectory().absoluteFilePath(u"morrowind.ini"_s);
   setArchives(iniFile, before);
 }

@@ -1,9 +1,11 @@
 #include "nehrimsavegame.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 NehrimSaveGame::NehrimSaveGame(QString const& fileName, GameNehrim const* game)
     : GamebryoSaveGame(fileName, game)
 {
-  FileWrapper file(getFilepath(), "TES4SAVEGAME");
+  FileWrapper file(getFilepath(), u"TES4SAVEGAME"_s);
   file.setPluginString(GamebryoSaveGame::StringType::TYPE_BSTRING);
 
   SYSTEMTIME creationTime;
@@ -45,7 +47,7 @@ void NehrimSaveGame::fetchInformationFields(FileWrapper& file,
 
 std::unique_ptr<GamebryoSaveGame::DataFields> NehrimSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "TES4SAVEGAME");
+  FileWrapper file(getFilepath(), u"TES4SAVEGAME"_s);
   file.setPluginString(GamebryoSaveGame::StringType::TYPE_BSTRING);
 
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();

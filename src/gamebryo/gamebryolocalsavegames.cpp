@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <QSettings>
 
+using namespace Qt::Literals::StringLiterals;
+
 GamebryoLocalSavegames::GamebryoLocalSavegames(const GameGamebryo* game,
                                                const QString& iniFileName)
     : m_Game{game}, m_IniFileName(iniFileName)
@@ -38,7 +40,7 @@ MappingType GamebryoLocalSavegames::mappings(const QDir& profileSaveDir) const
 
 QString GamebryoLocalSavegames::localSavesDummy() const
 {
-  return "__MO_Saves/";
+  return u"__MO_Saves/"_s;
 }
 
 QDir GamebryoLocalSavegames::localSavesDirectory() const
@@ -58,16 +60,16 @@ bool GamebryoLocalSavegames::prepareProfile(MOBase::IProfile* profile)
   QString basePath    = profile->localSettingsEnabled()
                             ? profile->absolutePath()
                             : localGameDirectory().absolutePath();
-  QString iniFilePath = basePath + "/" + m_IniFileName;
-  QString saveIniFilePath = profile->absolutePath() + "/" + "savepath.ini";
+  QString iniFilePath = basePath % '/' % m_IniFileName;
+  QString saveIniFilePath = profile->absolutePath() % '/' % u"savepath.ini"_s;
 
   QSettings ini(iniFilePath, QSettings::IniFormat);
 
-  QString skipMe = QStringLiteral("SKIP_ME");
-  QString deleteMe = QStringLiteral("DELETE_ME");
+  static const auto skipMe = u"SKIP_ME"_s;
+  static const auto deleteMe = u"DELETE_ME"_s;
 
-  QString sLocalSavePath = QStringLiteral("General/sLocalSavePath");
-  QString bUseMyGamesDirectory = QStringLiteral("General/bUseMyGamesDirectory");
+  static const auto sLocalSavePath = u"General/sLocalSavePath"_s;
+  static const auto bUseMyGamesDirectory = u"General/bUseMyGamesDirectory"_s;
 
   // Get the current sLocalSavePath
   QString currentPath = ini.value(sLocalSavePath, skipMe).toString();
@@ -80,7 +82,7 @@ bool GamebryoLocalSavegames::prepareProfile(MOBase::IProfile* profile)
   if (enable) {
     QDir saves = localSavesDirectory();
     if (!saves.exists()) {
-      saves.mkdir(".");
+      saves.mkdir(u"."_s);
     }
   }
 
@@ -97,7 +99,7 @@ bool GamebryoLocalSavegames::prepareProfile(MOBase::IProfile* profile)
     }
 
     ini.setValue(sLocalSavePath, localSavesDummy());
-    ini.setValue(bUseMyGamesDirectory, QStringLiteral("1"));
+    ini.setValue(bUseMyGamesDirectory, u"1"_s);
   }
 
   // Get rid of the local saves setting if it's still there

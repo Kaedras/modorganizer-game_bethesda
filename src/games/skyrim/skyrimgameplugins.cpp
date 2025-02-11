@@ -14,17 +14,21 @@ using MOBase::IPluginList;
 using MOBase::reportError;
 using MOBase::SafeWriteFile;
 
+using namespace Qt::Literals::StringLiterals;
+
 SkyrimGamePlugins::SkyrimGamePlugins(IOrganizer* organizer)
     : GamebryoGamePlugins(organizer)
 {}
 
 void SkyrimGamePlugins::readPluginLists(MOBase::IPluginList* pluginList)
 {
-  QString loadOrderPath = organizer()->profile()->absolutePath() + "/loadorder.txt";
-  QString pluginsPath   = organizer()->profile()->absolutePath() + "/plugins.txt";
+  QString loadOrderPath = organizer()->profile()->absolutePath() % u"/loadorder.txt"_s;
+  QString pluginsPath   = organizer()->profile()->absolutePath() % u"/plugins.txt"_s;
 
-  bool loadOrderIsNew = !m_LastRead.isValid() || !QFileInfo(loadOrderPath).exists() ||
-                        QFileInfo(loadOrderPath).lastModified() > m_LastRead;
+  QFileInfo loadOrderFileInfo(loadOrderPath);
+
+  bool loadOrderIsNew = !m_LastRead.isValid() || !loadOrderFileInfo.exists() ||
+                        loadOrderFileInfo.lastModified() > m_LastRead;
   bool pluginsIsNew =
       !m_LastRead.isValid() || QFileInfo(pluginsPath).lastModified() > m_LastRead;
 
@@ -68,14 +72,14 @@ QStringList SkyrimGamePlugins::readPluginList(MOBase::IPluginList* pluginList)
   // Do not sort the primary plugins. Their load order should be locked as defined in
   // "primaryPlugins".
   const QStringList pluginsClone(plugins);
-  for (QString plugin : pluginsClone) {
+  for (const QString& plugin : pluginsClone) {
     if (primaryPlugins.contains(plugin, Qt::CaseInsensitive))
       plugins.removeAll(plugin);
   }
 
   // Determine plugin active state by the plugins.txt file.
   bool pluginsTxtExists = true;
-  QString filePath      = organizer()->profile()->absolutePath() + "/plugins.txt";
+  QString filePath      = organizer()->profile()->absolutePath() % u"/plugins.txt"_s;
   QFile file(filePath);
   if (!file.open(QIODevice::ReadOnly)) {
     pluginsTxtExists = false;

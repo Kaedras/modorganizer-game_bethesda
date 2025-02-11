@@ -28,6 +28,7 @@
 #include <vector>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameMorrowind::GameMorrowind() {}
 
@@ -53,22 +54,22 @@ bool GameMorrowind::init(IOrganizer* moInfo)
 
 QString GameMorrowind::gameName() const
 {
-  return "Morrowind";
+  return u"Morrowind"_s;
 }
 
 QString GameMorrowind::getLauncherName() const
 {
-  return "Morrowind Launcher.exe";
+  return u"Morrowind Launcher.exe"_s;
 }
 
 QDir GameMorrowind::dataDirectory() const
 {
-  return gameDirectory().absoluteFilePath("Data Files");
+  return gameDirectory().absoluteFilePath(u"Data Files"_s);
 }
 
 QDir GameMorrowind::savesDirectory() const
 {
-  return QDir(gameDirectory().absoluteFilePath("Saves"));
+  return QDir(gameDirectory().absoluteFilePath(u"Saves"_s));
 }
 
 QDir GameMorrowind::documentsDirectory() const
@@ -79,13 +80,13 @@ QDir GameMorrowind::documentsDirectory() const
 QList<ExecutableInfo> GameMorrowind::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("MWSE (Launcher Method)",
-                           findInGameFolder("MWSE Launcher.exe"))
-         << ExecutableInfo("Morrowind", findInGameFolder(binaryName()))
-         << ExecutableInfo("Morrowind Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("MGE XE", findInGameFolder("MGEXEgui.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Morrowind\"");
+         << ExecutableInfo(u"MWSE (Launcher Method)"_s,
+                           findInGameFolder(u"MWSE Launcher.exe"_s))
+         << ExecutableInfo(u"Morrowind"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Morrowind Launcher"_s, findInGameFolder(getLauncherName()))
+         << ExecutableInfo(u"MGE XE"_s, findInGameFolder(u"MGEXEgui.exe"_s))
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Morrowind\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameMorrowind::executableForcedLoads() const
@@ -95,7 +96,7 @@ QList<ExecutableForcedLoadSetting> GameMorrowind::executableForcedLoads() const
 
 QString GameMorrowind::name() const
 {
-  return "Morrowind Support Plugin";
+  return u"Morrowind Support Plugin"_s;
 }
 
 QString GameMorrowind::localizedName() const
@@ -105,14 +106,14 @@ QString GameMorrowind::localizedName() const
 
 QString GameMorrowind::author() const
 {
-  return "Schilduin & MO2 Team";
+  return u"Schilduin & MO2 Team"_s;
 }
 
 QString GameMorrowind::description() const
 {
   return tr("Adds support for the game Morrowind.\n"
             "Splash by %1")
-      .arg("AnyOldName3");
+      .arg(u"AnyOldName3"_s);
 }
 
 MOBase::VersionInfo GameMorrowind::version() const
@@ -128,22 +129,22 @@ QList<PluginSetting> GameMorrowind::settings() const
 void GameMorrowind::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Morrowind", path, "plugins.txt");
+    copyToProfile(localAppFolder() % u"/Morrowind"_s, path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
-    copyToProfile(gameDirectory().absolutePath(), path, "Morrowind.ini");
+    copyToProfile(gameDirectory().absolutePath(), path, u"Morrowind.ini"_s);
   }
 }
 
 QString GameMorrowind::savegameExtension() const
 {
-  return "ess";
+  return u"ess"_s;
 }
 
 QString GameMorrowind::savegameSEExtension() const
 {
-  return "mwse";
+  return u"mwse"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -154,37 +155,37 @@ GameMorrowind::makeSaveGame(QString filePath) const
 
 QString GameMorrowind::steamAPPId() const
 {
-  return "22320";
+  return u"22320"_s;
 }
 
 QStringList GameMorrowind::primaryPlugins() const
 {
-  return {"morrowind.esm"};
+  return {u"morrowind.esm"_s};
 }
 
 QString GameMorrowind::binaryName() const
 {
-  return "Morrowind.exe";
+  return u"Morrowind.exe"_s;
 }
 
 QString GameMorrowind::gameShortName() const
 {
-  return "Morrowind";
+  return u"Morrowind"_s;
 }
 
 QString GameMorrowind::gameNexusName() const
 {
-  return "Morrowind";
+  return u"Morrowind"_s;
 }
 
 QStringList GameMorrowind::iniFiles() const
 {
-  return {"morrowind.ini"};
+  return {u"morrowind.ini"_s};
 }
 
 QStringList GameMorrowind::DLCPlugins() const
 {
-  return {"Tribunal.esm", "Bloodmoon.esm"};
+  return {u"Tribunal.esm"_s, u"Bloodmoon.esm"_s};
 }
 
 MOBase::IPluginGame::SortMechanism GameMorrowind::sortMechanism() const
@@ -206,6 +207,6 @@ QString GameMorrowind::identifyGamePath() const
 {
   QString path = GameGamebryo::identifyGamePath();
   if (path.isEmpty())
-    path = MOBase::findSteamGame("Morrowind", "Data Files/Morrowind.esm");
+    path = MOBase::findSteamGame(u"Morrowind"_s, u"Data Files/Morrowind.esm"_s);
   return path;
 }

@@ -1,5 +1,7 @@
 #include "oblivionmoddatachecker.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 MOBase::ModDataChecker::CheckReturn OblivionModDataChecker::dataLooksValid(
     std::shared_ptr<const MOBase::IFileTree> fileTree) const
 {
@@ -11,7 +13,7 @@ MOBase::ModDataChecker::CheckReturn OblivionModDataChecker::dataLooksValid(
 
   // Check for OBSE_ files:
   for (auto const& entry : *fileTree) {
-    if (entry->isDir() || !entry->name().startsWith("OBSE", Qt::CaseInsensitive)) {
+    if (entry->isDir() || !entry->name().startsWith(u"OBSE"_s, Qt::CaseInsensitive)) {
       return CheckReturn::INVALID;
     }
   }
@@ -24,7 +26,7 @@ OblivionModDataChecker::fix(std::shared_ptr<MOBase::IFileTree> fileTree) const
 {
   // If we arrive here, it means all files starts with OBSE.
   auto data = fileTree->createOrphanTree();
-  auto obse = data->addDirectory("OBSE/Plugins");
+  auto obse = data->addDirectory(u"OBSE/Plugins"_s);
   obse->merge(fileTree);
   return data;
 }

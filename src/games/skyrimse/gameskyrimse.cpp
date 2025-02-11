@@ -29,6 +29,7 @@
 #include <memory>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameSkyrimSE::GameSkyrimSE() {}
 
@@ -39,14 +40,14 @@ void GameSkyrimSE::setVariant(QString variant)
 
 void GameSkyrimSE::checkVariants()
 {
-  QFileInfo gog_dll(m_GamePath + "/Galaxy64.dll");
-  QFileInfo epic_dll(m_GamePath + "/EOSSDK-Win64-Shipping.dll");
+  QFileInfo gog_dll(m_GamePath % u"/Galaxy64.dll"_s);
+  QFileInfo epic_dll(m_GamePath % u"/EOSSDK-Win64-Shipping.dll"_s);
   if (gog_dll.exists())
-    setVariant("GOG");
+    setVariant(u"GOG"_s);
   else if (epic_dll.exists())
-    setVariant("Epic Games");
+    setVariant(u"Epic Games"_s);
   else
-    setVariant("Steam");
+    setVariant(u"Steam"_s);
 }
 
 QDir GameSkyrimSE::documentsDirectory() const
@@ -64,9 +65,9 @@ void GameSkyrimSE::detectGame()
 QString GameSkyrimSE::identifyGamePath() const
 {
   QMap<QString, QString> paths = {
-      {"Software\\Bethesda Softworks\\" + gameName(), "Installed Path"},
-      {"Software\\GOG.com\\Games\\1162721350", "path"},
-      {"Software\\GOG.com\\Games\\1711230643", "path"},
+      {u"Software\\Bethesda Softworks\\"_s % gameName(), u"Installed Path"_s},
+      {u"Software\\GOG.com\\Games\\1162721350"_s, u"path"_s},
+      {u"Software\\GOG.com\\Games\\1711230643"_s, u"path"_s},
   };
 
   QString result;
@@ -82,7 +83,7 @@ QString GameSkyrimSE::identifyGamePath() const
   //      AE Update: 5d600e4f59974aeba0259c7734134e27
   if (result.isEmpty()) {
     result = parseEpicGamesLocation(
-        {"ac82db5035584c7f8a2c548d98c86b2c", "5d600e4f59974aeba0259c7734134e27"});
+        {u"ac82db5035584c7f8a2c548d98c86b2c"_s, u"5d600e4f59974aeba0259c7734134e27"_s});
   }
 
   return result;
@@ -97,7 +98,7 @@ void GameSkyrimSE::setGamePath(const QString& path)
 
 QDir GameSkyrimSE::savesDirectory() const
 {
-  return QDir(m_MyGamesPath + "/Saves");
+  return QDir(m_MyGamesPath + u"/Saves"_s);
 }
 
 QString GameSkyrimSE::myGamesPath() const
@@ -118,7 +119,7 @@ bool GameSkyrimSE::init(IOrganizer* moInfo)
 
   registerFeature(std::make_shared<SkyrimSEScriptExtender>(this));
   registerFeature(std::make_shared<SkyrimSEDataArchives>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "SkyrimCustom.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, u"SkyrimCustom.ini"_s));
   registerFeature(std::make_shared<SkyrimSEModDataChecker>(this));
   registerFeature(
       std::make_shared<SkyrimSEModDataContent>(m_Organizer->gameFeatures()));
@@ -131,33 +132,33 @@ bool GameSkyrimSE::init(IOrganizer* moInfo)
 
 QString GameSkyrimSE::gameName() const
 {
-  return "Skyrim Special Edition";
+  return u"Skyrim Special Edition"_s;
 }
 
 QString GameSkyrimSE::gameDirectoryName() const
 {
-  if (selectedVariant() == "GOG")
-    return "Skyrim Special Edition GOG";
-  else if (selectedVariant() == "Epic Games")
-    return "Skyrim Special Edition EPIC";
+  if (selectedVariant() == u"GOG"_s)
+    return u"Skyrim Special Edition GOG"_s;
+  else if (selectedVariant() == u"Epic Games"_s)
+    return u"Skyrim Special Edition EPIC"_s;
   else
-    return "Skyrim Special Edition";
+    return u"Skyrim Special Edition"_s;
 }
 
 QList<ExecutableInfo> GameSkyrimSE::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("SKSE",
+         << ExecutableInfo(u"SKSE"_s,
                            findInGameFolder(m_Organizer->gameFeatures()
                                                 ->gameFeature<MOBase::ScriptExtender>()
                                                 ->loaderName()))
-         << ExecutableInfo("Skyrim Special Edition", findInGameFolder(binaryName()))
-         << ExecutableInfo("Skyrim Special Edition Launcher",
+         << ExecutableInfo(u"Skyrim Special Edition"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Skyrim Special Edition Launcher"_s,
                            findInGameFolder(getLauncherName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("1946180")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Skyrim Special Edition\"");
+         << ExecutableInfo(u"Creation Kit"_s, findInGameFolder(u"CreationKit.exe"_s))
+                .withSteamAppId(u"1946180"_s)
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Skyrim Special Edition\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameSkyrimSE::executableForcedLoads() const
@@ -167,12 +168,12 @@ QList<ExecutableForcedLoadSetting> GameSkyrimSE::executableForcedLoads() const
 
 QFileInfo GameSkyrimSE::findInGameFolder(const QString& relativePath) const
 {
-  return QFileInfo(m_GamePath + "/" + relativePath);
+  return QFileInfo(m_GamePath % '/' % relativePath);
 }
 
 QString GameSkyrimSE::name() const
 {
-  return "Skyrim Special Edition Support Plugin";
+  return u"Skyrim Special Edition Support Plugin"_s;
 }
 
 QString GameSkyrimSE::localizedName() const
@@ -182,7 +183,7 @@ QString GameSkyrimSE::localizedName() const
 
 QString GameSkyrimSE::author() const
 {
-  return "MO2 Team, Orig: Archost & ZachHaber";
+  return u"MO2 Team, Orig: Archost & ZachHaber"_s;
 }
 
 QString GameSkyrimSE::description() const
@@ -197,38 +198,38 @@ MOBase::VersionInfo GameSkyrimSE::version() const
 
 QList<PluginSetting> GameSkyrimSE::settings() const
 {
-  return {PluginSetting("enderal_downloads", "allow Enderal and Enderal SE downloads",
+  return {PluginSetting(u"enderal_downloads"_s, u"allow Enderal and Enderal SE downloads"_s,
                         QVariant(false))};
 }
 
 void GameSkyrimSE::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/" + gameDirectoryName(), path, "plugins.txt");
+    copyToProfile(localAppFolder() % '/' % gameDirectoryName(), path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo::exists(myGamesPath() + "/Skyrim.ini")) {
-      copyToProfile(gameDirectory().absolutePath(), path, "Skyrim_default.ini",
-                    "Skyrim.ini");
+        !QFileInfo::exists(myGamesPath() + u"/Skyrim.ini"_s)) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"Skyrim_default.ini"_s,
+                    u"Skyrim.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "Skyrim.ini");
+      copyToProfile(myGamesPath(), path, u"Skyrim.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "SkyrimPrefs.ini");
-    copyToProfile(myGamesPath(), path, "SkyrimCustom.ini");
+    copyToProfile(myGamesPath(), path, u"SkyrimPrefs.ini"_s);
+    copyToProfile(myGamesPath(), path, u"SkyrimCustom.ini"_s);
   }
 }
 
 QString GameSkyrimSE::savegameExtension() const
 {
-  return "ess";
+  return u"ess"_s;
 }
 
 QString GameSkyrimSE::savegameSEExtension() const
 {
-  return "skse";
+  return u"skse"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -239,15 +240,15 @@ GameSkyrimSE::makeSaveGame(QString filePath) const
 
 QString GameSkyrimSE::steamAPPId() const
 {
-  if (selectedVariant() == "Steam")
-    return "489830";
-  return QString();
+  if (selectedVariant() == u"Steam"_s)
+    return u"489830"_s;
+  return u""_s;
 }
 
 QStringList GameSkyrimSE::primaryPlugins() const
 {
-  QStringList plugins = {"Skyrim.esm", "Update.esm", "Dawnguard.esm", "HearthFires.esm",
-                         "Dragonborn.esm"};
+  QStringList plugins = {u"Skyrim.esm"_s, u"Update.esm"_s, u"Dawnguard.esm"_s, u"HearthFires.esm"_s,
+                         u"Dragonborn.esm"_s};
 
   plugins.append(CCPlugins());
 
@@ -256,36 +257,36 @@ QStringList GameSkyrimSE::primaryPlugins() const
 
 QStringList GameSkyrimSE::gameVariants() const
 {
-  return {"Steam", "GOG", "Epic Games"};
+  return {u"Steam"_s, u"GOG"_s, u"Epic Games"_s};
 }
 
 QString GameSkyrimSE::gameShortName() const
 {
-  return "SkyrimSE";
+  return u"SkyrimSE"_s;
 }
 
 QStringList GameSkyrimSE::validShortNames() const
 {
-  QStringList shortNames{"Skyrim"};
-  if (m_Organizer->pluginSetting(name(), "enderal_downloads").toBool()) {
-    shortNames.append({"Enderal", "EnderalSE"});
+  QStringList shortNames{u"Skyrim"_s};
+  if (m_Organizer->pluginSetting(name(), u"enderal_downloads"_s).toBool()) {
+    shortNames.append({u"Enderal"_s, u"EnderalSE"_s});
   }
   return shortNames;
 }
 
 QString GameSkyrimSE::gameNexusName() const
 {
-  return "skyrimspecialedition";
+  return u"skyrimspecialedition"_s;
 }
 
 QStringList GameSkyrimSE::iniFiles() const
 {
-  return {"Skyrim.ini", "SkyrimPrefs.ini", "skyrimcustom.ini"};
+  return {u"Skyrim.ini"_s, u"SkyrimPrefs.ini"_s, u"skyrimcustom.ini"_s};
 }
 
 QStringList GameSkyrimSE::DLCPlugins() const
 {
-  return {"Dawnguard.esm", "HearthFires.esm", "Dragonborn.esm"};
+  return {u"Dawnguard.esm"_s, u"HearthFires.esm"_s, u"Dragonborn.esm"_s};
 }
 
 QStringList GameSkyrimSE::CCPlugins() const
@@ -293,7 +294,7 @@ QStringList GameSkyrimSE::CCPlugins() const
   QStringList plugins;
   std::set<QString> pluginsLookup;
 
-  const QString path = gameDirectory().filePath("Skyrim.ccc");
+  const QString path = gameDirectory().filePath(u"Skyrim.ccc"_s);
 
   MOBase::forEachLineInFile(path, [&](QString s) {
     const auto lc = s.toLower();
@@ -331,9 +332,9 @@ MappingType GameSkyrimSE::mappings() const
 {
   MappingType result;
 
-  for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
-    result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                      localAppFolder() + "/" + gameDirectoryName() + "/" + profileFile,
+  for (const QString& profileFile : {u"plugins.txt"_s, u"loadorder.txt"_s}) {
+    result.push_back({m_Organizer->profilePath() % '/' % profileFile,
+                      localAppFolder() % '/' % gameDirectoryName() % '/' % profileFile,
                       false});
   }
 

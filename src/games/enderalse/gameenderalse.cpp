@@ -29,6 +29,7 @@
 #include <memory>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameEnderalSE::GameEnderalSE() {}
 
@@ -39,11 +40,11 @@ void GameEnderalSE::setVariant(QString variant)
 
 void GameEnderalSE::checkVariants()
 {
-  QFileInfo gog_dll(m_GamePath + "/Galaxy64.dll");
+  QFileInfo gog_dll(m_GamePath % u"/Galaxy64.dll"_s);
   if (gog_dll.exists())
-    setVariant("GOG");
+    setVariant(u"GOG"_s);
   else
-    setVariant("Steam");
+    setVariant(u"Steam"_s);
 }
 
 QDir GameEnderalSE::documentsDirectory() const
@@ -61,8 +62,8 @@ void GameEnderalSE::detectGame()
 QString GameEnderalSE::identifyGamePath() const
 {
   QMap<QString, QString> paths = {
-      {"Software\\Bethesda Softworks\\" + gameName(), "Installed Path"},
-      {"Software\\GOG.com\\Games\\1708684988", "path"},
+      {u"Software\\Bethesda Softworks\\"_s % gameName(), u"Installed Path"_s},
+      {u"Software\\GOG.com\\Games\\1708684988"_s, "path"},
   };
   QString result;
   try {
@@ -73,8 +74,8 @@ QString GameEnderalSE::identifyGamePath() const
         break;
     }
   } catch (MOBase::MyException) {
-    result = MOBase::findSteamGame("Enderal Special Edition",
-                                   "Data/Enderal - Forgotten Stories.esm");
+    result = MOBase::findSteamGame(u"Enderal Special Edition"_s,
+                                   u"Data/Enderal - Forgotten Stories.esm"_s);
   }
   return result;
 }
@@ -88,7 +89,7 @@ void GameEnderalSE::setGamePath(const QString& path)
 
 QDir GameEnderalSE::savesDirectory() const
 {
-  return QDir(m_MyGamesPath + "/Saves");
+  return QDir(m_MyGamesPath % u"/Saves"_s);
 }
 
 bool GameEnderalSE::isInstalled() const
@@ -105,7 +106,7 @@ bool GameEnderalSE::init(IOrganizer* moInfo)
   auto dataArchives = std::make_shared<EnderalSEDataArchives>(this);
   registerFeature(std::make_shared<EnderalSEScriptExtender>(this));
   registerFeature(dataArchives);
-  registerFeature(std::make_shared<EnderalSELocalSavegames>(this, "Enderal.ini"));
+  registerFeature(std::make_shared<EnderalSELocalSavegames>(this, u"Enderal.ini"_s));
   registerFeature(std::make_shared<EnderalSEModDataChecker>(this));
   registerFeature(std::make_shared<EnderalSEModDataContent>(moInfo->gameFeatures()));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
@@ -117,15 +118,15 @@ bool GameEnderalSE::init(IOrganizer* moInfo)
 
 QString GameEnderalSE::gameName() const
 {
-  return "Enderal Special Edition";
+  return u"Enderal Special Edition"_s;
 }
 
 QString GameEnderalSE::gameDirectoryName() const
 {
-  if (selectedVariant() == "GOG")
-    return "Enderal Special Edition GOG";
+  if (selectedVariant() == u"GOG"_s)
+    return u"Enderal Special Edition GOG"_s;
   else
-    return "Enderal Special Edition";
+    return u"Enderal Special Edition"_s;
 }
 
 QIcon GameEnderalSE::gameIcon() const
@@ -136,16 +137,16 @@ QIcon GameEnderalSE::gameIcon() const
 QList<ExecutableInfo> GameEnderalSE::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("Enderal Special Edition (SKSE)",
+         << ExecutableInfo(u"Enderal Special Edition (SKSE)"_s,
                            findInGameFolder(m_Organizer->gameFeatures()
                                                 ->gameFeature<MOBase::ScriptExtender>()
                                                 ->loaderName()))
-         << ExecutableInfo("Enderal Special Edition Launcher",
+         << ExecutableInfo(u"Enderal Special Edition Launcher"_s,
                            findInGameFolder(getLauncherName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("1946180")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Enderal Special Edition\"");
+         << ExecutableInfo(u"Creation Kit"_s, findInGameFolder(u"CreationKit.exe"_s))
+                .withSteamAppId(u"1946180"_s)
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Enderal Special Edition\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameEnderalSE::executableForcedLoads() const
@@ -155,12 +156,12 @@ QList<ExecutableForcedLoadSetting> GameEnderalSE::executableForcedLoads() const
 
 QString GameEnderalSE::binaryName() const
 {
-  return "skse64_loader.exe";
+  return u"skse64_loader.exe"_s;
 }
 
 QString GameEnderalSE::getLauncherName() const
 {
-  return "Enderal Launcher.exe";
+  return u"Enderal Launcher.exe"_s;
 }
 
 bool GameEnderalSE::looksValid(const QDir& folder) const
@@ -172,12 +173,12 @@ bool GameEnderalSE::looksValid(const QDir& folder) const
 
 QFileInfo GameEnderalSE::findInGameFolder(const QString& relativePath) const
 {
-  return QFileInfo(m_GamePath + "/" + relativePath);
+  return QFileInfo(m_GamePath % '/' % relativePath);
 }
 
 QString GameEnderalSE::name() const
 {
-  return "Enderal Special Edition Support Plugin";
+  return u"Enderal Special Edition Support Plugin"_s;
 }
 
 QString GameEnderalSE::localizedName() const
@@ -187,7 +188,7 @@ QString GameEnderalSE::localizedName() const
 
 QString GameEnderalSE::author() const
 {
-  return "Archost, ZachHaber & MO2 Team";
+  return u"Archost, ZachHaber & MO2 Team"_s;
 }
 
 QString GameEnderalSE::description() const
@@ -208,33 +209,33 @@ QList<PluginSetting> GameEnderalSE::settings() const
 void GameEnderalSE::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + gameDirectoryName(), path, "plugins.txt");
+    copyToProfile(localAppFolder() % gameDirectoryName(), path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/Enderal.ini").exists()) {
+        !QFileInfo::exists(myGamesPath() % u"/Enderal.ini"_s)) {
 
       // there is no default ini, actually they are going to put them in for us!
-      copyToProfile(gameDirectory().absolutePath(), path, "Enderal_default.ini",
-                    "Enderal.ini");
-      copyToProfile(gameDirectory().absolutePath(), path, "EnderalPrefs_default.ini",
-                    "EnderalPrefs.ini");
+      copyToProfile(gameDirectory().absolutePath(), path, u"Enderal_default.ini"_s,
+                    u"Enderal.ini"_s);
+      copyToProfile(gameDirectory().absolutePath(), path, u"EnderalPrefs_default.ini"_s,
+                    u"EnderalPrefs.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "Enderal.ini");
-      copyToProfile(myGamesPath(), path, "EnderalPrefs.ini");
+      copyToProfile(myGamesPath(), path, u"Enderal.ini"_s);
+      copyToProfile(myGamesPath(), path, u"EnderalPrefs.ini"_s);
     }
   }
 }
 
 QString GameEnderalSE::savegameExtension() const
 {
-  return "ess";
+  return u"ess"_s;
 }
 
 QString GameEnderalSE::savegameSEExtension() const
 {
-  return "skse";
+  return u"skse"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -245,20 +246,20 @@ GameEnderalSE::makeSaveGame(QString filePath) const
 
 QString GameEnderalSE::steamAPPId() const
 {
-  if (selectedVariant() == "Steam")
-    return "976620";
+  if (selectedVariant() == u"Steam"_s)
+    return u"976620"_s;
   return "";
 }
 
 QStringList GameEnderalSE::primaryPlugins() const
 {
-  return {"Skyrim.esm", "Update.esm", "Dawnguard.esm", "HearthFires.esm",
-          "Dragonborn.esm",
+  return {u"Skyrim.esm"_s, u"Update.esm"_s, u"Dawnguard.esm"_s, u"HearthFires.esm"_s,
+          u"Dragonborn.esm"_s,
 
           // these two plugins are considered "primary" for users but are not
           // automatically loaded by the game so we need to force-write them
           // to the plugin list
-          "Enderal - Forgotten Stories.esm", "SkyUI_SE.esp"};
+          u"Enderal - Forgotten Stories.esm"_s, u"SkyUI_SE.esp"_s};
 }
 
 QStringList GameEnderalSE::DLCPlugins() const
@@ -268,27 +269,27 @@ QStringList GameEnderalSE::DLCPlugins() const
 
 QStringList GameEnderalSE::gameVariants() const
 {
-  return {"Steam", "GOG"};
+  return {u"Steam"_s, u"GOG"_s};
 }
 
 QString GameEnderalSE::gameShortName() const
 {
-  return "EnderalSE";
+  return u"EnderalSE"_s;
 }
 
 QStringList GameEnderalSE::validShortNames() const
 {
-  return {"Skyrim", "SkyrimSE", "Enderal"};
+  return {u"Skyrim"_s, u"SkyrimSE"_s, u"Enderal"_s};
 }
 
 QString GameEnderalSE::gameNexusName() const
 {
-  return "enderalspecialedition";
+  return u"enderalspecialedition"_s;
 }
 
 QStringList GameEnderalSE::iniFiles() const
 {
-  return {"Enderal.ini", "EnderalPrefs.ini"};
+  return {u"Enderal.ini"_s, u"EnderalPrefs.ini"_s};
 }
 
 QStringList GameEnderalSE::CCPlugins() const
@@ -321,9 +322,9 @@ MappingType GameEnderalSE::mappings() const
 {
   MappingType result;
 
-  for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
-    result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                      localAppFolder() + "/" + gameDirectoryName() + "/" + profileFile,
+  for (const auto& profileFile : {u"plugins.txt"_s, u"loadorder.txt"_s}) {
+    result.push_back({m_Organizer->profilePath() % '/' % profileFile,
+                      localAppFolder() % '/' % gameDirectoryName() % '/' % profileFile,
                       false});
   }
 

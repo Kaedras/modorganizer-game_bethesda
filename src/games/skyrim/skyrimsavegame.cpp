@@ -8,10 +8,12 @@
 
 #include "gameskyrim.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 SkyrimSaveGame::SkyrimSaveGame(QString const& fileName, GameSkyrim const* game)
     : GamebryoSaveGame(fileName, game)
 {
-  FileWrapper file(getFilepath(), "TESV_SAVEGAME");
+  FileWrapper file(getFilepath(), u"TESV_SAVEGAME"_s);
 
   FILETIME ftime;
   fetchInformationFields(file, m_SaveNumber, m_PCName, m_PCLevel, m_PCLocation, ftime);
@@ -56,7 +58,7 @@ void SkyrimSaveGame::fetchInformationFields(
 
 std::unique_ptr<GamebryoSaveGame::DataFields> SkyrimSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "TESV_SAVEGAME");
+  FileWrapper file(getFilepath(), u"TESV_SAVEGAME"_s);
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();
 
   {

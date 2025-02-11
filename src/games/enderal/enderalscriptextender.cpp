@@ -1,7 +1,8 @@
 #include "enderalscriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 EnderalScriptExtender::EnderalScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -9,10 +10,10 @@ EnderalScriptExtender::EnderalScriptExtender(GameGamebryo const* game)
 
 QString EnderalScriptExtender::BinaryName() const
 {
-  return "skse_loader.exe";
+  return u"skse_loader.exe"_s;
 }
 
 QString EnderalScriptExtender::PluginPath() const
 {
-  return "SKSE/plugins";
+  return u"SKSE/plugins"_s;
 }

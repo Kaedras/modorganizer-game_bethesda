@@ -4,6 +4,8 @@
 #include <gamebryomoddatacontent.h>
 #include <ifiletree.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 class Fallout4ModDataContent : public GamebryoModDataContent
 {
 protected:
@@ -23,7 +25,7 @@ public:
   {
     auto contents = GamebryoModDataContent::getAllContents();
     contents.push_back(
-        Content(CONTENT_MATERIAL, "Materials", ":/MO/gui/content/material"));
+        Content(CONTENT_MATERIAL, u"Materials"_s, u":/MO/gui/content/material"_s));
     return contents;
   }
 
@@ -32,7 +34,7 @@ public:
   {
     auto contents = GamebryoModDataContent::getContentsFor(fileTree);
     for (auto e : *fileTree) {
-      if (e->compare("materials") == 0) {
+      if (e->compare(u"materials"_s) == 0) {
         contents.push_back(CONTENT_MATERIAL);
         break;  // Early break if you have nothing else to check.
       }

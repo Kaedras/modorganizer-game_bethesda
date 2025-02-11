@@ -37,6 +37,7 @@
 #include <vector>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameSkyrim::GameSkyrim() {}
 
@@ -51,7 +52,7 @@ bool GameSkyrim::init(IOrganizer* moInfo)
   registerFeature(dataArchives);
   registerFeature(std::make_shared<SkyrimBSAInvalidation>(dataArchives.get(), this));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "skyrim.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, u"skyrim.ini"_s));
   registerFeature(std::make_shared<SkyrimModDataChecker>(this));
   registerFeature(std::make_shared<SkyrimModDataContent>(m_Organizer->gameFeatures()));
   registerFeature(std::make_shared<SkyrimGamePlugins>(moInfo));
@@ -62,24 +63,24 @@ bool GameSkyrim::init(IOrganizer* moInfo)
 
 QString GameSkyrim::gameName() const
 {
-  return "Skyrim";
+  return u"Skyrim"_s;
 }
 
 QList<ExecutableInfo> GameSkyrim::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("SKSE",
+         << ExecutableInfo(u"SKSE"_s,
                            findInGameFolder(m_Organizer->gameFeatures()
                                                 ->gameFeature<MOBase::ScriptExtender>()
                                                 ->loaderName()))
-         << ExecutableInfo("SBW", findInGameFolder("SBW.exe"))
-         << ExecutableInfo("Skyrim", findInGameFolder(binaryName()))
-         << ExecutableInfo("Skyrim Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("BOSS", findInGameFolder("BOSS/BOSS.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Skyrim\"")
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("202480");
+         << ExecutableInfo(u"SBW"_s, findInGameFolder(u"SBW.exe"_s))
+         << ExecutableInfo(u"Skyrim"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Skyrim Launcher"_s, findInGameFolder(getLauncherName()))
+         << ExecutableInfo(u"BOSS"_s, findInGameFolder(u"BOSS/BOSS.exe"_s))
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Skyrim\""_s)
+         << ExecutableInfo(u"Creation Kit"_s, findInGameFolder(u"CreationKit.exe"_s))
+                .withSteamAppId(u"202480"_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameSkyrim::executableForcedLoads() const
@@ -89,7 +90,7 @@ QList<ExecutableForcedLoadSetting> GameSkyrim::executableForcedLoads() const
 
 QString GameSkyrim::name() const
 {
-  return "Skyrim Support Plugin";
+  return u"Skyrim Support Plugin"_s;
 }
 
 QString GameSkyrim::localizedName() const
@@ -99,7 +100,7 @@ QString GameSkyrim::localizedName() const
 
 QString GameSkyrim::author() const
 {
-  return "Tannin & MO2 Team";
+  return u"Tannin & MO2 Team"_s;
 }
 
 QString GameSkyrim::description() const
@@ -116,37 +117,37 @@ QList<PluginSetting> GameSkyrim::settings() const
 {
   QList<PluginSetting> results;
   results.push_back(
-      PluginSetting("sse_downloads", "allow Skyrim SE downloads", QVariant(false)));
+      PluginSetting(u"sse_downloads"_s, u"allow Skyrim SE downloads"_s, QVariant(false)));
   return results;
 }
 
 void GameSkyrim::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Skyrim", path, "plugins.txt");
+    copyToProfile(localAppFolder() % u"/Skyrim"_s, path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/skyrim.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "skyrim_default.ini",
-                    "skyrim.ini");
+        !QFileInfo::exists(myGamesPath() % u"/skyrim.ini"_s)) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"skyrim_default.ini"_s,
+                    u"skyrim.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "skyrim.ini");
+      copyToProfile(myGamesPath(), path, u"skyrim.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "skyrimprefs.ini");
+    copyToProfile(myGamesPath(), path, u"skyrimprefs.ini"_s);
   }
 }
 
 QString GameSkyrim::savegameExtension() const
 {
-  return "ess";
+  return u"ess"_s;
 }
 
 QString GameSkyrim::savegameSEExtension() const
 {
-  return "skse";
+  return u"skse"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame> GameSkyrim::makeSaveGame(QString filepath) const
@@ -156,51 +157,51 @@ std::shared_ptr<const GamebryoSaveGame> GameSkyrim::makeSaveGame(QString filepat
 
 QString GameSkyrim::steamAPPId() const
 {
-  return "72850";
+  return u"72850"_s;
 }
 
 QStringList GameSkyrim::primaryPlugins() const
 {
-  return {"skyrim.esm", "update.esm"};
+  return {u"skyrim.esm"_s, u"update.esm"_s};
 }
 
 QString GameSkyrim::binaryName() const
 {
-  return "TESV.exe";
+  return u"TESV.exe"_s;
 }
 
 QString GameSkyrim::gameShortName() const
 {
-  return "Skyrim";
+  return u"Skyrim"_s;
 }
 
 QString GameSkyrim::gameNexusName() const
 {
-  return "skyrim";
+  return u"skyrim"_s;
 }
 
 QStringList GameSkyrim::validShortNames() const
 {
   QStringList results;
-  if (m_Organizer->pluginSetting(name(), "sse_downloads").toBool()) {
-    results.push_back("SkyrimSE");
+  if (m_Organizer->pluginSetting(name(), u"sse_downloads"_s).toBool()) {
+    results.push_back(u"SkyrimSE"_s);
   }
   return results;
 }
 
 QStringList GameSkyrim::iniFiles() const
 {
-  return {"skyrim.ini", "skyrimprefs.ini"};
+  return {u"skyrim.ini"_s, u"skyrimprefs.ini"_s};
 }
 
 QStringList GameSkyrim::DLCPlugins() const
 {
-  return {"Dawnguard.esm",
-          "Dragonborn.esm",
-          "HearthFires.esm",
-          "HighResTexturePack01.esp",
-          "HighResTexturePack02.esp",
-          "HighResTexturePack03.esp"};
+  return {u"Dawnguard.esm"_s,
+          u"Dragonborn.esm"_s,
+          u"HearthFires.esm"_s,
+          u"HighResTexturePack01.esp"_s,
+          u"HighResTexturePack02.esp"_s,
+          u"HighResTexturePack03.esp"_s};
 }
 
 IPluginGame::LoadOrderMechanism GameSkyrim::loadOrderMechanism() const

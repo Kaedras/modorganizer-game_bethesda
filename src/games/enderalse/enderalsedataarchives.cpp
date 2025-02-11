@@ -3,34 +3,36 @@
 #include "iprofile.h"
 #include <utility.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 QStringList EnderalSEDataArchives::vanillaArchives() const
 {
-  return {"Skyrim - Textures0.bsa",
-          "Skyrim - Textures1.bsa",
-          "Skyrim - Textures2.bsa",
-          "Skyrim - Textures3.bsa",
-          "Skyrim - Textures4.bsa",
-          "Skyrim - Textures5.bsa",
-          "Skyrim - Textures6.bsa",
-          "Skyrim - Textures7.bsa",
-          "Skyrim - Textures8.bsa",
-          "Skyrim - Meshes0.bsa",
-          "Skyrim - Meshes1.bsa",
-          "Skyrim - Voices_en0.bsa",
-          "Skyrim - Sounds.bsa",
-          "Skyrim - Interface.bsa",
-          "Skyrim - Animations.bsa",
-          "Skyrim - Shaders.bsa",
-          "Skyrim - Misc.bsa",
-          "E - Meshes.bsa",
-          "E - SE.bsa",
-          "E - Scripts.bsa",
-          "E - Sounds.bsa",
-          "E - Textures1.bsa",
-          "E - Textures2.bsa",
-          "E - Textures3.bsa",
-          "L - Textures.bsa",
-          "L - Voices.bsa"};
+  return {u"Skyrim - Textures0.bsa"_s,
+          u"Skyrim - Textures1.bsa"_s,
+          u"Skyrim - Textures2.bsa"_s,
+          u"Skyrim - Textures3.bsa"_s,
+          u"Skyrim - Textures4.bsa"_s,
+          u"Skyrim - Textures5.bsa"_s,
+          u"Skyrim - Textures6.bsa"_s,
+          u"Skyrim - Textures7.bsa"_s,
+          u"Skyrim - Textures8.bsa"_s,
+          u"Skyrim - Meshes0.bsa"_s,
+          u"Skyrim - Meshes1.bsa"_s,
+          u"Skyrim - Voices_en0.bsa"_s,
+          u"Skyrim - Sounds.bsa"_s,
+          u"Skyrim - Interface.bsa"_s,
+          u"Skyrim - Animations.bsa"_s,
+          u"Skyrim - Shaders.bsa"_s,
+          u"Skyrim - Misc.bsa"_s,
+          u"E - Meshes.bsa"_s,
+          u"E - SE.bsa"_s,
+          u"E - Scripts.bsa"_s,
+          u"E - Sounds.bsa"_s,
+          u"E - Textures1.bsa"_s,
+          u"E - Textures2.bsa"_s,
+          u"E - Textures3.bsa"_s,
+          u"L - Textures.bsa"_s,
+          u"L - Voices.bsa"_s};
 }
 
 QStringList EnderalSEDataArchives::archives(const MOBase::IProfile* profile) const
@@ -38,10 +40,10 @@ QStringList EnderalSEDataArchives::archives(const MOBase::IProfile* profile) con
   QStringList result;
 
   QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath("Enderal.ini")
-                        : localGameDirectory().absoluteFilePath("Enderal.ini");
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList", 512));
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList2", 512));
+                        ? QDir(profile->absolutePath()).absoluteFilePath(u"Enderal.ini"_s)
+                        : localGameDirectory().absoluteFilePath(u"Enderal.ini"_s);
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList"_s, 512));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList2"_s, 512));
 
   return result;
 }
@@ -49,16 +51,16 @@ QStringList EnderalSEDataArchives::archives(const MOBase::IProfile* profile) con
 void EnderalSEDataArchives::writeArchiveList(MOBase::IProfile* profile,
                                              const QStringList& before)
 {
-  QString list = before.join(",");
+  QString list = before.join(',');
 
   QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath("Enderal.ini")
-                        : localGameDirectory().absoluteFilePath("Enderal.ini");
+                        ? QDir(profile->absolutePath()).absoluteFilePath(u"Enderal.ini"_s)
+                        : localGameDirectory().absoluteFilePath(u"Enderal.ini"_s);
   if (list.length() > 511) {
-    int splitIdx = list.lastIndexOf(",", 512);
-    setArchivesToKey(iniFile, "SResourceArchiveList", list.mid(0, splitIdx));
-    setArchivesToKey(iniFile, "SResourceArchiveList2", list.mid(splitIdx + 2));
+    int splitIdx = list.lastIndexOf(',', 512);
+    setArchivesToKey(iniFile, u"SResourceArchiveList"_s, list.mid(0, splitIdx));
+    setArchivesToKey(iniFile, u"SResourceArchiveList2"_s, list.mid(splitIdx + 2));
   } else {
-    setArchivesToKey(iniFile, "SResourceArchiveList", list);
+    setArchivesToKey(iniFile, u"SResourceArchiveList"_s, list);
   }
 }

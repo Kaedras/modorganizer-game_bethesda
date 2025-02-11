@@ -9,11 +9,13 @@
 #include <imoinfo.h>
 #include <utility.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 StarfieldBSAInvalidation::StarfieldBSAInvalidation(MOBase::DataArchives* dataArchives,
                                                    MOBase::IPluginGame const* game)
     : GamebryoBSAInvalidation(dataArchives, "StarfieldCustom.ini", game)
 {
-  m_IniFileName = "StarfieldCustom.ini";
+  m_IniFileName = u"StarfieldCustom.ini"_s;
   m_Game        = game;
 }
 
@@ -38,26 +40,23 @@ bool StarfieldBSAInvalidation::prepareProfile(MOBase::IProfile* profile)
   QString basePath    = profile->localSettingsEnabled()
                             ? profile->absolutePath()
                             : m_Game->documentsDirectory().absolutePath();
-  QString iniFilePath = basePath + "/" + m_IniFileName;
+  QString iniFilePath = basePath % '/' % m_IniFileName;
 
   QSettings ini(iniFilePath, QSettings::IniFormat);
 
-  QString bInvalidateOlderFiles = QStringLiteral("Archive/bInvalidateOlderFiles");
-  QString sResourceDataDirsFinal = QStringLiteral("Archive/sResourceDataDirsFinal");
-
   if (profile->invalidationActive(nullptr)) {
     // write bInvalidateOlderFiles = 1, if needed
-    if (ini.value(bInvalidateOlderFiles, "0").toString() != "1") {
+    if (ini.value(u"Archive/bInvalidateOlderFiles"_s, 0).toInt() != 1) {
       dirty = true;
-      ini.setValue(bInvalidateOlderFiles, "1");
+      ini.setValue(u"Archive/bInvalidateOlderFiles"_s, 1);
       if (ini.status() != QSettings::NoError) {
         qWarning("failed to override data directory in \"%s\"",
                  qUtf8Printable(m_IniFileName));
       }
     }
-    if (ini.value(sResourceDataDirsFinal, "STRINGS\\").toString() != "0") {
+    if (ini.value(u"Archive/sResourceDataDirsFinal"_s, u"STRINGS\\"_s).toString() != "0") {
       dirty = true;
-      ini.setValue(sResourceDataDirsFinal, "");
+      ini.setValue(u"Archive/sResourceDataDirsFinal"_s, u""_s);
       if (ini.status() != QSettings::NoError) {
         qWarning("failed to override data directory in \"%s\"",
                  qUtf8Printable(m_IniFileName));

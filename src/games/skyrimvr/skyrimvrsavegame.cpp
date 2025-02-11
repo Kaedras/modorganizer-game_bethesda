@@ -10,10 +10,12 @@
 
 #include "utils.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 SkyrimVRSaveGame::SkyrimVRSaveGame(QString const& fileName, GameSkyrimVR const* game)
     : GamebryoSaveGame(fileName, game, true)
 {
-  FileWrapper file(fileName, "TESV_SAVEGAME");  // 10bytes
+  FileWrapper file(fileName, u"TESV_SAVEGAME"_s);  // 10bytes
 
   unsigned long version;
   FILETIME ftime;
@@ -69,7 +71,7 @@ void SkyrimVRSaveGame::fetchInformationFields(FileWrapper& file, unsigned long& 
 
 std::unique_ptr<GamebryoSaveGame::DataFields> SkyrimVRSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "TESV_SAVEGAME");  // 10bytes
+  FileWrapper file(getFilepath(), u"TESV_SAVEGAME"_s);  // 10bytes
 
   unsigned long version = 0;
   {

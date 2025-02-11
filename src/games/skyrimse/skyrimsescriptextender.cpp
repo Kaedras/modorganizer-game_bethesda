@@ -2,16 +2,18 @@
 
 #include <QString>
 
+using namespace Qt::Literals::StringLiterals;
+
 SkyrimSEScriptExtender::SkyrimSEScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
 {}
 
 QString SkyrimSEScriptExtender::BinaryName() const
 {
-  return "skse64_loader.exe";
+  return u"skse64_loader.exe"_s;
 }
 
 QString SkyrimSEScriptExtender::PluginPath() const
 {
-  return "skse/plugins";
+  return u"skse/plugins"_s;
 }

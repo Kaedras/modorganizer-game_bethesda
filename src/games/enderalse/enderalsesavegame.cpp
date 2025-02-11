@@ -8,10 +8,12 @@
 #include <Windows.h>
 #endif
 
+using namespace Qt::Literals::StringLiterals;
+
 EnderalSESaveGame::EnderalSESaveGame(QString const& fileName, GameEnderalSE const* game)
     : GamebryoSaveGame(fileName, game, true)
 {
-  FileWrapper file(fileName, "TESV_SAVEGAME");  // 10bytes
+  FileWrapper file(fileName, u"TESV_SAVEGAME"_s);  // 10bytes
 
   unsigned long version;
   FILETIME ftime;
@@ -62,7 +64,7 @@ void EnderalSESaveGame::fetchInformationFields(
 
 std::unique_ptr<GamebryoSaveGame::DataFields> EnderalSESaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "TESV_SAVEGAME");  // 10bytes
+  FileWrapper file(getFilepath(), u"TESV_SAVEGAME"_s);  // 10bytes
 
   unsigned long version = 0;
   {

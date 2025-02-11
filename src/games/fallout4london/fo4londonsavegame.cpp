@@ -9,11 +9,13 @@
 
 #include "gamefo4london.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 Fallout4LondonSaveGame::Fallout4LondonSaveGame(QString const& fileName,
                                                GameFallout4London const* game)
     : GamebryoSaveGame(fileName, game, true)
 {
-  FileWrapper file(getFilepath(), "FO4_SAVEGAME");
+  FileWrapper file(getFilepath(), u"FO4_SAVEGAME"_s);
 
   FILETIME creationTime;
   fetchInformationFields(file, m_SaveNumber, m_PCName, m_PCLevel, m_PCLocation,
@@ -56,7 +58,7 @@ void Fallout4LondonSaveGame::fetchInformationFields(
 std::unique_ptr<GamebryoSaveGame::DataFields>
 Fallout4LondonSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "FO4_SAVEGAME");  // 10bytes
+  FileWrapper file(getFilepath(), u"FO4_SAVEGAME"_s);  // 10bytes
 
   {
     QString dummyName, dummyLocation;

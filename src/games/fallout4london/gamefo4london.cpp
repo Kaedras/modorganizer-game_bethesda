@@ -30,6 +30,7 @@
 #include <QSettings>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameFallout4London::GameFallout4London() {}
 
@@ -44,7 +45,7 @@ bool GameFallout4London::init(IOrganizer* moInfo)
   registerFeature(std::make_shared<Fallout4LondonScriptExtender>(this));
   registerFeature(dataArchives);
   registerFeature(
-      std::make_shared<GamebryoLocalSavegames>(this, "fo4londoncustom.ini"));
+      std::make_shared<GamebryoLocalSavegames>(this, u"fo4londoncustom.ini"_s));
   registerFeature(std::make_shared<Fallout4LondonModDataChecker>(this));
   registerFeature(
       std::make_shared<Fallout4LondonModDataContent>(m_Organizer->gameFeatures()));
@@ -59,19 +60,19 @@ bool GameFallout4London::init(IOrganizer* moInfo)
 
 QString GameFallout4London::gameName() const
 {
-  return "Fallout 4 London";
+  return u"Fallout 4 London"_s;
 }
 
 void GameFallout4London::detectGame()
 {
   m_GamePath    = identifyGamePath();
-  m_MyGamesPath = determineMyGamesPath("Fallout4");
+  m_MyGamesPath = determineMyGamesPath(u"Fallout4"_s);
 }
 
 QString GameFallout4London::identifyGamePath() const
 {
   // TODO: Add GOG support
-  QString path = "Software\\Bethesda Softworks\\Fallout4";
+  QString path = u"Software\\Bethesda Softworks\\Fallout4"_s;
   return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
                         L"Installed Path");
 }
@@ -79,16 +80,16 @@ QString GameFallout4London::identifyGamePath() const
 QList<ExecutableInfo> GameFallout4London::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("F4SE",
+         << ExecutableInfo(u"F4SE"_s,
                            findInGameFolder(m_Organizer->gameFeatures()
                                                 ->gameFeature<MOBase::ScriptExtender>()
                                                 ->loaderName()))
-         << ExecutableInfo("Fallout 4 London", findInGameFolder(binaryName()))
-         << ExecutableInfo("Fallout Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("1946160")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Fallout4\"");
+         << ExecutableInfo(u"Fallout 4 London"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Fallout Launcher"_s, findInGameFolder(getLauncherName()))
+         << ExecutableInfo(u"Creation Kit"_s, findInGameFolder(u"CreationKit.exe"_s))
+                .withSteamAppId(u"1946160"_s)
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Fallout4\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameFallout4London::executableForcedLoads() const
@@ -98,7 +99,7 @@ QList<ExecutableForcedLoadSetting> GameFallout4London::executableForcedLoads() c
 
 QString GameFallout4London::name() const
 {
-  return "Fallout 4 London Support Plugin";
+  return u"Fallout 4 London Support Plugin"_s;
 }
 
 QString GameFallout4London::localizedName() const
@@ -108,7 +109,7 @@ QString GameFallout4London::localizedName() const
 
 QString GameFallout4London::author() const
 {
-  return "MO2 Team";
+  return u"MO2 Team"_s;
 }
 
 QString GameFallout4London::description() const
@@ -130,9 +131,9 @@ MappingType GameFallout4London::mappings() const
 {
   MappingType result;
   if (testFilePlugins().isEmpty()) {
-    for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
-      result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                        localAppFolder() + "/Fallout4/" + profileFile, false});
+    for (const QString& profileFile : {u"plugins.txt"_s, u"loadorder.txt"_s}) {
+      result.push_back({m_Organizer->profilePath() % '/' % profileFile,
+                        localAppFolder() % u"/Fallout4/"_s % profileFile, false});
     }
   }
   return result;
@@ -142,31 +143,31 @@ void GameFallout4London::initializeProfile(const QDir& path,
                                            ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Fallout4", path, "plugins.txt");
+    copyToProfile(localAppFolder() % u"/Fallout4"_s, path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/fallout4.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "fallout4_default.ini",
-                    "fallout4.ini");
+        !QFileInfo::exists(myGamesPath() % u"/fallout4.ini"_s)) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"fallout4_default.ini"_s,
+                    u"fallout4.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "fallout4.ini");
+      copyToProfile(myGamesPath(), path, u"fallout4.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "fallout4prefs.ini");
-    copyToProfile(myGamesPath(), path, "fallout4custom.ini");
+    copyToProfile(myGamesPath(), path, u"fallout4prefs.ini"_s);
+    copyToProfile(myGamesPath(), path, u"fallout4custom.ini"_s);
   }
 }
 
 QString GameFallout4London::savegameExtension() const
 {
-  return "fos";
+  return u"fos"_s;
 }
 
 QString GameFallout4London::savegameSEExtension() const
 {
-  return "f4se";
+  return u"f4se"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -177,7 +178,7 @@ GameFallout4London::makeSaveGame(QString filePath) const
 
 QString GameFallout4London::steamAPPId() const
 {
-  return "377160";
+  return u"377160"_s;
 }
 
 QStringList GameFallout4London::testFilePlugins() const
@@ -185,16 +186,16 @@ QStringList GameFallout4London::testFilePlugins() const
   QStringList plugins;
   if (m_Organizer != nullptr && m_Organizer->profile() != nullptr) {
     QString customIni(
-        m_Organizer->profile()->absoluteIniFilePath("Fallout4Custom.ini"));
+        m_Organizer->profile()->absoluteIniFilePath(u"Fallout4Custom.ini"_s));
     if (QFile(customIni).exists()) {
       for (int i = 1; i <= 10; ++i) {
-        QString setting("sTestFile");
+        QString setting(u"sTestFile"_s);
         setting += std::to_string(i);
 
         QSettings ini(customIni, QSettings::IniFormat);
-        QString value = ini.value("General/" + setting, "").toString();
+        QString value = ini.value(u"General/"_s % setting, u""_s).toString();
 
-        if (value != "") {
+        if (value != u""_s) {
           if (!value.isEmpty() && !plugins.contains(value))
             plugins.append(value);
         }
@@ -206,10 +207,10 @@ QStringList GameFallout4London::testFilePlugins() const
 
 QStringList GameFallout4London::primaryPlugins() const
 {
-  QStringList plugins = {"fallout4.esm",      "dlcrobot.esm",
-                         "dlcworkshop01.esm", "dlccoast.esm",
-                         "dlcworkshop02.esm", "dlcworkshop03.esm",
-                         "dlcnukaworld.esm",  "dlcultrahighresolution.esm"};
+  QStringList plugins = {u"fallout4.esm"_s,      u"dlcrobot.esm"_s,
+                         u"dlcworkshop01.esm"_s, u"dlccoast.esm"_s,
+                         u"dlcworkshop02.esm"_s, u"dlcworkshop03.esm"_s,
+                         u"dlcnukaworld.esm"_s,  u"dlcultrahighresolution.esm"_s};
 
   auto testPlugins = testFilePlugins();
   if (loadOrderMechanism() == LoadOrderMechanism::None) {
@@ -223,59 +224,59 @@ QStringList GameFallout4London::primaryPlugins() const
 
 QStringList GameFallout4London::enabledPlugins() const
 {
-  return {"bakaframework.esm", "londonworldspace.esm", "londonworldspace-dlcblock.esp"};
+  return {u"bakaframework.esm"_s, u"londonworldspace.esm"_s, u"londonworldspace-dlcblock.esp"_s};
 }
 
 QStringList GameFallout4London::gameVariants() const
 {
-  return {"Regular"};
+  return {u"Regular"_s};
 }
 
 QString GameFallout4London::gameShortName() const
 {
-  return "Fallout4London";
+  return u"Fallout4London"_s;
 }
 
 QStringList GameFallout4London::validShortNames() const
 {
-  return {"Fallout4"};
+  return {u"Fallout4"_s};
 }
 
 QString GameFallout4London::gameNexusName() const
 {
-  return "fallout4london";
+  return u"fallout4london"_s;
 }
 
 QString GameFallout4London::binaryName() const
 {
-  return "Fallout4.exe";
+  return u"Fallout4.exe"_s;
 }
 
 QString GameFallout4London::getLauncherName() const
 {
-  return "Fallout4Launcher.exe";
+  return u"Fallout4Launcher.exe"_s;
 }
 
 QStringList GameFallout4London::iniFiles() const
 {
-  return {"fallout4.ini", "fallout4prefs.ini", "fallout4custom.ini"};
+  return {u"fallout4.ini"_s, u"fallout4prefs.ini"_s, u"fallout4custom.ini"_s};
 }
 
 QStringList GameFallout4London::DLCPlugins() const
 {
-  return {"dlcrobot.esm",
-          "dlcworkshop01.esm",
-          "dlccoast.esm",
-          "dlcworkshop02.esm",
-          "dlcworkshop03.esm",
-          "dlcnukaworld.esm",
-          "dlcultrahighresolution.esm"};
+  return {u"dlcrobot.esm"_s,
+          u"dlcworkshop01.esm"_s,
+          u"dlccoast.esm"_s,
+          u"dlcworkshop02.esm"_s,
+          u"dlcworkshop03.esm"_s,
+          u"dlcnukaworld.esm"_s,
+          u"dlcultrahighresolution.esm"_s};
 }
 
 QStringList GameFallout4London::CCPlugins() const
 {
   QStringList plugins = {};
-  QFile file(gameDirectory().absoluteFilePath("Fallout4.ccc"));
+  QFile file(gameDirectory().absoluteFilePath(u"Fallout4.ccc"_s));
   if (file.open(QIODevice::ReadOnly)) {
     ON_BLOCK_EXIT([&file]() {
       file.close();

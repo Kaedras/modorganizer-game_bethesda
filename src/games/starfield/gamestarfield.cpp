@@ -33,6 +33,7 @@
 #include <QSettings>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameStarfield::GameStarfield() {}
 
@@ -46,7 +47,7 @@ bool GameStarfield::init(IOrganizer* moInfo)
   registerFeature(std::make_shared<StarfieldScriptExtender>(this));
   registerFeature(dataArchives);
   registerFeature(
-      std::make_shared<GamebryoLocalSavegames>(this, "StarfieldCustom.ini"));
+      std::make_shared<GamebryoLocalSavegames>(this, u"StarfieldCustom.ini"_s));
   registerFeature(std::make_shared<StarfieldModDataChecker>(this));
   registerFeature(
       std::make_shared<StarfieldModDataContent>(m_Organizer->gameFeatures()));
@@ -66,7 +67,7 @@ QString GameStarfield::gameName() const
 void GameStarfield::detectGame()
 {
   m_GamePath    = identifyGamePath();
-  m_MyGamesPath = determineMyGamesPath("Starfield");
+  m_MyGamesPath = determineMyGamesPath(u"Starfield"_s);
 }
 
 QString GameStarfield::identifyGamePath() const
@@ -76,31 +77,31 @@ QString GameStarfield::identifyGamePath() const
 
 QDir GameStarfield::dataDirectory() const
 {
-  QDir dataDir = documentsDirectory().absoluteFilePath("Data");
+  QDir dataDir = documentsDirectory().absoluteFilePath(u"Data"_s);
   if (!dataDir.exists())
     dataDir.mkdir(dataDir.path());
-  return documentsDirectory().absoluteFilePath("Data");
+  return documentsDirectory().absoluteFilePath(u"Data"_s);
 }
 
 QMap<QString, QDir> GameStarfield::secondaryDataDirectories() const
 {
   QMap<QString, QDir> directories;
-  directories.insert("game_data", gameDirectory().absoluteFilePath("Data"));
+  directories.insert(u"game_data"_s, gameDirectory().absoluteFilePath(u"Data"_s));
   return directories;
 }
 
 QList<ExecutableInfo> GameStarfield::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("SFSE",
+         << ExecutableInfo(u"SFSE"_s,
                            findInGameFolder(m_Organizer->gameFeatures()
                                                 ->gameFeature<MOBase::ScriptExtender>()
                                                 ->loaderName()))
-         << ExecutableInfo("Starfield", findInGameFolder(binaryName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("2722710")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Starfield\"");
+         << ExecutableInfo(u"Starfield"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Creation Kit"_s, findInGameFolder(u"CreationKit.exe"_s))
+                .withSteamAppId(u"2722710"_s)
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Starfield\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameStarfield::executableForcedLoads() const
@@ -110,7 +111,7 @@ QList<ExecutableForcedLoadSetting> GameStarfield::executableForcedLoads() const
 
 QString GameStarfield::name() const
 {
-  return "Starfield Support Plugin";
+  return u"Starfield Support Plugin"_s;
 }
 
 QString GameStarfield::localizedName() const
@@ -120,7 +121,7 @@ QString GameStarfield::localizedName() const
 
 QString GameStarfield::author() const
 {
-  return "Silarn";
+  return u"Silarn"_s;
 }
 
 QString GameStarfield::description() const
@@ -137,10 +138,10 @@ QList<PluginSetting> GameStarfield::settings() const
 {
   return QList<PluginSetting>()
          << PluginSetting(
-                "enable_esp_warning",
+                u"enable_esp_warning"_s,
                 tr("Show a warning when ESP plugins are enabled in the load order."),
                 true)
-         << PluginSetting("enable_management_warnings",
+         << PluginSetting(u"enable_management_warnings"_s,
                           tr("Show a warning when plugins.txt management is invalid."),
                           true);
 }
@@ -149,9 +150,9 @@ MappingType GameStarfield::mappings() const
 {
   MappingType result;
   if (testFilePlugins().isEmpty()) {
-    for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
-      result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                        localAppFolder() + "/" + gameShortName() + "/" + profileFile,
+    for (const QString& profileFile : {u"plugins.txt"_s, u"loadorder.txt"_s}) {
+      result.push_back({m_Organizer->profilePath() % '/' % profileFile,
+                        localAppFolder() % '/' % gameShortName() % '/' % profileFile,
                         false});
     }
   }
@@ -161,23 +162,23 @@ MappingType GameStarfield::mappings() const
 void GameStarfield::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Starfield", path, "plugins.txt");
+    copyToProfile(localAppFolder() % u"/Starfield"_s, path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
-    copyToProfile(myGamesPath(), path, "StarfieldPrefs.ini");
-    copyToProfile(myGamesPath(), path, "StarfieldCustom.ini");
+    copyToProfile(myGamesPath(), path, u"StarfieldPrefs.ini"_s);
+    copyToProfile(myGamesPath(), path, u"StarfieldCustom.ini"_s);
   }
 }
 
 QString GameStarfield::savegameExtension() const
 {
-  return "sfs";
+  return u"sfs"_s;
 }
 
 QString GameStarfield::savegameSEExtension() const
 {
-  return "sfse";
+  return u"sfse"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -188,7 +189,7 @@ GameStarfield::makeSaveGame(QString filePath) const
 
 QString GameStarfield::steamAPPId() const
 {
-  return "1716740";
+  return u"1716740"_s;
 }
 
 QStringList GameStarfield::testFilePlugins() const
@@ -196,16 +197,15 @@ QStringList GameStarfield::testFilePlugins() const
   QStringList plugins;
   if (m_Organizer != nullptr && m_Organizer->profile() != nullptr) {
     QString customIni(
-        m_Organizer->profile()->absoluteIniFilePath("StarfieldCustom.ini"));
+        m_Organizer->profile()->absoluteIniFilePath(u"StarfieldCustom.ini"_s));
     if (QFile(customIni).exists()) {
       for (int i = 1; i <= 10; ++i) {
-        QString setting("sTestFile");
-        setting += std::to_string(i);
+        QString setting = u"sTestFile"_s % QString::number(i);
 
         QSettings ini(customIni, QSettings::IniFormat);
 
-        QString plugin = ini.value("General/" + setting, "").toString();
-        if (plugin != "") {
+        QString plugin = ini.value(u"General/"_s % setting, u""_s).toString();
+        if (plugin != u""_s) {
           if (!plugin.isEmpty() && !plugins.contains(plugin))
             plugins.append(plugin);
         }
@@ -217,13 +217,13 @@ QStringList GameStarfield::testFilePlugins() const
 
 QStringList GameStarfield::primaryPlugins() const
 {
-  QStringList plugins = {"Starfield.esm",      "Constellation.esm",
-                         "ShatteredSpace.esm", "OldMars.esm",
-                         "SFBGS003.esm",       "SFBGS004.esm",
-                         "SFBGS006.esm",       "SFBGS007.esm",
-                         "SFBGS008.esm",       "BlueprintShips-Starfield.esm"};
+  QStringList plugins = {u"Starfield.esm"_s,      u"Constellation.esm"_s,
+                         u"ShatteredSpace.esm"_s, u"OldMars.esm"_s,
+                         u"SFBGS003.esm"_s,       u"SFBGS004.esm"_s,
+                         u"SFBGS006.esm"_s,       u"SFBGS007.esm"_s,
+                         u"SFBGS008.esm"_s,       u"BlueprintShips-Starfield.esm"_s};
 
-  for (auto plugin : CCCPlugins()) {
+  for (const auto& plugin : CCCPlugins()) {
     if (!plugins.contains(plugin, Qt::CaseInsensitive)) {
       plugins.append(plugin);
     }
@@ -247,22 +247,22 @@ QStringList GameStarfield::enabledPlugins() const
 
 QStringList GameStarfield::gameVariants() const
 {
-  return {"Regular"};
+  return {u"Regular"_s};
 }
 
 QString GameStarfield::gameShortName() const
 {
-  return "Starfield";
+  return u"Starfield"_s;
 }
 
 QString GameStarfield::gameNexusName() const
 {
-  return "starfield";
+  return u"starfield"_s;
 }
 
 QStringList GameStarfield::iniFiles() const
 {
-  return {"StarfieldPrefs.ini", "StarfieldCustom.ini"};
+  return {u"StarfieldPrefs.ini"_s, u"StarfieldCustom.ini"_s};
 }
 
 bool GameStarfield::prepareIni(const QString& exec)
@@ -272,7 +272,7 @@ bool GameStarfield::prepareIni(const QString& exec)
 
 QStringList GameStarfield::DLCPlugins() const
 {
-  return {"Constellation.esm", "ShatteredSpace.esm"};
+  return {u"Constellation.esm"_s, u"ShatteredSpace.esm"_s};
 }
 
 QStringList GameStarfield::CCCPlugins() const
@@ -282,8 +282,8 @@ QStringList GameStarfield::CCCPlugins() const
   // force-loading the core game plugins.
   QStringList plugins = {};
   if (!testFilePresent()) {
-    QFile myDocsCCCFile(myGamesPath() + "/Starfield.ccc");
-    QFile gameCCCFile(gameDirectory().absoluteFilePath("Starfield.ccc"));
+    QFile myDocsCCCFile(myGamesPath() % u"/Starfield.ccc"_s);
+    QFile gameCCCFile(gameDirectory().absoluteFilePath(u"Starfield.ccc"_s));
     QFile* file;
     if (myDocsCCCFile.exists()) {
       file = &myDocsCCCFile;
@@ -356,10 +356,10 @@ std::vector<unsigned int> GameStarfield::activeProblems() const
 {
   std::vector<unsigned int> result;
   if (m_Organizer->managedGame() == this) {
-    if (m_Organizer->pluginSetting(name(), "enable_esp_warning").toBool() &&
+    if (m_Organizer->pluginSetting(name(), u"enable_esp_warning"_s).toBool() &&
         activeESP())
       result.push_back(PROBLEM_ESP);
-    if (m_Organizer->pluginSetting(name(), "enable_management_warnings").toBool()) {
+    if (m_Organizer->pluginSetting(name(), u"enable_management_warnings"_s).toBool()) {
       if (testFilePresent())
         result.push_back(PROBLEM_TEST_FILE);
     }
@@ -372,8 +372,8 @@ bool GameStarfield::activeESP() const
   m_Active_ESPs.clear();
   std::set<QString> enabledPlugins;
 
-  QStringList esps = m_Organizer->findFiles("", [](const QString& fileName) -> bool {
-    return fileName.endsWith(".esp", FileNameComparator::CaseSensitivity);
+  QStringList esps = m_Organizer->findFiles(u""_s, [](const QString& fileName) -> bool {
+    return fileName.endsWith(u".esp"_s, FileNameComparator::CaseSensitivity);
   });
 
   for (const QString& esp : esps) {
@@ -410,7 +410,7 @@ QString GameStarfield::fullDescription(unsigned int key) const
 {
   switch (key) {
   case PROBLEM_ESP: {
-    QString espInfo = SetJoin(m_Active_ESPs, ", ");
+    QString espInfo = SetJoin(m_Active_ESPs, u", "_s);
     return tr("<p>ESP plugins are not ideal for Starfield. In addition to being unable "
               "to sort them alongside ESM or master-flagged plugins, certain record "
               "references are always kept loaded by the game. This consumes "

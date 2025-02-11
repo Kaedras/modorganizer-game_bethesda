@@ -3,29 +3,32 @@
 #include "iprofile.h"
 #include <utility.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 QStringList Fallout4LondonDataArchives::vanillaArchives() const
 {
-  return {"Fallout4 - Textures1.ba2",   "Fallout4 - Textures2.ba2",
-          "Fallout4 - Textures3.ba2",   "Fallout4 - Textures4.ba2",
-          "Fallout4 - Textures5.ba2",   "Fallout4 - Textures6.ba2",
-          "Fallout4 - Textures7.ba2",   "Fallout4 - Textures8.ba2",
-          "Fallout4 - Textures9.ba2",   "Fallout4 - Meshes.ba2",
-          "Fallout4 - MeshesExtra.ba2", "Fallout4 - Voices.ba2",
-          "Fallout4 - Sounds.ba2",      "Fallout4 - Interface.ba2",
-          "Fallout4 - Animations.ba2",  "Fallout4 - Materials.ba2",
-          "Fallout4 - Shaders.ba2",     "Fallout4 - Startup.ba2",
-          "Fallout4 - Misc.ba2"};
+  return {u"Fallout4 - Textures1.ba2"_s,   u"Fallout4 - Textures2.ba2"_s,
+          u"Fallout4 - Textures3.ba2"_s,   u"Fallout4 - Textures4.ba2"_s,
+          u"Fallout4 - Textures5.ba2"_s,   u"Fallout4 - Textures6.ba2"_s,
+          u"Fallout4 - Textures7.ba2"_s,   u"Fallout4 - Textures8.ba2"_s,
+          u"Fallout4 - Textures9.ba2"_s,   u"Fallout4 - Meshes.ba2"_s,
+          u"Fallout4 - MeshesExtra.ba2"_s, u"Fallout4 - Voices.ba2"_s,
+          u"Fallout4 - Sounds.ba2"_s,      u"Fallout4 - Interface.ba2"_s,
+          u"Fallout4 - Animations.ba2"_s,  u"Fallout4 - Materials.ba2"_s,
+          u"Fallout4 - Shaders.ba2"_s,     u"Fallout4 - Startup.ba2"_s,
+          u"Fallout4 - Misc.ba2"_s};
 }
 
 QStringList Fallout4LondonDataArchives::archives(const MOBase::IProfile* profile) const
 {
   QStringList result;
 
-  QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath("fallout4.ini")
-                        : localGameDirectory().absoluteFilePath("fallout4.ini");
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList"));
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList2"));
+  QString iniFile =
+      profile->localSettingsEnabled()
+          ? QDir(profile->absolutePath()).absoluteFilePath(u"fallout4.ini"_s)
+          : localGameDirectory().absoluteFilePath(u"fallout4.ini"_s);
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList"_s));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList2"_s));
 
   return result;
 }
@@ -33,16 +36,17 @@ QStringList Fallout4LondonDataArchives::archives(const MOBase::IProfile* profile
 void Fallout4LondonDataArchives::writeArchiveList(MOBase::IProfile* profile,
                                                   const QStringList& before)
 {
-  QString list = before.join(", ");
+  QString list = before.join(u", "_s);
 
-  QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath("fallout4.ini")
-                        : localGameDirectory().absoluteFilePath("fallout4.ini");
+  QString iniFile =
+      profile->localSettingsEnabled()
+          ? QDir(profile->absolutePath()).absoluteFilePath(u"fallout4.ini"_s)
+          : localGameDirectory().absoluteFilePath(u"fallout4.ini"_s);
   if (list.length() > 255) {
-    int splitIdx = list.lastIndexOf(",", 256);
-    setArchivesToKey(iniFile, "SResourceArchiveList", list.mid(0, splitIdx));
-    setArchivesToKey(iniFile, "SResourceArchiveList2", list.mid(splitIdx + 2));
+    int splitIdx = list.lastIndexOf(',', 256);
+    setArchivesToKey(iniFile, u"SResourceArchiveList"_s, list.mid(0, splitIdx));
+    setArchivesToKey(iniFile, u"SResourceArchiveList2"_s, list.mid(splitIdx + 2));
   } else {
-    setArchivesToKey(iniFile, "SResourceArchiveList", list);
+    setArchivesToKey(iniFile, u"SResourceArchiveList"_s, list);
   }
 }

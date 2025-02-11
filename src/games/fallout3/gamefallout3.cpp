@@ -26,6 +26,7 @@
 #include <memory>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameFallout3::GameFallout3() {}
 
@@ -40,7 +41,7 @@ bool GameFallout3::init(IOrganizer* moInfo)
   registerFeature(dataArchives);
   registerFeature(std::make_shared<Fallout3BSAInvalidation>(dataArchives.get(), this));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "fallout.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, u"fallout.ini"_s));
   registerFeature(std::make_shared<Fallout3ModDataChecker>(this));
   registerFeature(
       std::make_shared<Fallout3ModDataContent>(m_Organizer->gameFeatures()));
@@ -51,37 +52,37 @@ bool GameFallout3::init(IOrganizer* moInfo)
 
 QString GameFallout3::identifyVariant() const
 {
-  if (QFile::exists(m_GamePath + "/Fallout3ng.exe")) {
-    return "Low Violence";
-  } else if (QFile::exists(m_GamePath + "/Galaxy.dll")) {
-    return "GOG";
+  if (QFile::exists(m_GamePath + u"/Fallout3ng.exe"_s)) {
+    return u"Low Violence"_s;
+  } else if (QFile::exists(m_GamePath + u"/Galaxy.dll"_s)) {
+    return u"GOG"_s;
   } else if (QFile::exists(m_GamePath + "/FalloutLauncherEpic.exe")) {
-    return "Epic Games";
-  } else if (m_GamePath.endsWith("Fallout 3 goty")) {
-    return "Steam (Game of the Year)";
+    return u"Epic Games"_s;
+  } else if (m_GamePath.endsWith(u"Fallout 3 goty"_s)) {
+    return u"Steam (Game of the Year)"_s;
   } else {
-    return "Steam (Regular)";
+    return u"Steam (Regular)"_s;
   }
 }
 
 QString GameFallout3::identifyGamePath() const
 {
   // Steam (Regular)
-  auto result = parseSteamLocation("22300", "Fallout 3");
+  auto result = parseSteamLocation(u"22300"_s, u"Fallout 3"_s);
 
   // Steam (Game of the Year)
   if (result.isEmpty()) {
-    result = parseSteamLocation("22370", "Fallout 3 goty");
+    result = parseSteamLocation(u"22370"_s, u"Fallout 3 goty"_s);
   }
 
   // Epic Games
   if (result.isEmpty()) {
     // Fallout 3: Game of the Year Edition: adeae8bbfc94427db57c7dfecce3f1d4
-    result = parseEpicGamesLocation({"adeae8bbfc94427db57c7dfecce3f1d4"});
+    result = parseEpicGamesLocation({u"adeae8bbfc94427db57c7dfecce3f1d4"_s});
     if (QFileInfo(result).isDir()) {
       QDir startPath = QDir(result);
       auto subDirs =
-          startPath.entryList({"Fallout 3 GOTY*"}, QDir::Dirs | QDir::NoDotAndDotDot);
+          startPath.entryList({u"Fallout 3 GOTY*"_s}, QDir::Dirs | QDir::NoDotAndDotDot);
       if (!subDirs.isEmpty())
         result = startPath.absoluteFilePath(subDirs.first());
     }
@@ -104,23 +105,23 @@ void GameFallout3::detectGame()
 {
   m_GamePath = identifyGamePath();
   setGameVariant(identifyVariant());
-  m_MyGamesPath = determineMyGamesPath("Fallout3");
+  m_MyGamesPath = determineMyGamesPath(u"Fallout3"_s);
 }
 
 QList<ExecutableInfo> GameFallout3::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("FOSE",
+         << ExecutableInfo(u"FOSE"_s,
                            findInGameFolder(m_Organizer->gameFeatures()
                                                 ->gameFeature<MOBase::ScriptExtender>()
                                                 ->loaderName()))
-         << ExecutableInfo("Fallout 3", findInGameFolder(binaryName()))
-         << ExecutableInfo("Fallout Mod Manager", findInGameFolder("fomm/fomm.exe"))
-         << ExecutableInfo("Construction Kit", findInGameFolder("geck.exe"))
-         << ExecutableInfo("Fallout Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("BOSS", findInGameFolder("BOSS/BOSS.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Fallout3\"");
+         << ExecutableInfo(u"Fallout 3"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Fallout Mod Manager"_s, findInGameFolder(u"fomm/fomm.exe"_s))
+         << ExecutableInfo(u"Construction Kit"_s, findInGameFolder(u"geck.exe"_s))
+         << ExecutableInfo(u"Fallout Launcher"_s, findInGameFolder(getLauncherName()))
+         << ExecutableInfo(u"BOSS"_s, findInGameFolder(u"BOSS/BOSS.exe"_s))
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Fallout3\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameFallout3::executableForcedLoads() const
@@ -130,7 +131,7 @@ QList<ExecutableForcedLoadSetting> GameFallout3::executableForcedLoads() const
 
 QString GameFallout3::name() const
 {
-  return "Fallout 3 Support Plugin";
+  return u"Fallout 3 Support Plugin"_s;
 }
 
 QString GameFallout3::localizedName() const
@@ -140,7 +141,7 @@ QString GameFallout3::localizedName() const
 
 QString GameFallout3::author() const
 {
-  return "Tannin";
+  return u"Tannin"_s;
 }
 
 QString GameFallout3::description() const
@@ -161,30 +162,30 @@ QList<PluginSetting> GameFallout3::settings() const
 void GameFallout3::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Fallout3", path, "plugins.txt");
-    copyToProfile(localAppFolder() + "/Fallout3", path, "loadorder.txt");
+    copyToProfile(localAppFolder() + u"/Fallout3"_s, path, u"plugins.txt"_s);
+    copyToProfile(localAppFolder() + u"/Fallout3"_s, path, u"loadorder.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath(), "fallout.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "fallout_default.ini",
-                    "fallout.ini");
+        !QFileInfo(myGamesPath(), u"fallout.ini"_s).exists()) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"fallout_default.ini"_s,
+                    u"fallout.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "fallout.ini");
+      copyToProfile(myGamesPath(), path, u"fallout.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "falloutprefs.ini");
-    copyToProfile(myGamesPath(), path, "FalloutCustom.ini");
-    copyToProfile(myGamesPath(), path, "custom.ini");
-    copyToProfile(myGamesPath(), path, "GECKCustom.ini");
-    copyToProfile(myGamesPath(), path, "GECKPrefs.ini");
+    copyToProfile(myGamesPath(), path, u"falloutprefs.ini"_s);
+    copyToProfile(myGamesPath(), path, u"FalloutCustom.ini"_s);
+    copyToProfile(myGamesPath(), path, u"custom.ini"_s);
+    copyToProfile(myGamesPath(), path, u"GECKCustom.ini"_s);
+    copyToProfile(myGamesPath(), path, u"GECKPrefs.ini"_s);
   }
 }
 
 QString GameFallout3::savegameExtension() const
 {
-  return "fos";
+  return u"fos"_s;
 }
 
 QString GameFallout3::savegameSEExtension() const
@@ -200,10 +201,10 @@ GameFallout3::makeSaveGame(QString filePath) const
 
 QString GameFallout3::steamAPPId() const
 {
-  if (selectedVariant() == "Steam (Game Of The Year)") {
-    return "22370";
-  } else if (selectedVariant() == "Steam (Regular)") {
-    return "22300";
+  if (selectedVariant() == u"Steam (Game Of The Year)"_s) {
+    return u"22370"_s;
+  } else if (selectedVariant() == u"Steam (Regular)"_s) {
+    return u"22300"_s;
   } else {
     return "";
   }
@@ -211,19 +212,19 @@ QString GameFallout3::steamAPPId() const
 
 QStringList GameFallout3::primaryPlugins() const
 {
-  return {"fallout3.esm"};
+  return {u"fallout3.esm"_s};
 }
 
 QStringList GameFallout3::gameVariants() const
 {
-  return {"Steam (Regular)", "Steam (Game Of The Year)", "Epic Games", "GOG",
-          "Low Violence"};
+  return {u"Steam (Regular)"_s, u"Steam (Game Of The Year)"_s, u"Epic Games"_s, u"GOG"_s,
+          u"Low Violence"_s};
 }
 
 QString GameFallout3::binaryName() const
 {
-  if (selectedVariant() == "Low Violence") {
-    return "Fallout3ng.exe";
+  if (selectedVariant() == u"Low Violence"_s) {
+    return u"Fallout3ng.exe"_s;
   } else {
     return GameGamebryo::binaryName();
   }
@@ -231,29 +232,29 @@ QString GameFallout3::binaryName() const
 
 QString GameFallout3::gameShortName() const
 {
-  return "Fallout3";
+  return u"Fallout3"_s;
 }
 
 QStringList GameFallout3::validShortNames() const
 {
-  return {"FalloutNV"};
+  return {u"FalloutNV"_s};
 }
 
 QString GameFallout3::gameNexusName() const
 {
-  return "fallout3";
+  return u"fallout3"_s;
 }
 
 QStringList GameFallout3::iniFiles() const
 {
-  return {"fallout.ini", "falloutprefs.ini", "FalloutCustom.ini", "GECKCustom.ini",
-          "GECKPrefs.ini"};
+  return {u"fallout.ini"_s, u"falloutprefs.ini"_s, u"FalloutCustom.ini"_s, u"GECKCustom.ini"_s,
+          u"GECKPrefs.ini"_s};
 }
 
 QStringList GameFallout3::DLCPlugins() const
 {
-  return {"ThePitt.esm", "Anchorage.esm", "BrokenSteel.esm", "PointLookout.esm",
-          "Zeta.esm"};
+  return {u"ThePitt.esm"_s, u"Anchorage.esm"_s, u"BrokenSteel.esm"_s, u"PointLookout.esm"_s,
+          u"Zeta.esm"_s};
 }
 
 int GameFallout3::nexusModOrganizerID() const
@@ -269,11 +270,11 @@ int GameFallout3::nexusGameID() const
 QString GameFallout3::getLauncherName() const
 {
   const QMap<QString, QString> names = {
-      {"Steam (Regular)", "Fallout3Launcher.exe"},
-      {"Steam (Game of the Year)", "Fallout3Launcher.exe"},
-      {"Epic Games", "FalloutLauncherEpic.exe"},
-      {"GOG", "FalloutLauncher.exe"},
-      {"Low Violence", "Fallout3Launcher.exe"}};
+      {u"Steam (Regular)"_s, u"Fallout3Launcher.exe"_s},
+      {u"Steam (Game of the Year)"_s, u"Fallout3Launcher.exe"_s},
+      {u"Epic Games"_s, u"FalloutLauncherEpic.exe"_s},
+      {u"GOG"_s, u"FalloutLauncher.exe"_s},
+      {u"Low Violence"_s, u"Fallout3Launcher.exe"_s}};
 
   return names.value(selectedVariant());
 }

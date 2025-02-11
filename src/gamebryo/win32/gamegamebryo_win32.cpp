@@ -34,6 +34,8 @@
 #include <string>
 #include <vector>
 
+using namespace Qt::Literals::StringLiterals;
+
 WORD GameGamebryo::getArch(QString const& program) const
 {
   WORD arch = 0;
@@ -86,15 +88,15 @@ cleanup:  // release all of our handles
 
 QString GameGamebryo::identifyGamePath() const
 {
-  QString path = "Software\\Bethesda Softworks\\" + gameShortName();
+  QString path = u"Software\\Bethesda Softworks\\"_s % gameShortName();
   return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
                         L"Installed Path");
 }
 
 /*static*/ QString GameGamebryo::getLootPath()
 {
-  return findInRegistry(HKEY_LOCAL_MACHINE, L"Software\\LOOT", L"Installed Path") +
-         "/Loot.exe";
+  return findInRegistry(HKEY_LOCAL_MACHINE, L"Software\\LOOT", L"Installed Path") %
+         u"/Loot.exe"_s;
 }
 
 std::unique_ptr<BYTE[]> GameGamebryo::getRegValue(HKEY key, LPCWSTR path, LPCWSTR value,
@@ -169,7 +171,7 @@ QString GameGamebryo::getSpecialPath(const QString& name)
 
 QString GameGamebryo::determineMyGamesPath(const QString& gameName)
 {
-  const QString pattern = "%1/My Games/" + gameName;
+  const QString pattern = u"%1/My Games/"_s % gameName;
 
   auto tryDir = [&](const QString& dir) -> std::optional<QString> {
     if (dir.isEmpty()) {
@@ -195,7 +197,7 @@ QString GameGamebryo::determineMyGamesPath(const QString& gameName)
   }
 
   // c) finally, look in the registry. This is discouraged
-  if (auto d = tryDir(getSpecialPath("Personal"))) {
+  if (auto d = tryDir(getSpecialPath(u"Personal"_s))) {
     return *d;
   }
 
@@ -209,10 +211,10 @@ QString GameGamebryo::parseEpicGamesLocation(const QStringList& manifests)
   QString manifestDir = findInRegistry(
       HKEY_LOCAL_MACHINE, L"Software\\Epic Games\\EpicGamesLauncher", L"AppDataPath");
   if (manifestDir.isEmpty())
-    manifestDir = getKnownFolderPath(FOLDERID_ProgramData, false) +
-                  "\\Epic\\EpicGamesLauncher\\Data\\";
-  manifestDir += "Manifests";
-  QDir epicManifests(manifestDir, "*.item",
+    manifestDir = getKnownFolderPath(FOLDERID_ProgramData, false) %
+                  u"\\Epic\\EpicGamesLauncher\\Data\\"_s;
+  manifestDir += u"Manifests"_s;
+  QDir epicManifests(manifestDir, u"*.item"_s,
                      QDir::SortFlags(QDir::Name | QDir::IgnoreCase), QDir::Files);
   if (epicManifests.exists()) {
     QDirIterator it(epicManifests);
@@ -229,8 +231,8 @@ QString GameGamebryo::parseEpicGamesLocation(const QStringList& manifests)
 
       QJsonDocument manifestJson(QJsonDocument::fromJson(manifestData));
 
-      if (manifests.contains(manifestJson["AppName"].toString())) {
-        return manifestJson["InstallLocation"].toString();
+      if (manifests.contains(manifestJson[u"AppName"_s].toString())) {
+        return manifestJson[u"InstallLocation"_s].toString();
       }
     }
   }
@@ -240,28 +242,28 @@ QString GameGamebryo::parseEpicGamesLocation(const QStringList& manifests)
 QString GameGamebryo::parseSteamLocation(const QString& appid,
                                          const QString& directoryName)
 {
-  QString path = "Software\\Valve\\Steam";
+  QString path = u"Software\\Valve\\Steam"_s;
   QString steamLocation =
       findInRegistry(HKEY_CURRENT_USER, path.toStdWString().c_str(), L"SteamPath");
   if (!steamLocation.isEmpty()) {
     QString steamLibraryLocation;
-    QString steamLibraries(steamLocation + "\\" + "config" + "\\" +
-                           "libraryfolders.vdf");
+    QString steamLibraries(steamLocation % '\\' % u"config"_s % '\\' %
+                           u"libraryfolders.vdf"_s);
     if (QFile(steamLibraries).exists()) {
       std::ifstream file(steamLibraries.toStdString());
       auto root = tyti::vdf::read(file);
       for (auto child : root.childs) {
         tyti::vdf::object* library = child.second.get();
-        auto apps                  = library->childs["apps"];
+        auto apps                  = library->childs[u"apps"_s];
         if (apps->attribs.contains(appid.toStdString())) {
-          steamLibraryLocation = QString::fromStdString(library->attribs["path"]);
+          steamLibraryLocation = QString::fromStdString(library->attribs[u"path"_s]);
           break;
         }
       }
     }
     if (!steamLibraryLocation.isEmpty()) {
-      QString gameLocation = steamLibraryLocation + "\\" + "steamapps" + "\\" +
-                             "common" + "\\" + directoryName;
+      QString gameLocation = steamLibraryLocation % '\\' % u"steamapps"_s % '\\' %
+                             u"common"_s % '\\' % directoryName;
       if (QDir(gameLocation).exists())
         return gameLocation;
     }

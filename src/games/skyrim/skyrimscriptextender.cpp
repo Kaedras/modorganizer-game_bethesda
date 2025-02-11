@@ -1,7 +1,8 @@
 #include "skyrimscriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 SkyrimScriptExtender::SkyrimScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -9,10 +10,10 @@ SkyrimScriptExtender::SkyrimScriptExtender(GameGamebryo const* game)
 
 QString SkyrimScriptExtender::BinaryName() const
 {
-  return "skse_loader.exe";
+  return u"skse_loader.exe"_s;
 }
 
 QString SkyrimScriptExtender::PluginPath() const
 {
-  return "skse/plugins";
+  return u"skse/plugins"_s;
 }

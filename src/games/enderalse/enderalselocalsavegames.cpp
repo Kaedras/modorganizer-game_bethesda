@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "enderalselocalsavegames.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 QString EnderalSELocalSavegames::localSavesDummy() const
 {
-  return "../Enderal Special Edition/__MO_Saves/";
+  return u"../Enderal Special Edition/__MO_Saves/"_s;
 }

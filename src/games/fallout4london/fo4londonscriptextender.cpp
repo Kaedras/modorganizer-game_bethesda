@@ -1,7 +1,8 @@
 #include "fo4londonscriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 Fallout4LondonScriptExtender::Fallout4LondonScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -9,10 +10,10 @@ Fallout4LondonScriptExtender::Fallout4LondonScriptExtender(GameGamebryo const* g
 
 QString Fallout4LondonScriptExtender::BinaryName() const
 {
-  return "f4se_loader.exe";
+  return u"f4se_loader.exe"_s;
 }
 
 QString Fallout4LondonScriptExtender::PluginPath() const
 {
-  return "f4se/plugins";
+  return u"f4se/plugins"_s;
 }

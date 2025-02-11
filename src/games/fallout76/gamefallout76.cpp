@@ -23,6 +23,7 @@
 #include "scopeguard.h"
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameFallout76::GameFallout76() {}
 
@@ -44,7 +45,7 @@ bool GameFallout76::init(IOrganizer* moInfo)
 
 QString GameFallout76::gameName() const
 {
-  return "Fallout 76";
+  return u"Fallout 76"_s;
 }
 
 void GameFallout76::detectGame()
@@ -56,7 +57,7 @@ void GameFallout76::detectGame()
 QList<ExecutableInfo> GameFallout76::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("Fallout 76", findInGameFolder(binaryName()));
+         << ExecutableInfo(u"Fallout 76"_s, findInGameFolder(binaryName()));
 }
 
 QList<ExecutableForcedLoadSetting> GameFallout76::executableForcedLoads() const
@@ -66,19 +67,19 @@ QList<ExecutableForcedLoadSetting> GameFallout76::executableForcedLoads() const
 
 QString GameFallout76::name() const
 {
-  return "Fallout 76 Support Plugin";
+  return u"Fallout 76 Support Plugin"_s;
 }
 
 QString GameFallout76::author() const
 {
-  return "Mod Organizer Team; EntranceJew";
+  return u"Mod Organizer Team; EntranceJew"_s;
 }
 
 QString GameFallout76::description() const
 {
   return tr("Adds support for the game Fallout 76.\n"
             "Splash by %1")
-      .arg("nekoyoubi");
+      .arg(u"nekoyoubi"_s);
 }
 
 MOBase::VersionInfo GameFallout76::version() const
@@ -94,21 +95,21 @@ QList<PluginSetting> GameFallout76::settings() const
 void GameFallout76::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Fallout76", path, "plugins.txt");
-    copyToProfile(localAppFolder() + "/Fallout76", path, "loadorder.txt");
+    copyToProfile(localAppFolder() + u"/Fallout76"_s, path, u"plugins.txt"_s);
+    copyToProfile(localAppFolder() + u"/Fallout76"_s, path, u"loadorder.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/Fallout76.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "Fallout76_default.ini",
-                    "Fallout76.ini");
+        !QFileInfo::exists(myGamesPath() % u"/Fallout76.ini"_s)) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"Fallout76_default.ini"_s,
+                    u"Fallout76.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "Fallout76.ini");
+      copyToProfile(myGamesPath(), path, u"Fallout76.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "Fallout76Prefs.ini");
-    copyToProfile(myGamesPath(), path, "Fallout76Custom.ini");
+    copyToProfile(myGamesPath(), path, u"Fallout76Prefs.ini"_s);
+    copyToProfile(myGamesPath(), path, u"Fallout76Custom.ini"_s);
   }
 }
 
@@ -140,12 +141,12 @@ std::shared_ptr<const GamebryoSaveGame> GameFallout76::makeSaveGame(QString) con
 
 QString GameFallout76::steamAPPId() const
 {
-  return "1151340";
+  return u"1151340"_s;
 }
 
 QStringList GameFallout76::primaryPlugins() const
 {
-  QStringList plugins = {"SeventySix.esm"};
+  QStringList plugins = {u"SeventySix.esm"_s};
 
   plugins.append(CCPlugins());
 
@@ -154,22 +155,22 @@ QStringList GameFallout76::primaryPlugins() const
 
 QStringList GameFallout76::gameVariants() const
 {
-  return {"Regular"};
+  return {u"Regular"_s};
 }
 
 QString GameFallout76::gameShortName() const
 {
-  return "Fallout76";
+  return u"Fallout76"_s;
 }
 
 QString GameFallout76::gameNexusName() const
 {
-  return "Fallout76";
+  return u"Fallout76"_s;
 }
 
 QStringList GameFallout76::iniFiles() const
 {
-  return {"Fallout76.ini", "Fallout76Prefs.ini", "Fallout76Custom.ini"};
+  return {u"Fallout76.ini"_s, u"Fallout76Prefs.ini"_s, u"Fallout76Custom.ini"_s};
 }
 
 QStringList GameFallout76::DLCPlugins() const
@@ -180,7 +181,7 @@ QStringList GameFallout76::DLCPlugins() const
 QStringList GameFallout76::CCPlugins() const
 {
   QStringList plugins = {};
-  QFile file(gameDirectory().absoluteFilePath("Fallout76.ccc"));
+  QFile file(gameDirectory().absoluteFilePath(u"Fallout76.ccc"_s));
   if (file.open(QIODevice::ReadOnly)) {
     ON_BLOCK_EXIT([&file]() {
       file.close();

@@ -36,7 +36,7 @@ bool GameFallout4VR::init(IOrganizer* moInfo)
   }
 
   registerFeature(std::make_shared<Fallout4VRDataArchives>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "fallout4custom.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, u"fallout4custom.ini"_s));
   registerFeature(std::make_shared<Fallout4VRModDataChecker>(this));
   registerFeature(
       std::make_shared<Fallout4VRModDataContent>(m_Organizer->gameFeatures()));
@@ -55,16 +55,16 @@ QString GameFallout4VR::gameName() const
 void GameFallout4VR::detectGame()
 {
   m_GamePath    = identifyGamePath();
-  m_MyGamesPath = determineMyGamesPath("Fallout4VR");
+  m_MyGamesPath = determineMyGamesPath(u"Fallout4VR"_s);
 }
 
 QList<ExecutableInfo> GameFallout4VR::executables() const
 {
   return QList<ExecutableInfo>()
-         << ExecutableInfo("Fallout 4 VR", findInGameFolder(binaryName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Fallout4VR\"");
+         << ExecutableInfo(u"Fallout 4 VR"_s, findInGameFolder(binaryName()))
+         << ExecutableInfo(u"Creation Kit"_s, findInGameFolder(u"CreationKit.exe"_s))
+         << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                .withArgument(u"--game=\"Fallout4VR\""_s);
 }
 
 QList<ExecutableForcedLoadSetting> GameFallout4VR::executableForcedLoads() const
@@ -74,7 +74,7 @@ QList<ExecutableForcedLoadSetting> GameFallout4VR::executableForcedLoads() const
 
 QString GameFallout4VR::name() const
 {
-  return "Fallout 4 VR Support Plugin";
+  return u"Fallout 4 VR Support Plugin"_s;
 }
 
 QString GameFallout4VR::localizedName() const
@@ -84,14 +84,14 @@ QString GameFallout4VR::localizedName() const
 
 QString GameFallout4VR::author() const
 {
-  return "MO2 Contibutors";
+  return u"MO2 Contibutors"_s;
 }
 
 QString GameFallout4VR::description() const
 {
   return tr("Adds support for the game Fallout 4 VR.\n"
             "Splash by %1")
-      .arg("nekoyoubi");
+      .arg(u"nekoyoubi"_s);
 }
 
 MOBase::VersionInfo GameFallout4VR::version() const
@@ -107,30 +107,30 @@ QList<PluginSetting> GameFallout4VR::settings() const
 void GameFallout4VR::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Fallout4VR", path, "plugins.txt");
+    copyToProfile(localAppFolder() % u"/Fallout4VR"_s, path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/fallout4.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "fallout4.ini");
+        !QFileInfo::exists(myGamesPath() % u"/fallout4.ini"_s)) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"fallout4.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "fallout4.ini");
+      copyToProfile(myGamesPath(), path, u"fallout4.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "fallout4prefs.ini");
-    copyToProfile(myGamesPath(), path, "fallout4custom.ini");
+    copyToProfile(myGamesPath(), path, u"fallout4prefs.ini"_s);
+    copyToProfile(myGamesPath(), path, u"fallout4custom.ini"_s);
   }
 }
 
 QString GameFallout4VR::savegameExtension() const
 {
-  return "fos";
+  return u"fos"_s;
 }
 
 QString GameFallout4VR::savegameSEExtension() const
 {
-  return "f4se";
+  return u"f4se"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -141,12 +141,12 @@ GameFallout4VR::makeSaveGame(QString filePath) const
 
 QString GameFallout4VR::steamAPPId() const
 {
-  return "611660";
+  return u"611660"_s;
 }
 
 QStringList GameFallout4VR::primaryPlugins() const
 {
-  QStringList plugins = {"fallout4.esm", "fallout4_vr.esm"};
+  QStringList plugins = {u"fallout4.esm_s"_s, u"fallout4_vr.esm"_s};
 
   plugins.append(CCPlugins());
 
@@ -155,17 +155,17 @@ QStringList GameFallout4VR::primaryPlugins() const
 
 QStringList GameFallout4VR::gameVariants() const
 {
-  return {"Regular"};
+  return {u"Regular"_s};
 }
 
 QString GameFallout4VR::gameShortName() const
 {
-  return "Fallout4VR";
+  return u"Fallout4VR"_s;
 }
 
 QStringList GameFallout4VR::validShortNames() const
 {
-  return {"Fallout4"};
+  return {u"Fallout4"_s};
 }
 
 QString GameFallout4VR::gameNexusName() const
@@ -175,24 +175,24 @@ QString GameFallout4VR::gameNexusName() const
 
 QStringList GameFallout4VR::iniFiles() const
 {
-  return {"fallout4.ini", "fallout4custom.ini", "fallout4prefs.ini"};
+  return {u"fallout4.ini"_s, u"fallout4custom.ini"_s, u"fallout4prefs.ini"_s};
 }
 
 QStringList GameFallout4VR::DLCPlugins() const
 {
-  return {"dlcrobot.esm",
-          "dlcworkshop01.esm",
-          "dlccoast.esm",
-          "dlcworkshop02.esm",
-          "dlcworkshop03.esm",
-          "dlcnukaworld.esm",
-          "dlcultrahighresolution.esm"};
+  return {u"dlcrobot.esm"_s,
+          u"dlcworkshop01.esm"_s,
+          u"dlccoast.esm"_s,
+          u"dlcworkshop02.esm"_s,
+          u"dlcworkshop03.esm"_s,
+          u"dlcnukaworld.esm"_s,
+          u"dlcultrahighresolution.esm"_s};
 }
 
 QStringList GameFallout4VR::CCPlugins() const
 {
   QStringList plugins = {};
-  QFile file(gameDirectory().absoluteFilePath("Fallout4.ccc"));
+  QFile file(gameDirectory().absoluteFilePath(u"Fallout4.ccc"_s));
   if (file.open(QIODevice::ReadOnly)) {
     ON_BLOCK_EXIT([&file]() {
       file.close();
@@ -241,7 +241,7 @@ QString GameFallout4VR::getLauncherName() const
 
 QString GameFallout4VR::identifyGamePath() const
 {
-  QString path = "Software\\Bethesda Softworks\\" + gameName();
+  QString path = u"Software\\Bethesda Softworks\\"_s % gameName();
   return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
                         L"Installed Path");
 }

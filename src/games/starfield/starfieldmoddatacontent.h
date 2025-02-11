@@ -4,6 +4,8 @@
 #include <gamebryomoddatacontent.h>
 #include <ifiletree.h>
 
+using Qt::StringLiterals::operator ""_s;
+
 class StarfieldModDataContent : public GamebryoModDataContent
 {
 protected:
@@ -24,9 +26,9 @@ public:
   std::vector<Content> getAllContents() const override
   {
     static std::vector<Content> STARFIELD_CONTENTS{
-        {CONTENT_MATERIAL, QT_TR_NOOP("Materials"), ":/MO/gui/content/material"},
-        {CONTENT_GEOMETRIES, QT_TR_NOOP("Geometries"), ":/MO/gui/content/geometries"},
-        {CONTENT_VIDEO, QT_TR_NOOP("Video"), ":/MO/gui/content/media"}};
+        {CONTENT_MATERIAL, QT_TR_NOOP("Materials"), u":/MO/gui/content/material"_s},
+        {CONTENT_GEOMETRIES, QT_TR_NOOP("Geometries"), u":/MO/gui/content/geometries"_s},
+        {CONTENT_VIDEO, QT_TR_NOOP("Video"), u":/MO/gui/content/media"_s}};
     auto contents = GamebryoModDataContent::getAllContents();
     std::copy(std::begin(STARFIELD_CONTENTS), std::end(STARFIELD_CONTENTS),
               std::back_inserter(contents));
@@ -39,11 +41,11 @@ public:
     auto contents = GamebryoModDataContent::getContentsFor(fileTree);
     for (auto e : *fileTree) {
       if (e->isDir()) {
-        if (e->compare("materials") == 0) {
+        if (e->compare(u"materials"_s) == 0) {
           contents.push_back(CONTENT_MATERIAL);
-        } else if (e->compare("geometries") == 0) {
+        } else if (e->compare(u"geometries"_s) == 0) {
           contents.push_back(CONTENT_GEOMETRIES);
-        } else if (e->compare("video") == 0) {
+        } else if (e->compare(u"video"_s) == 0) {
           contents.push_back(CONTENT_VIDEO);
         }
       }

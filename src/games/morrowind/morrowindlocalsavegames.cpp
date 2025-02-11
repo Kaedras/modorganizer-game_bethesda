@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <stddef.h>
 #include <string>
 
+using namespace Qt::Literals::StringLiterals;
+
 MorrowindLocalSavegames::MorrowindLocalSavegames(const MOBase::IPluginGame* game)
     : m_GamePlugin(game)
 {}
@@ -31,15 +33,15 @@ bool MorrowindLocalSavegames::prepareProfile(MOBase::IProfile* profile)
   bool dirty = false;
 
   if (profile->localSavesEnabled()) {
-    if (m_GamePlugin->gameDirectory().exists("Saves")) {
-      if (!m_GamePlugin->gameDirectory().rename("Saves", "_Saves")) {
+    if (m_GamePlugin->gameDirectory().exists(u"Saves"_s)) {
+      if (!m_GamePlugin->gameDirectory().rename(u"Saves"_s, u"_Saves"_s)) {
         qCritical("Unable to enable Morrowind local save games!");
       }
       dirty = true;
     }
   } else {
-    if (m_GamePlugin->gameDirectory().exists("_Saves")) {
-      if (!m_GamePlugin->gameDirectory().rename("_Saves", "Saves")) {
+    if (m_GamePlugin->gameDirectory().exists(u"_Saves"_s)) {
+      if (!m_GamePlugin->gameDirectory().rename(u"_Saves"_s, u"Saves"_s)) {
         qCritical("Unable to disable Morrowind local save games!");
       }
       dirty = true;
@@ -52,5 +54,5 @@ bool MorrowindLocalSavegames::prepareProfile(MOBase::IProfile* profile)
 MappingType MorrowindLocalSavegames::mappings(const QDir& profileSaveDir) const
 {
   return {{profileSaveDir.absolutePath(),
-           m_GamePlugin->gameDirectory().absoluteFilePath("Saves"), true, true}};
+           m_GamePlugin->gameDirectory().absoluteFilePath(u"Saves"_s), true, true}};
 }

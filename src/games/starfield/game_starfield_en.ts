@@ -4,22 +4,22 @@
 <context>
     <name>GameStarfield</name>
     <message>
-        <location filename="gamestarfield.cpp" line="118"/>
+        <location filename="gamestarfield.cpp" line="119"/>
         <source>Starfield Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamestarfield.cpp" line="128"/>
+        <location filename="gamestarfield.cpp" line="129"/>
         <source>Adds support for the game Starfield.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamestarfield.cpp" line="141"/>
+        <location filename="gamestarfield.cpp" line="142"/>
         <source>Show a warning when ESP plugins are enabled in the load order.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamestarfield.cpp" line="144"/>
+        <location filename="gamestarfield.cpp" line="145"/>
         <source>Show a warning when plugins.txt management is invalid.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -47,7 +47,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="starfieldunmanagedmods.cpp" line="70"/>
+        <location filename="starfieldunmanagedmods.cpp" line="72"/>
         <source>ContentCatalog.txt appears to be corrupt: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -55,17 +55,17 @@
 <context>
     <name>StarfieldModDataContent</name>
     <message>
-        <location filename="starfieldmoddatacontent.h" line="27"/>
+        <location filename="starfieldmoddatacontent.h" line="29"/>
         <source>Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="starfieldmoddatacontent.h" line="28"/>
+        <location filename="starfieldmoddatacontent.h" line="30"/>
         <source>Geometries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="starfieldmoddatacontent.h" line="29"/>
+        <location filename="starfieldmoddatacontent.h" line="31"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>

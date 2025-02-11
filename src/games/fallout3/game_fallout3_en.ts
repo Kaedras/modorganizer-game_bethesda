@@ -4,12 +4,12 @@
 <context>
     <name>GameFallout3</name>
     <message>
-        <location filename="gamefallout3.cpp" line="138"/>
+        <location filename="gamefallout3.cpp" line="139"/>
         <source>Fallout 3 Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefallout3.cpp" line="148"/>
+        <location filename="gamefallout3.cpp" line="149"/>
         <source>Adds support for the game Fallout 3.</source>
         <translation type="unfinished"></translation>
     </message>

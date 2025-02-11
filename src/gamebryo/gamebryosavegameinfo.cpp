@@ -12,6 +12,8 @@
 #include <QString>
 #include <QStringList>
 
+using namespace Qt::Literals::StringLiterals;
+
 GamebryoSaveGameInfo::GamebryoSaveGameInfo(GameGamebryo const* game) : m_Game(game) {}
 
 GamebryoSaveGameInfo::~GamebryoSaveGameInfo() {}
@@ -50,7 +52,7 @@ GamebryoSaveGameInfo::getMissingAssets(MOBase::ISaveGame const& save) const
   }
 
   // Find out any other mods that might contain the esp/esm
-  QStringList espFilter({"*.esp", "*.esl", "*.esm"});
+  QStringList espFilter({u"*.esp"_s, u"*.esl"_s, u"*.esm"_s});
 
   QString dataDir(organizerCore->managedGame()->dataDirectory().absolutePath());
 
@@ -83,8 +85,8 @@ GamebryoSaveGameInfo::getMissingAssets(MOBase::ISaveGame const& save) const
     for (const QString& esp : esps) {
       MissingAssets::iterator iter = missingAssets.find(esp);
       if (iter != missingAssets.end()) {
-        if (!iter->contains("<overwrite>")) {
-          iter->push_back("<overwrite>");
+        if (!iter->contains(u"<overwrite>"_s)) {
+          iter->push_back(u"<overwrite>"_s);
         }
       }
     }

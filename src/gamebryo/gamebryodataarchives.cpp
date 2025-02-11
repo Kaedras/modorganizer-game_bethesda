@@ -6,6 +6,8 @@
 
 #include "gamegamebryo.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 GamebryoDataArchives::GamebryoDataArchives(const GameGamebryo* game) : m_Game{game} {}
 
 QDir GamebryoDataArchives::gameDirectory() const
@@ -24,7 +26,7 @@ QStringList GamebryoDataArchives::getArchivesFromKey(const QString& iniFile,
 {
   QSettings ini(iniFile, QSettings::IniFormat);
   QStringList result;
-  auto value = ini.value("Archive/" + key);
+  auto value = ini.value(u"Archive/"_s % key);
   if (value.isValid()) {
     result.append(value.toString().split(','));
   }
@@ -39,7 +41,7 @@ QStringList GamebryoDataArchives::getArchivesFromKey(const QString& iniFile,
 void GamebryoDataArchives::setArchivesToKey(const QString& iniFile, const QString& key,
                                             const QString& value)
 {
-  if (!MOBase::WriteRegistryValue("Archive", key, value, iniFile)) {
+  if (!MOBase::WriteRegistryValue(u"Archive"_s, key, value, iniFile)) {
     qWarning("failed to set archives in \"%s\"", qUtf8Printable(iniFile));
   }
 }

@@ -3,6 +3,8 @@
 
 #include <gamebryomoddatachecker.h>
 
+using Qt::StringLiterals::operator ""_s;
+
 class MorrowindModDataChecker : public GamebryoModDataChecker
 {
 public:
@@ -11,14 +13,14 @@ public:
 protected:
   virtual const FileNameSet& possibleFolderNames() const override
   {
-    static FileNameSet result{"fonts",    "meshes",  "music", "shaders",     "sound",
-                              "textures", "video",   "mwse",  "distantland", "mits",
-                              "icons",    "bookart", "splash"};
+    static FileNameSet result{u"fonts"_s,    u"meshes"_s,  u"music"_s, u"shaders"_s,     u"sound"_s,
+                              u"textures"_s, u"video"_s,   u"mwse"_s,  u"distantland"_s, u"mits"_s,
+                              u"icons"_s,    u"bookart"_s, u"splash"_s};
     return result;
   }
   virtual const FileNameSet& possibleFileExtensions() const override
   {
-    static FileNameSet result{"esp", "esm", "bsa", "modgroups"};
+    static FileNameSet result{u"esp"_s, u"esm"_s, u"bsa"_s, u"modgroups"_s};
     return result;
   }
 };

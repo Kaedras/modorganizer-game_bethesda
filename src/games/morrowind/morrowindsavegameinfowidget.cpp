@@ -25,6 +25,8 @@
 
 #include <memory>
 
+using namespace Qt::Literals::StringLiterals;
+
 MorrowindSaveGameInfoWidget::MorrowindSaveGameInfoWidget(
     MorrowindSaveGameInfo const* info, QWidget* parent)
     : MOBase::ISaveGameInfoWidget(parent), ui(new Ui::MorrowindSaveGameInfoWidget),
@@ -34,7 +36,7 @@ MorrowindSaveGameInfoWidget::MorrowindSaveGameInfoWidget(
   this->setWindowFlags(Qt::ToolTip | Qt::BypassGraphicsProxyWidget);
   setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) /
                    qreal(255.0));
-  ui->gameFrame->setStyleSheet("background-color: transparent;");
+  ui->gameFrame->setStyleSheet(u"background-color: transparent;"_s);
 
   QVBoxLayout* gameLayout = new QVBoxLayout();
   gameLayout->setContentsMargins(0, 0, 0, 0);
@@ -51,22 +53,22 @@ void MorrowindSaveGameInfoWidget::setSave(MOBase::ISaveGame const& save)
 {
   auto const& morrowindSave = dynamic_cast<MorrowindSaveGame const&>(save);
 
-  ui->saveNameLabel->setText(QString("%1 (Day %2)")
+  ui->saveNameLabel->setText(QString(u"%1 (Day %2)"_s)
                                  .arg(morrowindSave.getSaveName())
                                  .arg(morrowindSave.getGameDays()));
-  ui->saveNumLabel->setText(QString("%1").arg(morrowindSave.getSaveNumber()));
-  ui->healthLabel->setText(QString("%1 / %2")
+  ui->saveNumLabel->setText(QString::number(morrowindSave.getSaveNumber()));
+  ui->healthLabel->setText(QString(u"%1 / %2"_s)
                                .arg(round(morrowindSave.getPCCurrentHealth()))
                                .arg(morrowindSave.getPCMaxHealth()));
   ui->characterLabel->setText(morrowindSave.getPCName());
   ui->locationLabel->setText(morrowindSave.getPCLocation());
-  ui->levelLabel->setText(QString("%1").arg(morrowindSave.getPCLevel()));
+  ui->levelLabel->setText(QString::number(morrowindSave.getPCLevel()));
 
   // This somewhat contorted code is because on my system at least, the
   // old way of doing this appears to give short date and long time.
   QDateTime t = morrowindSave.getCreationTime();
   ui->dateLabel->setText(
-      QLocale::system().toString(t.date(), QLocale::FormatType::ShortFormat) + " " +
+      QLocale::system().toString(t.date(), QLocale::FormatType::ShortFormat) % u" "_s %
       QLocale::system().toString(t.time(), QLocale::FormatType::ShortFormat));
   ui->screenshotLabel->setPixmap(QPixmap::fromImage(morrowindSave.getScreenshot()));
   if (ui->gameFrame->layout() != nullptr) {
@@ -109,7 +111,7 @@ void MorrowindSaveGameInfoWidget::setSave(MOBase::ISaveGame const& save)
     layout->addWidget(pluginLabel);
   }
   if (count > 7) {
-    QLabel* dotDotLabel = new QLabel("...");
+    QLabel* dotDotLabel = new QLabel(u"..."_s);
     dotDotLabel->setIndent(10);
     dotDotLabel->setFont(contentFont);
     layout->addWidget(dotDotLabel);

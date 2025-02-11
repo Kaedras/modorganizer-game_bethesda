@@ -4,14 +4,16 @@
 #include <QRegularExpression>
 #include <filesystem>
 
+using namespace Qt::Literals::StringLiterals;
+
 MorrowindSaveGame::MorrowindSaveGame(QString const& fileName, GameMorrowind const* game)
     : GamebryoSaveGame(fileName, game)
 {
   std::filesystem::path realFile(fileName.toStdWString());
   QString realFileName = QString::fromStdWString(realFile.filename().wstring());
-  m_SaveNumber = realFileName.mid(4, 5).remove(QRegularExpression("0+$")).toInt();
+  m_SaveNumber = realFileName.mid(4, 5).remove(QRegularExpression(u"0+$"_s)).toInt();
 
-  FileWrapper file(fileName, "TES3");
+  FileWrapper file(fileName, u"TES3"_s);
   QStringList dummyPlugins;
   fetchInformationFields(file, m_SaveName, dummyPlugins, m_PCCurrentHealth,
                          m_PCCMaxHealth, m_PCLocation, m_GameDays, m_PCName);
@@ -19,7 +21,7 @@ MorrowindSaveGame::MorrowindSaveGame(QString const& fileName, GameMorrowind cons
 
 QString MorrowindSaveGame::getName() const
 {
-  return QString("%1, #%2, %3").arg(m_PCName).arg(m_SaveNumber).arg(m_PCLocation);
+  return QString(u"%1, #%2, %3"_s).arg(m_PCName).arg(m_SaveNumber).arg(m_PCLocation);
 }
 
 unsigned short MorrowindSaveGame::getPCLevel() const
@@ -55,7 +57,7 @@ void MorrowindSaveGame::fetchInformationFields(FileWrapper& file, QString& saveN
   std::vector<char> buffer(255);
   file.read(buffer.data(), 4);
   // Parse the MAST/DATA records
-  while (QString::fromLatin1(buffer.data(), 4) == "MAST") {
+  while (QString::fromLatin1(buffer.data(), 4) == u"MAST"_s) {
     uint32_t len;
     file.read(len);                 // Length of master name
     file.read(buffer.data(), len);  // Name of master
@@ -95,7 +97,7 @@ void MorrowindSaveGame::fetchInformationFields(FileWrapper& file, QString& saveN
 
 std::unique_ptr<GamebryoSaveGame::DataFields> MorrowindSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "TES3");
+  FileWrapper file(getFilepath(), u"TES3"_s);
   std::vector<char> buffer(255);
 
   std::unique_ptr<MorrowindDataFields> fields = std::make_unique<MorrowindDataFields>();
@@ -125,22 +127,22 @@ std::unique_ptr<GamebryoSaveGame::DataFields> MorrowindSaveGame::fetchDataFields
   // file.skip<unsigned char>();
   std::vector<char> buff(4);
   file.read(buff.data(), 4);
-  while (QString::fromLatin1(buff.data(), 4) != "NPC_") {
+  while (QString::fromLatin1(buff.data(), 4) != u"NPC_"_s) {
     uint32_t len;
     file.read(len);
     file.skip<unsigned char>(8 + len);
     file.read(buff.data(), 4);
   }
-  while (QString::fromLatin1(buff.data(), 4) == "NPC_") {
+  while (QString::fromLatin1(buff.data(), 4) == u"NPC_"_s) {
     uint32_t size;
     file.read(size);
     file.skip<unsigned long>(3);
     uint32_t len;
     file.read(len);
     file.read(buffer.data(), len);
-    if (QString::fromLatin1(buffer.data(), len - 1) == "player") {
+    if (QString::fromLatin1(buffer.data(), len - 1) == u"player"_s) {
       file.read(buff.data(), 4);
-      while (QString::fromLatin1(buff.data(), 4) != "NPDT") {
+      while (QString::fromLatin1(buff.data(), 4) != u"NPDT"_s) {
         uint32_t len;
         file.read(len);
         file.skip<unsigned char>(len);

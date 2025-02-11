@@ -3,14 +3,16 @@
 #include "iprofile.h"
 #include <utility.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 QStringList SkyrimSEDataArchives::vanillaArchives() const
 {
-  return {"Skyrim - Textures0.bsa", "Skyrim - Textures1.bsa", "Skyrim - Textures2.bsa",
-          "Skyrim - Textures3.bsa", "Skyrim - Textures4.bsa", "Skyrim - Textures5.bsa",
-          "Skyrim - Textures6.bsa", "Skyrim - Textures7.bsa", "Skyrim - Textures8.bsa",
-          "Skyrim - Meshes0.bsa",   "Skyrim - Meshes1.bsa",   "Skyrim - Voices_en0.bsa",
-          "Skyrim - Sounds.bsa",    "Skyrim - Interface.bsa", "Skyrim - Animations.bsa",
-          "Skyrim - Shaders.bsa",   "Skyrim - Misc.bsa"};
+  return {u"Skyrim - Textures0.bsa"_s, u"Skyrim - Textures1.bsa"_s, u"Skyrim - Textures2.bsa"_s,
+          u"Skyrim - Textures3.bsa"_s, u"Skyrim - Textures4.bsa"_s, u"Skyrim - Textures5.bsa"_s,
+          u"Skyrim - Textures6.bsa"_s, u"Skyrim - Textures7.bsa"_s, u"Skyrim - Textures8.bsa"_s,
+          u"Skyrim - Meshes0.bsa"_s,   u"Skyrim - Meshes1.bsa"_s,   u"Skyrim - Voices_en0.bsa"_s,
+          u"Skyrim - Sounds.bsa"_s,    u"Skyrim - Interface.bsa"_s, u"Skyrim - Animations.bsa"_s,
+          u"Skyrim - Shaders.bsa"_s,   u"Skyrim - Misc.bsa"_s};
 }
 
 QStringList SkyrimSEDataArchives::archives(const MOBase::IProfile* profile) const
@@ -18,10 +20,10 @@ QStringList SkyrimSEDataArchives::archives(const MOBase::IProfile* profile) cons
   QStringList result;
 
   QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath("skyrim.ini")
-                        : localGameDirectory().absoluteFilePath("skyrim.ini");
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList"));
-  result.append(getArchivesFromKey(iniFile, "SResourceArchiveList2"));
+                        ? QDir(profile->absolutePath()).absoluteFilePath(u"skyrim.ini"_s)
+                        : localGameDirectory().absoluteFilePath(u"skyrim.ini"_s);
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList"_s));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList2"_s));
 
   return result;
 }
@@ -29,16 +31,16 @@ QStringList SkyrimSEDataArchives::archives(const MOBase::IProfile* profile) cons
 void SkyrimSEDataArchives::writeArchiveList(MOBase::IProfile* profile,
                                             const QStringList& before)
 {
-  QString list = before.join(", ");
+  QString list = before.join(u", "_s);
 
   QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath("skyrim.ini")
-                        : localGameDirectory().absoluteFilePath("skyrim.ini");
+                        ? QDir(profile->absolutePath()).absoluteFilePath(u"skyrim.ini"_s)
+                        : localGameDirectory().absoluteFilePath(u"skyrim.ini"_s);
   if (list.length() > 255) {
-    int splitIdx = list.lastIndexOf(",", 256);
-    setArchivesToKey(iniFile, "SResourceArchiveList", list.mid(0, splitIdx));
-    setArchivesToKey(iniFile, "SResourceArchiveList2", list.mid(splitIdx + 2));
+    int splitIdx = list.lastIndexOf(',', 256);
+    setArchivesToKey(iniFile, u"SResourceArchiveList"_s, list.mid(0, splitIdx));
+    setArchivesToKey(iniFile, u"SResourceArchiveList2"_s, list.mid(splitIdx + 2));
   } else {
-    setArchivesToKey(iniFile, "SResourceArchiveList", list);
+    setArchivesToKey(iniFile, u"SResourceArchiveList"_s, list);
   }
 }

@@ -3,16 +3,18 @@
 #include <QString>
 #include <QStringList>
 
+using namespace Qt::Literals::StringLiterals;
+
 StarfieldScriptExtender::StarfieldScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
 {}
 
 QString StarfieldScriptExtender::BinaryName() const
 {
-  return "sfse_loader.exe";
+  return u"sfse_loader.exe"_s;
 }
 
 QString StarfieldScriptExtender::PluginPath() const
 {
-  return "sfse/plugins";
+  return u"sfse/plugins"_s;
 }

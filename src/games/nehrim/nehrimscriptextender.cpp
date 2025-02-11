@@ -1,7 +1,8 @@
 #include "nehrimscriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 NehrimScriptExtender::NehrimScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -11,10 +12,10 @@ NehrimScriptExtender::~NehrimScriptExtender() {}
 
 QString NehrimScriptExtender::BinaryName() const
 {
-  return "obse_loader.exe";
+  return u"obse_loader.exe"_s;
 }
 
 QString NehrimScriptExtender::PluginPath() const
 {
-  return "obse/plugins";
+  return u"obse/plugins"_s;
 }

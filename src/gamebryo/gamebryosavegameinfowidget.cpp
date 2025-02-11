@@ -25,6 +25,8 @@
 
 #include <memory>
 
+using namespace Qt::Literals::StringLiterals;
+
 GamebryoSaveGameInfoWidget::GamebryoSaveGameInfoWidget(GamebryoSaveGameInfo const* info,
                                                        QWidget* parent)
     : MOBase::ISaveGameInfoWidget(parent), ui(new Ui::GamebryoSaveGameInfoWidget),
@@ -34,7 +36,7 @@ GamebryoSaveGameInfoWidget::GamebryoSaveGameInfoWidget(GamebryoSaveGameInfo cons
   this->setWindowFlags(Qt::ToolTip | Qt::BypassGraphicsProxyWidget);
   setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) /
                    qreal(255.0));
-  ui->gameFrame->setStyleSheet("background-color: transparent;");
+  ui->gameFrame->setStyleSheet(u"background-color: transparent;"_s);
 
   QVBoxLayout* gameLayout = new QVBoxLayout();
   gameLayout->setContentsMargins(0, 0, 0, 0);
@@ -50,15 +52,15 @@ GamebryoSaveGameInfoWidget::~GamebryoSaveGameInfoWidget()
 void GamebryoSaveGameInfoWidget::setSave(MOBase::ISaveGame const& save)
 {
   auto& gamebryoSave = dynamic_cast<GamebryoSaveGame const&>(save);
-  ui->saveNumLabel->setText(QString("%1").arg(gamebryoSave.getSaveNumber()));
+  ui->saveNumLabel->setText(QString::number(gamebryoSave.getSaveNumber()));
   ui->characterLabel->setText(gamebryoSave.getPCName());
   ui->locationLabel->setText(gamebryoSave.getPCLocation());
-  ui->levelLabel->setText(QString("%1").arg(gamebryoSave.getPCLevel()));
+  ui->levelLabel->setText(QString::number(gamebryoSave.getPCLevel()));
   // This somewhat contorted code is because on my system at least, the
   // old way of doing this appears to give short date and long time.
   QDateTime t = gamebryoSave.getCreationTime().toLocalTime();
   ui->dateLabel->setText(
-      QLocale::system().toString(t.date(), QLocale::FormatType::ShortFormat) + " " +
+      QLocale::system().toString(t.date(), QLocale::FormatType::ShortFormat) % u" "_s %
       QLocale::system().toString(t.time()));
   ui->screenshotLabel->setPixmap(QPixmap::fromImage(gamebryoSave.getScreenshot()));
   if (ui->gameFrame->layout() != nullptr) {
@@ -107,7 +109,7 @@ void GamebryoSaveGameInfoWidget::setSave(MOBase::ISaveGame const& save)
     layout->addWidget(pluginLabel);
   }
   if (count > 7) {
-    QLabel* dotDotLabel = new QLabel("...");
+    QLabel* dotDotLabel = new QLabel(u"..."_s);
     dotDotLabel->setIndent(10);
     dotDotLabel->setFont(contentFont);
     layout->addWidget(dotDotLabel);
@@ -145,7 +147,7 @@ void GamebryoSaveGameInfoWidget::setSave(MOBase::ISaveGame const& save)
       layout->addWidget(pluginLabel);
     }
     if (countEsh > 7) {
-      QLabel* dotDotLabel = new QLabel("...");
+      QLabel* dotDotLabel = new QLabel(u"..."_s);
       dotDotLabel->setIndent(10);
       dotDotLabel->setFont(contentFont);
       layout->addWidget(dotDotLabel);
@@ -184,7 +186,7 @@ void GamebryoSaveGameInfoWidget::setSave(MOBase::ISaveGame const& save)
       layout->addWidget(pluginLabel);
     }
     if (countEsl > 7) {
-      QLabel* dotDotLabel = new QLabel("...");
+      QLabel* dotDotLabel = new QLabel(u"..."_s);
       dotDotLabel->setIndent(10);
       dotDotLabel->setFont(contentFont);
       layout->addWidget(dotDotLabel);

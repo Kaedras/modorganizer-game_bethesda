@@ -13,6 +13,8 @@
 #include <QStringEncoder>
 #include <QStringList>
 
+using namespace Qt::Literals::StringLiterals;
+
 using MOBase::IOrganizer;
 using MOBase::IPluginList;
 using MOBase::reportError;
@@ -30,27 +32,27 @@ void MorrowindGamePlugins::writePluginLists(const IPluginList* pluginList)
 
   if (organizer()->profile()->localSettingsEnabled()) {
     writePluginList(pluginList,
-                    organizer()->profile()->absolutePath() + "/Morrowind.ini");
+                    organizer()->profile()->absolutePath() % u"/Morrowind.ini"_s);
   } else {
     writePluginList(pluginList,
-                    organizer()->managedGame()->gameDirectory().absolutePath() +
-                        "/Morrowind.ini");
+                    organizer()->managedGame()->gameDirectory().absolutePath() %
+                        u"/Morrowind.ini"_s);
   }
 
   writeLoadOrderList(pluginList,
-                     organizer()->profile()->absolutePath() + "/loadorder.txt");
+                     organizer()->profile()->absolutePath() % u"/loadorder.txt"_s);
 
   m_LastRead = QDateTime::currentDateTime();
 }
 
 void MorrowindGamePlugins::readPluginLists(MOBase::IPluginList* pluginList)
 {
-  QString loadOrderPath = organizer()->profile()->absolutePath() + "/loadorder.txt";
+  QString loadOrderPath = organizer()->profile()->absolutePath() % u"/loadorder.txt"_s;
 
-  QString pluginsPath = organizer()->profile()->absolutePath() + "/Morrowind.ini";
+  QString pluginsPath = organizer()->profile()->absolutePath() % u"/Morrowind.ini"_s;
   if (!organizer()->profile()->localSettingsEnabled()) {
     pluginsPath =
-        organizer()->managedGame()->gameDirectory().absolutePath() + "/Morrowind.ini";
+        organizer()->managedGame()->gameDirectory().absolutePath() % u"/Morrowind.ini"_s;
   }
 
   bool loadOrderIsNew = !m_LastRead.isValid() || !QFileInfo(loadOrderPath).exists() ||
@@ -89,7 +91,7 @@ void MorrowindGamePlugins::writeList(const IPluginList* pluginList,
   QSettings ini(filePath, QSettings::IniFormat);
 
   // todo: check if this is required
-  ini.beginGroup("Game Files");
+  ini.beginGroup(u"Game Files"_s);
   ini.endGroup();
 
   bool invalidFileNames = false;
@@ -108,7 +110,7 @@ void MorrowindGamePlugins::writeList(const IPluginList* pluginList,
         invalidFileNames = true;
         qCritical("invalid plugin name %s", qUtf8Printable(pluginName));
       } else {
-        ini.setValue(QString("Game Files/%1%2").arg(key, writtenCount), pluginName);
+        ini.setValue(QString(u"Game Files/%1%2"_s).arg(key, writtenCount), pluginName);
         if (ini.status() != QSettings::NoError) {
           qWarning("failed to set game files in \"%s\"", qUtf8Printable(filePath));
         }
@@ -165,10 +167,10 @@ QStringList MorrowindGamePlugins::readPluginList(MOBase::IPluginList* pluginList
               return QFileInfo(lhp).lastModified() < QFileInfo(rhp).lastModified();
             });
 
-  QString filePath = organizer()->profile()->absolutePath() + "/Morrowind.ini";
+  QString filePath = organizer()->profile()->absolutePath() % u"/Morrowind.ini"_s;
   if (!organizer()->profile()->localSettingsEnabled()) {
     filePath =
-        organizer()->managedGame()->gameDirectory().absolutePath() + "/Morrowind.ini";
+        organizer()->managedGame()->gameDirectory().absolutePath() % u"/Morrowind.ini"_s;
   }
   wchar_t buffer[256];
   QStringList result;
@@ -178,12 +180,12 @@ QStringList MorrowindGamePlugins::readPluginList(MOBase::IPluginList* pluginList
 
   QStringList activePlugins;
   QStringList inactivePlugins;
-  QString key = "GameFile";
+  QString key = u"GameFile"_s;
   int i       = 0;
 
   QSettings ini(filePath, QSettings::IniFormat);
 
-  while (ini.contains(QString("Game Files/%1%2").arg(key, i))) {
+  while (ini.contains(QString(u"Game Files/%1%2"_s).arg(key, i))) {
     QString pluginName;
     pluginName = QString::fromStdWString(buffer).trimmed();
     pluginList->setState(pluginName, IPluginList::STATE_ACTIVE);

@@ -24,6 +24,8 @@
 #include "gamegamebryo.h"
 #include "imoinfo.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 #define CHUNK 16384
 
 GamebryoSaveGame::GamebryoSaveGame(QString const& file, GameGamebryo const* game,
@@ -68,7 +70,7 @@ QStringList GamebryoSaveGame::allFiles() const
   auto e = m_Game->m_Organizer->gameFeatures()->gameFeature<MOBase::ScriptExtender>();
   if (e != nullptr) {
     QFileInfo file(m_FileName);
-    QFileInfo SEfile(file.absolutePath() + "/" + file.completeBaseName() + "." +
+    QFileInfo SEfile(file.absolutePath() % '/' % file.completeBaseName() % '.' %
                      m_Game->savegameSEExtension());
     if (SEfile.exists()) {
       res.push_back(SEfile.absoluteFilePath());
@@ -80,7 +82,7 @@ QStringList GamebryoSaveGame::allFiles() const
 bool GamebryoSaveGame::hasScriptExtenderFile() const
 {
   QFileInfo file(m_FileName);
-  QFileInfo SEfile(file.absolutePath() + "/" + file.completeBaseName() + "." +
+  QFileInfo SEfile(file.absolutePath() % '/' % file.completeBaseName() % '/' %
                    m_Game->savegameSEExtension());
   return SEfile.exists();
 }

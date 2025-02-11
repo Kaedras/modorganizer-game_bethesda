@@ -6,10 +6,12 @@
 #include <Windows.h>
 #endif
 
+using namespace Qt::Literals::StringLiterals;
+
 OblivionSaveGame::OblivionSaveGame(QString const& fileName, GameOblivion const* game)
     : GamebryoSaveGame(fileName, game)
 {
-  FileWrapper file(getFilepath(), "TES4SAVEGAME");
+  FileWrapper file(getFilepath(), u"TES4SAVEGAME"_s);
   file.setPluginString(GamebryoSaveGame::StringType::TYPE_BSTRING);
 
   SYSTEMTIME creationTime;
@@ -51,7 +53,7 @@ void OblivionSaveGame::fetchInformationFields(FileWrapper& file,
 
 std::unique_ptr<GamebryoSaveGame::DataFields> OblivionSaveGame::fetchDataFields() const
 {
-  FileWrapper file(getFilepath(), "TES4SAVEGAME");
+  FileWrapper file(getFilepath(), u"TES4SAVEGAME"_s);
   file.setPluginString(GamebryoSaveGame::StringType::TYPE_BSTRING);
 
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();

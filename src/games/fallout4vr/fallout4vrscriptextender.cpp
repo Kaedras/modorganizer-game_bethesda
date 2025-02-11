@@ -1,7 +1,8 @@
 #include "fallout4vrscriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 Fallout4VRScriptExtender::Fallout4VRScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -9,10 +10,10 @@ Fallout4VRScriptExtender::Fallout4VRScriptExtender(GameGamebryo const* game)
 
 QString Fallout4VRScriptExtender::BinaryName() const
 {
-  return "f4se_loader.exe";
+  return u"f4se_loader.exe"_s;
 }
 
 QString Fallout4VRScriptExtender::PluginPath() const
 {
-  return "f4se/plugins";
+  return u"f4se/plugins"_s;
 }

@@ -4,23 +4,23 @@
 <context>
     <name>GameFallout4</name>
     <message>
-        <location filename="gamefallout4.cpp" line="96"/>
+        <location filename="gamefallout4.cpp" line="97"/>
         <source>Fallout 4 Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefallout4.cpp" line="106"/>
+        <location filename="gamefallout4.cpp" line="107"/>
         <source>Adds support for the game Fallout 4.
 Splash by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefallout4.cpp" line="322"/>
+        <location filename="gamefallout4.cpp" line="323"/>
         <source>sTestFile entries are present</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefallout4.cpp" line="330"/>
+        <location filename="gamefallout4.cpp" line="331"/>
         <source>&lt;p&gt;You have sTestFile settings in your Fallout4Custom.ini. These must be removed or the game will not read the plugins.txt file. Management is disabled.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>

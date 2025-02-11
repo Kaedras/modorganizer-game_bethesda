@@ -1,7 +1,8 @@
 #include "falloutttwscriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 FalloutTTWScriptExtender::FalloutTTWScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -9,10 +10,10 @@ FalloutTTWScriptExtender::FalloutTTWScriptExtender(GameGamebryo const* game)
 
 QString FalloutTTWScriptExtender::BinaryName() const
 {
-  return "nvse_loader.exe";
+  return u"nvse_loader.exe"_s;
 }
 
 QString FalloutTTWScriptExtender::PluginPath() const
 {
-  return "nvse/plugins";
+  return u"nvse/plugins"_s;
 }

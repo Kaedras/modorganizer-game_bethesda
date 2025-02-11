@@ -26,6 +26,7 @@
 #include <memory>
 
 using namespace MOBase;
+using namespace Qt::Literals::StringLiterals;
 
 GameFalloutNV::GameFalloutNV() {}
 
@@ -40,7 +41,7 @@ bool GameFalloutNV::init(IOrganizer* moInfo)
   registerFeature(dataArchives);
   registerFeature(std::make_shared<FalloutNVBSAInvalidation>(dataArchives.get(), this));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "fallout.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, u"fallout.ini"_s));
   registerFeature(std::make_shared<FalloutNVModDataChecker>(this));
   registerFeature(
       std::make_shared<FalloutNVModDataContent>(m_Organizer->gameFeatures()));
@@ -57,14 +58,14 @@ void GameFalloutNV::setVariant(QString variant)
 
 void GameFalloutNV::checkVariants()
 {
-  QFileInfo gog_dll(m_GamePath + "/Galaxy.dll");
-  QFileInfo epic_dll(m_GamePath + "/EOSSDK-Win32-Shipping.dll");
-  if (gog_dll.exists())
-    setVariant("GOG");
-  else if (epic_dll.exists())
-    setVariant("Epic Games");
+  bool gog_dll_exists = QFileInfo::exists(m_GamePath % u"/Galaxy.dll"_s);
+  bool epic_dll_exists = QFileInfo::exists(m_GamePath % u"/EOSSDK-Win32-Shipping.dll"_s);
+  if (gog_dll_exists)
+    setVariant(u"GOG"_s);
+  else if (epic_dll_exists)
+    setVariant(u"Epic Games"_s);
   else
-    setVariant("Steam");
+    setVariant(u"Steam"_s);
 }
 
 QDir GameFalloutNV::documentsDirectory() const
@@ -86,10 +87,10 @@ QString GameFalloutNV::identifyGamePath() const
      * Gun Runners' Arsenal: 7dcfb9cd9d134728b2646466c34c7b3b
      * Courier's Stash: ee9a44b4530942499ef1c8c390731fce
      */
-    result = parseEpicGamesLocation({"5daeb974a22a435988892319b3a4f476"});
+    result = parseEpicGamesLocation({u"5daeb974a22a435988892319b3a4f476"_s});
     if (QFileInfo(result).isDir()) {
       QDir startPath = QDir(result);
-      auto subDirs   = startPath.entryList({"Fallout New Vegas*"},
+      auto subDirs   = startPath.entryList({u"Fallout New Vegas*"_s},
                                            QDir::Dirs | QDir::NoDotAndDotDot);
       if (!subDirs.isEmpty())
         result = startPath.absoluteFilePath(subDirs.first());
@@ -107,7 +108,7 @@ void GameFalloutNV::setGamePath(const QString& path)
 
 QDir GameFalloutNV::savesDirectory() const
 {
-  return QDir(m_MyGamesPath + "/Saves");
+  return QDir(m_MyGamesPath % u"/Saves"_s);
 }
 
 QString GameFalloutNV::myGamesPath() const
@@ -122,15 +123,15 @@ bool GameFalloutNV::isInstalled() const
 
 QString GameFalloutNV::gameName() const
 {
-  return "New Vegas";
+  return u"New Vegas"_s;
 }
 
 QString GameFalloutNV::gameDirectoryName() const
 {
-  if (selectedVariant() == "Epic Games")
-    return "FalloutNV_Epic";
+  if (selectedVariant() == u"Epic Games"_s)
+    return u"FalloutNV_Epic"_s;
   else
-    return "FalloutNV";
+    return u"FalloutNV"_s;
 }
 
 void GameFalloutNV::detectGame()
@@ -142,24 +143,24 @@ void GameFalloutNV::detectGame()
 
 QList<ExecutableInfo> GameFalloutNV::executables() const
 {
-  ExecutableInfo game("New Vegas", findInGameFolder(binaryName()));
-  ExecutableInfo launcher("Fallout Launcher", findInGameFolder(getLauncherName()));
+  ExecutableInfo game(u"New Vegas"_s, findInGameFolder(binaryName()));
+  ExecutableInfo launcher(u"Fallout Launcher"_s, findInGameFolder(getLauncherName()));
   QList<ExecutableInfo> extraExecutables =
-      QList<ExecutableInfo>() << ExecutableInfo("Fallout Mod Manager",
-                                                findInGameFolder("fomm/fomm.exe"))
-                              << ExecutableInfo("BOSS",
-                                                findInGameFolder("BOSS/BOSS.exe"))
-                              << ExecutableInfo("GECK", findInGameFolder("geck.exe"))
-                              << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                                     .withArgument("--game=\"FalloutNV\"");
-  if (selectedVariant() != "Epic Games") {
+      QList<ExecutableInfo>() << ExecutableInfo(u"Fallout Mod Manager"_s,
+                                                findInGameFolder(u"fomm/fomm.exe"_s))
+                              << ExecutableInfo(u"BOSS"_s,
+                                                findInGameFolder(u"BOSS/BOSS.exe"_s))
+                              << ExecutableInfo(u"GECK"_s, findInGameFolder(u"geck.exe"_s))
+                              << ExecutableInfo(u"LOOT"_s, QFileInfo(getLootPath()))
+                                     .withArgument(u"--game=\"FalloutNV\""_s);
+  if (selectedVariant() != u"Epic Games"_s) {
     extraExecutables.prepend(ExecutableInfo(
-        "NVSE", findInGameFolder(m_Organizer->gameFeatures()
+        u"NVSE"_s, findInGameFolder(m_Organizer->gameFeatures()
                                      ->gameFeature<MOBase::ScriptExtender>()
                                      ->loaderName())));
   } else {
-    game.withArgument("-EpicPortal");
-    launcher.withArgument("-EpicPortal");
+    game.withArgument(u"-EpicPortal"_s);
+    launcher.withArgument(u"-EpicPortal"_s);
   }
   QList<ExecutableInfo> executables = {game, launcher};
   executables += extraExecutables;
@@ -173,7 +174,7 @@ QList<ExecutableForcedLoadSetting> GameFalloutNV::executableForcedLoads() const
 
 QString GameFalloutNV::name() const
 {
-  return "Fallout NV Support Plugin";
+  return u"Fallout NV Support Plugin"_s;
 }
 
 QString GameFalloutNV::localizedName() const
@@ -183,7 +184,7 @@ QString GameFalloutNV::localizedName() const
 
 QString GameFalloutNV::author() const
 {
-  return "Tannin & MO2 Team";
+  return u"Tannin & MO2 Team"_s;
 }
 
 QString GameFalloutNV::description() const
@@ -199,7 +200,7 @@ MOBase::VersionInfo GameFalloutNV::version() const
 QList<PluginSetting> GameFalloutNV::settings() const
 {
   return QList<PluginSetting>()
-         << PluginSetting("enable_loot_sorting",
+         << PluginSetting(u"enable_loot_sorting"_s,
                           tr("While not recommended by the FNV modding community, "
                              "enables LOOT sorting"),
                           false);
@@ -208,33 +209,33 @@ QList<PluginSetting> GameFalloutNV::settings() const
 void GameFalloutNV::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/" + gameDirectoryName(), path, "plugins.txt");
+    copyToProfile(localAppFolder() % '/' % gameDirectoryName(), path, u"plugins.txt"_s);
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/fallout.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "fallout_default.ini",
-                    "fallout.ini");
+        !QFileInfo::exists(myGamesPath() % u"/fallout.ini"_s)) {
+      copyToProfile(gameDirectory().absolutePath(), path, u"fallout_default.ini"_s,
+                    u"fallout.ini"_s);
     } else {
-      copyToProfile(myGamesPath(), path, "fallout.ini");
+      copyToProfile(myGamesPath(), path, u"fallout.ini"_s);
     }
 
-    copyToProfile(myGamesPath(), path, "falloutprefs.ini");
-    copyToProfile(myGamesPath(), path, "falloutcustom.ini");
-    copyToProfile(myGamesPath(), path, "GECKCustom.ini");
-    copyToProfile(myGamesPath(), path, "GECKPrefs.ini");
+    copyToProfile(myGamesPath(), path, u"falloutprefs.ini"_s);
+    copyToProfile(myGamesPath(), path, u"falloutcustom.ini"_s);
+    copyToProfile(myGamesPath(), path, u"GECKCustom.ini"_s);
+    copyToProfile(myGamesPath(), path, u"GECKPrefs.ini"_s);
   }
 }
 
 QString GameFalloutNV::savegameExtension() const
 {
-  return "fos";
+  return u"fos"_s;
 }
 
 QString GameFalloutNV::savegameSEExtension() const
 {
-  return "nvse";
+  return u"nvse"_s;
 }
 
 std::shared_ptr<const GamebryoSaveGame>
@@ -245,11 +246,11 @@ GameFalloutNV::makeSaveGame(QString filePath) const
 
 QString GameFalloutNV::steamAPPId() const
 {
-  if (selectedVariant() == "Steam") {
-    if (m_GamePath.endsWith("enplczru")) {
-      return "22490";
+  if (selectedVariant() == u"Steam"_s) {
+    if (m_GamePath.endsWith(u"enplczru"_s)) {
+      return u"22490"_s;
     } else {
-      return "22380";
+      return u"22380"_s;
     }
   }
   return QString();
@@ -257,40 +258,40 @@ QString GameFalloutNV::steamAPPId() const
 
 QStringList GameFalloutNV::primaryPlugins() const
 {
-  return {"falloutnv.esm"};
+  return {u"falloutnv.esm"_s};
 }
 
 QStringList GameFalloutNV::gameVariants() const
 {
-  return {"Steam", "GOG", "Epic Games"};
+  return {u"Steam"_s, u"GOG"_s, u"Epic Games"_s};
 }
 
 QString GameFalloutNV::gameShortName() const
 {
-  return "FalloutNV";
+  return u"FalloutNV"_s;
 }
 
 QStringList GameFalloutNV::validShortNames() const
 {
-  return {"Fallout3"};
+  return {u"Fallout3"_s};
 }
 
 QString GameFalloutNV::gameNexusName() const
 {
-  return "newvegas";
+  return u"newvegas"_s;
 }
 
 QStringList GameFalloutNV::iniFiles() const
 {
-  return {"fallout.ini", "falloutprefs.ini", "falloutcustom.ini", "GECKCustom.ini",
-          "GECKPrefs.ini"};
+  return {u"fallout.ini"_s, u"falloutprefs.ini"_s, u"falloutcustom.ini"_s, u"GECKCustom.ini"_s,
+          u"GECKPrefs.ini"_s};
 }
 
 QStringList GameFalloutNV::DLCPlugins() const
 {
-  return {"DeadMoney.esm",    "HonestHearts.esm",      "OldWorldBlues.esm",
-          "LonesomeRoad.esm", "GunRunnersArsenal.esm", "CaravanPack.esm",
-          "ClassicPack.esm",  "MercenaryPack.esm",     "TribalPack.esm"};
+  return {u"DeadMoney.esm"_s,    u"HonestHearts.esm"_s,      u"OldWorldBlues.esm"_s,
+          u"LonesomeRoad.esm"_s, u"GunRunnersArsenal.esm"_s, u"CaravanPack.esm"_s,
+          u"ClassicPack.esm"_s,  u"MercenaryPack.esm"_s,     u"TribalPack.esm"_s};
 }
 
 MOBase::IPluginGame::SortMechanism GameFalloutNV::sortMechanism() const
@@ -319,14 +320,14 @@ MappingType GameFalloutNV::mappings() const
 {
   MappingType result;
 
-  for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
-    result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                      localAppFolder() + "/" + gameShortName() + "/" + profileFile,
+  for (const QString& profileFile : {u"plugins.txt"_s, u"loadorder.txt"_s}) {
+    result.push_back({m_Organizer->profilePath() % '/' % profileFile,
+                      localAppFolder() % '/' % gameShortName() % '/' % profileFile,
                       false});
     if (selectedVariant() == "Epic Games") {
       result.push_back(
-          {m_Organizer->profilePath() + "/" + profileFile,
-           localAppFolder() + "/" + gameDirectoryName() + "/" + profileFile, false});
+          {m_Organizer->profilePath() % '/' % profileFile,
+           localAppFolder() % '/' % gameDirectoryName() % '/' % profileFile, false});
     }
   }
 

@@ -1,7 +1,8 @@
 #include "oblivionscriptextender.h"
 
 #include <QString>
-#include <QStringList>
+
+using namespace Qt::Literals::StringLiterals;
 
 OblivionScriptExtender::OblivionScriptExtender(GameGamebryo const* game)
     : GamebryoScriptExtender(game)
@@ -11,10 +12,10 @@ OblivionScriptExtender::~OblivionScriptExtender() {}
 
 QString OblivionScriptExtender::BinaryName() const
 {
-  return "obse_loader.exe";
+  return u"obse_loader.exe"_s;
 }
 
 QString OblivionScriptExtender::PluginPath() const
 {
-  return "obse/plugins";
+  return u"obse/plugins"_s;
 }
