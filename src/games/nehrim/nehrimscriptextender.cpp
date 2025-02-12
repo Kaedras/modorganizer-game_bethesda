@@ -17,5 +17,5 @@ QString NehrimScriptExtender::BinaryName() const
 
 QString NehrimScriptExtender::PluginPath() const
 {
-  return u"obse/plugins"_s;
+  return u"OBSE/plugins"_s;
 }

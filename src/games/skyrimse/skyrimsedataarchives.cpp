@@ -20,8 +20,8 @@ QStringList SkyrimSEDataArchives::archives(const MOBase::IProfile* profile) cons
   QStringList result;
 
   QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath(u"skyrim.ini"_s)
-                        : localGameDirectory().absoluteFilePath(u"skyrim.ini"_s);
+                        ? QDir(profile->absolutePath()).absoluteFilePath(u"Skyrim.ini"_s)
+                        : localGameDirectory().absoluteFilePath(u"Skyrim.ini"_s);
   result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList"_s));
   result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList2"_s));
 
@@ -34,8 +34,8 @@ void SkyrimSEDataArchives::writeArchiveList(MOBase::IProfile* profile,
   QString list = before.join(u", "_s);
 
   QString iniFile = profile->localSettingsEnabled()
-                        ? QDir(profile->absolutePath()).absoluteFilePath(u"skyrim.ini"_s)
-                        : localGameDirectory().absoluteFilePath(u"skyrim.ini"_s);
+                        ? QDir(profile->absolutePath()).absoluteFilePath(u"Skyrim.ini"_s)
+                        : localGameDirectory().absoluteFilePath(u"Skyrim.ini"_s);
   if (list.length() > 255) {
     int splitIdx = list.lastIndexOf(',', 256);
     setArchivesToKey(iniFile, u"SResourceArchiveList"_s, list.mid(0, splitIdx));
