@@ -30,7 +30,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 
-GameGamebryo::GameGamebryo() {}
+GameGamebryo::GameGamebryo() : m_Organizer(nullptr) {}
 
 void GameGamebryo::detectGame()
 {

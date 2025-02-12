@@ -19,7 +19,7 @@ StarfieldBSAInvalidation::StarfieldBSAInvalidation(MOBase::DataArchives* dataArc
   m_Game        = game;
 }
 
-bool StarfieldBSAInvalidation::isInvalidationBSA(const QString& bsaName)
+bool StarfieldBSAInvalidation::isInvalidationBSA([[maybe_unused]] const QString& bsaName)
 {
   return false;
 }

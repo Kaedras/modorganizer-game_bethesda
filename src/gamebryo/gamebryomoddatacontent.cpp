@@ -68,8 +68,8 @@ std::vector<int> GamebryoModDataContent::getContentsFor(
       } else if (m_Enabled[CONTENT_INTERFACE] &&
                  (e->compare(u"interface"_s) == 0 || e->compare(u"menus"_s) == 0)) {
         contents.push_back(CONTENT_INTERFACE);
-      } else if (m_Enabled[CONTENT_SOUND] && e->compare(u"music"_s) == 0 ||
-                 e->compare(u"sound"_s) == 0) {
+      } else if (m_Enabled[CONTENT_SOUND] && (e->compare(u"music"_s) == 0 ||
+                 e->compare(u"sound"_s) == 0)) {
         contents.push_back(CONTENT_SOUND);
       } else if (m_Enabled[CONTENT_SCRIPT] && e->compare(u"scripts"_s) == 0) {
         contents.push_back(CONTENT_SCRIPT);

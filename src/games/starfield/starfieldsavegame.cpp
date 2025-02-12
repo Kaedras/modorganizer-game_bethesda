@@ -61,9 +61,9 @@ void StarfieldSaveGame::fetchInformationFields(
     QString& playerName, unsigned short& playerLevel, QString& playerLocation,
     FILETIME& creationTime) const
 {
-  char fileID[12];  // SFS_SAVEGAME
-  unsigned int headerSize;
-  unsigned int version;
+  [[maybe_unused]] char fileID[12];  // SFS_SAVEGAME
+  [[maybe_unused]] unsigned int headerSize;
+  [[maybe_unused]] unsigned int version;
   // file.read(fileID, 12);
   headerSize  = file.readInt(12);
   version     = file.readInt();
@@ -80,9 +80,9 @@ void StarfieldSaveGame::fetchInformationFields(
   file.read(ignore);  // playtime as ascii hh.mm.ss
   file.read(ignore);  // race name (i.e. BretonRace)
 
-  unsigned short gender;
+  [[maybe_unused]] unsigned short gender;
   gender = file.readShort();  // Player gender (0 = male)
-  float experience, experienceRequired;
+  [[maybe_unused]] float experience, experienceRequired;
   experience         = file.readFloat();
   experienceRequired = file.readFloat();
 
@@ -96,7 +96,7 @@ std::unique_ptr<GamebryoSaveGame::DataFields> StarfieldSaveGame::fetchDataFields
   FileWrapper file(getFilepath(), u"BCPS"_s);  // 10bytes
 
   getData(file);
-  FILETIME creationTime;
+  [[maybe_unused]] FILETIME creationTime;
   unsigned char saveVersion;
 
   {

@@ -42,8 +42,8 @@ QStringList EnderalSEDataArchives::archives(const MOBase::IProfile* profile) con
   QString iniFile = profile->localSettingsEnabled()
                         ? QDir(profile->absolutePath()).absoluteFilePath(u"Enderal.ini"_s)
                         : localGameDirectory().absoluteFilePath(u"Enderal.ini"_s);
-  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList"_s, 512));
-  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList2"_s, 512));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList"_s));
+  result.append(getArchivesFromKey(iniFile, u"SResourceArchiveList2"_s));
 
   return result;
 }

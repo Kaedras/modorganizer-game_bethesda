@@ -96,8 +96,8 @@ std::unique_ptr<GamebryoSaveGame::DataFields> SkyrimSESaveGame::fetchDataFields(
   file.openCompressedData();
 
   uint8_t saveGameVersion = file.readChar();
-  uint8_t pluginInfoSize  = file.readChar();
-  uint16_t other          = file.readShort();  // Unknown
+  [[maybe_unused]] uint8_t pluginInfoSize  = file.readChar();
+  [[maybe_unused]] uint16_t other          = file.readShort();  // Unknown
 
   fields->Plugins = file.readPlugins(1);  // Just empty data
 

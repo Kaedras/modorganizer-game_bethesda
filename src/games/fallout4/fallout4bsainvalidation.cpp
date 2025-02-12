@@ -18,7 +18,7 @@ Fallout4BSAInvalidation::Fallout4BSAInvalidation(MOBase::DataArchives* dataArchi
   m_Game        = game;
 }
 
-bool Fallout4BSAInvalidation::isInvalidationBSA(const QString& bsaName)
+bool Fallout4BSAInvalidation::isInvalidationBSA([[maybe_unused]] const QString& bsaName)
 {
   return false;
 }

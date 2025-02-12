@@ -19,7 +19,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefo4london.cpp" line="359"/>
+        <location filename="gamefo4london.cpp" line="361"/>
         <source>&lt;p&gt;You have sTestFile settings in your Fallout4Custom.ini. These must be removed or the game will not read the plugins.txt file. Management is disabled.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>

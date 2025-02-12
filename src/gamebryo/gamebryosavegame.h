@@ -196,7 +196,7 @@ protected:
     void skipQDataStream(QDataStream& data, std::size_t length);
 
     QStringList readPluginData(uint32_t count, int extraData,
-                               const QStringList corePlugins);
+                               const QStringList& corePlugins);
   };
 
   void setCreationTime(_SYSTEMTIME const& time);

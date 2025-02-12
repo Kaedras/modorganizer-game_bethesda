@@ -78,23 +78,23 @@ QStringList StarfieldDataArchives::archives(const MOBase::IProfile* profile) con
                                  u"sResourceStartUpArchiveList"_s,
                                  u"sResourceEnglishVoiceList"_s};
   for (const auto& setting : archiveSettings) {
-    auto archives = getArchivesFromKey(customIniFile, setting, 4096);
+    auto archives = getArchivesFromKey(customIniFile, setting);
     if (archives.isEmpty())
-      archives = getArchivesFromKey(defaultIniFile, setting, 4096);
+      archives = getArchivesFromKey(defaultIniFile, setting);
     result.append(archives);
   }
 
   return result;
 }
 
-void StarfieldDataArchives::writeArchiveList(MOBase::IProfile* profile,
-                                             const QStringList& before)
+void StarfieldDataArchives::writeArchiveList([[maybe_unused]] MOBase::IProfile* profile,
+                                             [[maybe_unused]] const QStringList& before)
 {}
 
-void StarfieldDataArchives::addArchive(MOBase::IProfile* profile, int index,
-                                       const QString& archiveName)
+void StarfieldDataArchives::addArchive([[maybe_unused]] MOBase::IProfile* profile, [[maybe_unused]] int index,
+                                       [[maybe_unused]] const QString& archiveName)
 {}
 
-void StarfieldDataArchives::removeArchive(MOBase::IProfile* profile,
-                                          const QString& archiveName)
+void StarfieldDataArchives::removeArchive([[maybe_unused]] MOBase::IProfile* profile,
+                                          [[maybe_unused]] const QString& archiveName)
 {}

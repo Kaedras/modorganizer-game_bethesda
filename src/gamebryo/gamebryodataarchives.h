@@ -22,8 +22,7 @@ protected:
   QDir gameDirectory() const;
   QDir localGameDirectory() const;
 
-  QStringList getArchivesFromKey(const QString& iniFile, const QString& key,
-                                 int size = 256) const;
+  QStringList getArchivesFromKey(const QString& iniFile, const QString& key) const;
   void setArchivesToKey(const QString& iniFile, const QString& key,
                         const QString& value);
 

@@ -21,8 +21,7 @@ QDir GamebryoDataArchives::localGameDirectory() const
 }
 
 QStringList GamebryoDataArchives::getArchivesFromKey(const QString& iniFile,
-                                                     const QString& key,
-                                                     const int size) const
+                                                     const QString& key) const
 {
   QSettings ini(iniFile, QSettings::IniFormat);
   QStringList result;

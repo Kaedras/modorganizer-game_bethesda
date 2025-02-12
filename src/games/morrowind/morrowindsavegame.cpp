@@ -160,7 +160,7 @@ std::unique_ptr<GamebryoSaveGame::DataFields> MorrowindSaveGame::fetchDataFields
 
 QImage MorrowindSaveGame::readImageBGRA(GamebryoSaveGame::FileWrapper& file,
                                         unsigned long width, unsigned long height,
-                                        int scale = 0, bool alpha = false) const
+                                        int scale = 0, [[maybe_unused]] bool alpha = false) const
 {
   QImage image(width, height, QImage::Format_RGBA8888);
   for (unsigned long h = 0; h < width; h++) {

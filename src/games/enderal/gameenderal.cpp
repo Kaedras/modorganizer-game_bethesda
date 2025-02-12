@@ -248,7 +248,7 @@ QString GameEnderal::identifyGamePath() const
   try {
     result =
         findInRegistry(HKEY_CURRENT_USER, path.toStdWString().c_str(), L"Install_Path");
-  } catch (MOBase::MyException) {
+  } catch (const MOBase::MyException&) {
     result = MOBase::findSteamGame(u"Enderal"_s, u"Data/Enderal - Forgotten Stories.esm"_s);
   }
   return result;

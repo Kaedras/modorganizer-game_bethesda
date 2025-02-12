@@ -85,7 +85,7 @@ namespace vdf
       {
         return c;
       }
-      static CONSTEXPR const char result(const char c, const wchar_t) NOEXCEPT
+      static CONSTEXPR char result(const char c, const wchar_t) NOEXCEPT
       {
         return c;
       }
@@ -98,7 +98,7 @@ namespace vdf
       {
         return wc;
       }
-      static CONSTEXPR const wchar_t result(const char, const wchar_t wc) NOEXCEPT
+      static CONSTEXPR wchar_t result(const char, const wchar_t wc) NOEXCEPT
       {
         return wc;
       }

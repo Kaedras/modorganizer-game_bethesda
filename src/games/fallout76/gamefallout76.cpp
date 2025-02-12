@@ -124,7 +124,7 @@ QString GameFallout76::savegameSEExtension() const
 }
 
 std::vector<std::shared_ptr<const MOBase::ISaveGame>>
-GameFallout76::listSaves(QDir folder) const
+GameFallout76::listSaves([[maybe_unused]] QDir folder) const
 {
   return {};
 }

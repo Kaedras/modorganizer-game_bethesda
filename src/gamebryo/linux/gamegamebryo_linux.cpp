@@ -36,6 +36,8 @@
 
 WORD GameGamebryo::getArch(QString const& program) const
 {
+  (void)program;
+
   STUB();
   return 0;
 }
@@ -60,17 +62,27 @@ QString GameGamebryo::identifyGamePath() const
 std::unique_ptr<BYTE[]> GameGamebryo::getRegValue(HKEY key, LPCWSTR path, LPCWSTR value,
                                                   DWORD flags, LPDWORD type = nullptr)
 {
+  (void)key;
+  (void)path;
+  (void)value;
+  (void)flags;
+  (void)type;
+
   STUB();
   return {};
 }
 
 QString GameGamebryo::findInRegistry(HKEY baseKey, LPCWSTR path, LPCWSTR value)
 {
+  (void)baseKey;
+  (void)path;
+  (void)value;
+
   STUB();
   return {};
 }
 
-QString GameGamebryo::getKnownFolderPath(REFKNOWNFOLDERID folderId, bool useDefault)
+QString GameGamebryo::getKnownFolderPath(REFKNOWNFOLDERID folderId, [[maybe_unused]] bool useDefault)
 {
   // use folderId as QStandardPaths::StandardLocation
   return QStandardPaths::standardLocations(
@@ -79,6 +91,8 @@ QString GameGamebryo::getKnownFolderPath(REFKNOWNFOLDERID folderId, bool useDefa
 
 QString GameGamebryo::getSpecialPath(const QString& name)
 {
+  (void)name;
+
   STUB();
   return {};
 }
@@ -112,6 +126,8 @@ QString GameGamebryo::determineMyGamesPath(const QString& gameName)
 
 QString GameGamebryo::parseEpicGamesLocation(const QStringList& manifests)
 {
+  (void)manifests;
+
   STUB();
   return {};
 }

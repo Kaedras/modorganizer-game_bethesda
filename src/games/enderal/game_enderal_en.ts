@@ -4,7 +4,7 @@
 <context>
     <name>GameEnderal</name>
     <message>
-         <location filename="gameenderal.cpp" line="98"/>
+        <location filename="gameenderal.cpp" line="98"/>
         <source>Enderal Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>

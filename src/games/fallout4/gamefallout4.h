@@ -46,8 +46,8 @@ public:  // IPluginDiagnose interface
   virtual std::vector<unsigned int> activeProblems() const override;
   virtual QString shortDescription(unsigned int key) const override;
   virtual QString fullDescription(unsigned int key) const override;
-  virtual bool hasGuidedFix(unsigned int key) const override { return false; }
-  virtual void startGuidedFix(unsigned int key) const override {}
+  virtual bool hasGuidedFix([[maybe_unused]] unsigned int key) const override { return false; }
+  virtual void startGuidedFix([[maybe_unused]] unsigned int key) const override {}
 
 public:  // IPlugin interface
   virtual QString name() const override;

@@ -105,7 +105,7 @@ void MorrowindGamePlugins::writeList(const IPluginList* pluginList,
   QString key = "GameFile";
   for (const QString& pluginName : plugins) {
     if (loadOrder || (pluginList->state(pluginName) == IPluginList::STATE_ACTIVE)) {
-      auto result = encoder.encode(pluginName);
+      encoder.encode(pluginName);
       if (encoder.hasError()) {
         invalidFileNames = true;
         qCritical("invalid plugin name %s", qUtf8Printable(pluginName));

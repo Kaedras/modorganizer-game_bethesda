@@ -349,6 +349,8 @@ QString GameFallout4London::shortDescription(unsigned int key) const
   switch (key) {
   case PROBLEM_TEST_FILE:
     return tr("sTestFile entries are present");
+  default:
+    return {};
   }
 }
 
@@ -361,5 +363,7 @@ QString GameFallout4London::fullDescription(unsigned int key) const
               "the game will not read the plugins.txt file. "
               "Management is disabled.</p>");
   }
+  default:
+    return {};
   }
 }

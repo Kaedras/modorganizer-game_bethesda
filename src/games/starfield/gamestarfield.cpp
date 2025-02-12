@@ -265,7 +265,7 @@ QStringList GameStarfield::iniFiles() const
   return {u"StarfieldPrefs.ini"_s, u"StarfieldCustom.ini"_s};
 }
 
-bool GameStarfield::prepareIni(const QString& exec)
+bool GameStarfield::prepareIni([[maybe_unused]] const QString& exec)
 {
   return true;  // no need to write to Starfield.ini
 }
@@ -433,9 +433,9 @@ QString GameStarfield::fullDescription(unsigned int key) const
   return "";
 }
 
-bool GameStarfield::hasGuidedFix(unsigned int key) const
+bool GameStarfield::hasGuidedFix([[maybe_unused]] unsigned int key) const
 {
   return false;
 }
 
-void GameStarfield::startGuidedFix(unsigned int key) const {}
+void GameStarfield::startGuidedFix([[maybe_unused]] unsigned int key) const {}

@@ -18,7 +18,7 @@ Fallout4LondonBSAInvalidation::Fallout4LondonBSAInvalidation(
   m_Game        = game;
 }
 
-bool Fallout4LondonBSAInvalidation::isInvalidationBSA(const QString& bsaName)
+bool Fallout4LondonBSAInvalidation::isInvalidationBSA([[maybe_unused]]const QString& bsaName)
 {
   return false;
 }

@@ -73,7 +73,7 @@ QString GameEnderalSE::identifyGamePath() const
       if (!result.isEmpty())
         break;
     }
-  } catch (MOBase::MyException) {
+  } catch (const MOBase::MyException&) {
     result = MOBase::findSteamGame(u"Enderal Special Edition"_s,
                                    u"Data/Enderal - Forgotten Stories.esm"_s);
   }

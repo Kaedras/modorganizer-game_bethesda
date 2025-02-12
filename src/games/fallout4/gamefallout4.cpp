@@ -321,6 +321,8 @@ QString GameFallout4::shortDescription(unsigned int key) const
   switch (key) {
   case PROBLEM_TEST_FILE:
     return tr("sTestFile entries are present");
+  default:
+    return {};
   }
 }
 
@@ -333,5 +335,7 @@ QString GameFallout4::fullDescription(unsigned int key) const
               "the game will not read the plugins.txt file. "
               "Management is disabled.</p>");
   }
+  default:
+    return {};
   }
 }

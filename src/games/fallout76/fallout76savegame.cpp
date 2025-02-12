@@ -27,10 +27,10 @@ Fallout76SaveGame::Fallout76SaveGame(QString const& fileName, GameFallout76 cons
 }
 
 void Fallout76SaveGame::fetchInformationFields(FileWrapper& file, QString playerName,
-                                               unsigned short playerLevel,
+                                               [[maybe_unused]] unsigned short playerLevel,
                                                QString playerLocation,
                                                unsigned long saveNumber,
-                                               FILETIME& creationTime) const
+                                               [[maybe_unused]] FILETIME& creationTime) const
 {
 
   file.skip<unsigned long>();  // header size
@@ -41,7 +41,7 @@ void Fallout76SaveGame::fetchInformationFields(FileWrapper& file, QString player
 
   unsigned long temp;
   file.read(temp);
-  playerLevel = static_cast<unsigned short>(temp);
+  // playerLevel = static_cast<unsigned short>(temp);
   file.read(playerLocation);
 
   QString ignore;
