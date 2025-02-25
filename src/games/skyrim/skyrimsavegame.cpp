@@ -1,12 +1,14 @@
 #include "skyrimsavegame.h"
 
 #ifdef __unix__
-#include "linux/windowsFunctionWrapper.h"
+#include "linux/windowsTypes.h"
 #else
 #include <Windows.h>
 #endif
 
 #include "gameskyrim.h"
+
+#include <utils.h>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -21,9 +23,8 @@ SkyrimSaveGame::SkyrimSaveGame(QString const& fileName, GameSkyrim const* game)
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&ftime, &ctime);
-  setCreationTime(ctime);
+
+  setCreationTime(fileTimeToQDateTime(ftime));
 }
 
 void SkyrimSaveGame::fetchInformationFields(

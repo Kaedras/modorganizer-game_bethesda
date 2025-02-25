@@ -2,9 +2,10 @@
 
 #include "gamefallout76.h"
 
+#include <utils.h>
+
 #ifdef __unix__
 #include <linux/windowsTypes.h>
-#include <linux/windowsFunctionWrapper.h>
 #endif
 
 using namespace Qt::Literals::StringLiterals;
@@ -20,10 +21,8 @@ Fallout76SaveGame::Fallout76SaveGame(QString const& fileName, GameFallout76 cons
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&ftime, &ctime);
 
-  setCreationTime(ctime);
+  setCreationTime(fileTimeToQDateTime(ftime));
 }
 
 void Fallout76SaveGame::fetchInformationFields(FileWrapper& file, QString playerName,

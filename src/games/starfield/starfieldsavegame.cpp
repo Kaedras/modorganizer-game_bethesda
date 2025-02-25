@@ -1,11 +1,13 @@
 #include "starfieldsavegame.h"
 
 #ifdef __unix__
-#include "linux/windowsFunctionWrapper.h"
+#include "linux/windowsTypes.h"
 #else
 #include <Windows.h>
 #endif
 #include "gamestarfield.h"
+
+#include <utils.h>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -25,10 +27,8 @@ StarfieldSaveGame::StarfieldSaveGame(QString const& fileName, GameStarfield cons
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&creationTime, &ctime);
 
-  setCreationTime(ctime);
+  setCreationTime(fileTimeToQDateTime(creationTime));
 }
 
 void StarfieldSaveGame::getData(FileWrapper& file) const

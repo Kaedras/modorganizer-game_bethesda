@@ -2,12 +2,13 @@
 
 #ifdef __unix__
 #include "linux/windowsTypes.h"
-#include "linux/windowsFunctionWrapper.h"
 #else
 #include <Windows.h>
 #endif
 
 #include "gameenderal.h"
+
+#include <utils.h>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -22,9 +23,8 @@ EnderalSaveGame::EnderalSaveGame(QString const& fileName, GameEnderal const* gam
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&ftime, &ctime);
-  setCreationTime(ctime);
+
+  setCreationTime(fileTimeToQDateTime(ftime));
 }
 
 void EnderalSaveGame::fetchInformationFields(

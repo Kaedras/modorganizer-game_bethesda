@@ -1,5 +1,11 @@
 #include "nehrimsavegame.h"
 
+#ifdef __unix__
+#include "linux/windowsTypes.h"
+#else
+#include <Windows.h>
+#endif
+
 using namespace Qt::Literals::StringLiterals;
 
 NehrimSaveGame::NehrimSaveGame(QString const& fileName, GameNehrim const* game)

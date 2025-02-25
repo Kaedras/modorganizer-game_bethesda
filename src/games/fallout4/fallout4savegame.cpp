@@ -2,12 +2,13 @@
 
 #ifdef __unix__
 #include "linux/windowsTypes.h"
-#include "linux/windowsFunctionWrapper.h"
 #else
 #include <Windows.h>
 #endif
 
 #include "gamefallout4.h"
+
+#include <utils.h>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -23,10 +24,8 @@ Fallout4SaveGame::Fallout4SaveGame(QString const& fileName, GameFallout4 const* 
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&creationTime, &ctime);
 
-  setCreationTime(ctime);
+  setCreationTime(fileTimeToQDateTime(creationTime));
 }
 
 void Fallout4SaveGame::fetchInformationFields(

@@ -22,14 +22,6 @@
 #include <QVersionNumber>
 #include <QtDebug>
 
-#ifdef __unix__
-#include "linux/windowsFunctionWrapper.h"
-#else
-#include <Windows.h>
-#include <Windows.h>
-#include <winver.h>
-#endif
-
 #include <exception>
 #include <memory>
 #include <stdexcept>

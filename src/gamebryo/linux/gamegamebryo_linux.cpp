@@ -1,14 +1,9 @@
 #include "gamegamebryo.h"
 
-#include "bsainvalidation.h"
-#include "dataarchives.h"
 #include "gamebryomoddatacontent.h"
 #include "gamebryosavegame.h"
-#include "gameplugins.h"
-#include "iprofile.h"
 #include "log.h"
 #include "savegameinfo.h"
-#include "scopeguard.h"
 #include "scriptextender.h"
 #include "utility.h"
 #include "vdf_parser.h"
@@ -17,10 +12,8 @@
 
 #include <QBuffer>
 #include <QDir>
-#include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
-#include <QIcon>
 #include <QJsonDocument>
 #include <QSettings>
 #include <QStandardPaths>
@@ -30,7 +23,6 @@
 
 #include <optional>
 #include <string>
-#include <vector>
 
 #include "stub.h"
 
@@ -88,11 +80,12 @@ WORD GameGamebryo::getArch(QString const& program) const
 {
   // brief summary of this function:
   // seek to 0x3C
-  // the next 4 bytes contain either "PE\0\0" or the offset of the aforementioned value, in which case seek to the offset
-  // read the 2 bytes after "PE\0\0" and return them as uint16_t
+  // the next 4 bytes contain either "PE\0\0" or the offset of the aforementioned value,
+  // in which case seek to the offset read the 2 bytes after "PE\0\0" and return them as
+  // uint16_t
 
   static constexpr uint16_t offset = 0x3C;
-  static constexpr char pe[4] = {'P', 'E', 0, 0};
+  static constexpr char pe[4]      = {'P', 'E', 0, 0};
 
   QFile file(program);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -104,7 +97,8 @@ WORD GameGamebryo::getArch(QString const& program) const
     return 0;
   }
   uint32_t peValue;
-  if (file.read(reinterpret_cast<char*>(&peValue), sizeof(uint32_t)) != sizeof(uint32_t)) {
+  if (file.read(reinterpret_cast<char*>(&peValue), sizeof(uint32_t)) !=
+      sizeof(uint32_t)) {
     return 0;
   }
 
@@ -114,7 +108,8 @@ WORD GameGamebryo::getArch(QString const& program) const
     if (!file.seek(peValue)) {
       return 0;
     }
-    if (file.read(reinterpret_cast<char*>(&peValue), sizeof(uint32_t)) != sizeof(uint32_t)) {
+    if (file.read(reinterpret_cast<char*>(&peValue), sizeof(uint32_t)) !=
+        sizeof(uint32_t)) {
       return 0;
     }
     if (memcmp(&peValue, pe, sizeof(uint32_t)) != 0) {
@@ -123,7 +118,8 @@ WORD GameGamebryo::getArch(QString const& program) const
   }
 
   uint16_t value;
-  if (file.read(reinterpret_cast<char*>(&value), sizeof(uint16_t)) != sizeof(uint16_t)) {
+  if (file.read(reinterpret_cast<char*>(&value), sizeof(uint16_t)) !=
+      sizeof(uint16_t)) {
     return 0;
   }
 
@@ -141,14 +137,18 @@ QString GameGamebryo::identifyGamePath() const
   return {};
 }
 
-std::unique_ptr<BYTE[]> GameGamebryo::getRegValue([[maybe_unused]] HKEY key, [[maybe_unused]] LPCWSTR path, [[maybe_unused]] LPCWSTR value,
-                                                  [[maybe_unused]] DWORD flags, [[maybe_unused]] LPDWORD type = nullptr)
+std::unique_ptr<BYTE[]>
+GameGamebryo::getRegValue([[maybe_unused]] HKEY key, [[maybe_unused]] LPCWSTR path,
+                          [[maybe_unused]] LPCWSTR value, [[maybe_unused]] DWORD flags,
+                          [[maybe_unused]] LPDWORD type = nullptr)
 {
   // this function is probably not needed
   return {};
 }
 
-QString GameGamebryo::findInRegistry([[maybe_unused]] HKEY baseKey, [[maybe_unused]] LPCWSTR path, [[maybe_unused]] LPCWSTR value)
+QString GameGamebryo::findInRegistry([[maybe_unused]] HKEY baseKey,
+                                     [[maybe_unused]] LPCWSTR path,
+                                     [[maybe_unused]] LPCWSTR value)
 {
   // this function is probably not needed
   return {};
