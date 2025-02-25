@@ -20,7 +20,7 @@ public:  // ISaveGame interface
   virtual QString getName() const override;
 
   // The PC level is not pre-fetch for morrowind.
-  unsigned short getPCLevel() const override;
+  uint16_t getPCLevel() const override;
 
 public:
   // Simple getters
@@ -36,13 +36,13 @@ protected:
   float m_GameDays;
 
 protected:
-  QImage readImageBGRA(GamebryoSaveGame::FileWrapper& file, unsigned long width,
-                       unsigned long height, int scale, bool alpha) const;
+  QImage readImageBGRA(GamebryoSaveGame::FileWrapper& file, uint32_t width,
+                       uint32_t height, int scale, bool alpha) const;
 
   // We need to add the PC level here.
   struct MorrowindDataFields : public DataFields
   {
-    unsigned short PCLevel = 0;
+    uint16_t PCLevel = 0;
   };
 
   // Fetch easy-to-access information.

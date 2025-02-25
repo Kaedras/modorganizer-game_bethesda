@@ -189,10 +189,10 @@ template <>
 void GamebryoSaveGame::FileWrapper::read<QString>(QString& value)
 {
   if (m_CompressionType == 0) {
-    unsigned short length;
+    uint16_t length;
     if (m_PluginString == StringType::TYPE_BSTRING ||
         m_PluginString == StringType::TYPE_BZSTRING) {
-      unsigned char len;
+      uint8_t len;
       read(len);
       length = m_PluginString == StringType::TYPE_BZSTRING ? len + 1 : len;
     } else {
@@ -200,7 +200,7 @@ void GamebryoSaveGame::FileWrapper::read<QString>(QString& value)
     }
 
     if (m_HasFieldMarkers) {
-      skip<char>();
+      skip<uint8_t>();
     }
 
     QByteArray buffer;
@@ -213,7 +213,7 @@ void GamebryoSaveGame::FileWrapper::read<QString>(QString& value)
       buffer[length - 1] = '\0';
 
     if (m_HasFieldMarkers) {
-      skip<char>();
+      skip<uint8_t>();
     }
 
     if (m_PluginStringFormat == StringFormat::UTF8)
@@ -221,10 +221,10 @@ void GamebryoSaveGame::FileWrapper::read<QString>(QString& value)
     else
       value = QString::fromLocal8Bit(buffer.constData());
   } else if (m_CompressionType == 1 || m_CompressionType == 2) {
-    unsigned short length;
+    uint16_t length;
     if (m_PluginString == StringType::TYPE_BSTRING ||
         m_PluginString == StringType::TYPE_BZSTRING) {
-      unsigned char len;
+      uint8_t len;
       readQDataStream(*m_Data, len);
       length = m_PluginString == StringType::TYPE_BZSTRING ? len + 1 : len;
     } else {
@@ -268,21 +268,21 @@ void GamebryoSaveGame::FileWrapper::read(void* buff, std::size_t length)
 
 QImage GamebryoSaveGame::FileWrapper::readImage(int scale, bool alpha)
 {
-  unsigned long width;
+  uint32_t width;
   read(width);
-  unsigned long height;
+  uint32_t height;
   read(height);
   return readImage(width, height, scale, alpha);
 }
 
-QImage GamebryoSaveGame::FileWrapper::readImage(unsigned long width,
-                                                unsigned long height, int scale,
+QImage GamebryoSaveGame::FileWrapper::readImage(uint32_t width,
+                                                uint32_t height, int scale,
                                                 bool alpha)
 {
   int bpp = alpha ? 4 : 3;
-  QScopedArrayPointer<unsigned char> buffer(new unsigned char[width * height * bpp]);
+  QScopedArrayPointer<uint8_t> buffer(new uint8_t[width * height * bpp]);
   read(buffer.data(), width * height * bpp);
-  QImage image(buffer.data(), static_cast<int>(width), static_cast<int>(height),
+  QImage image(buffer.data(), width, height,
                alpha ? QImage::Format_RGBA8888_Premultiplied : QImage::Format_RGB888);
 
   // We need to copy the image here because QImage does not make a copy of the
@@ -316,7 +316,7 @@ bool GamebryoSaveGame::FileWrapper::openCompressedData(int bytesToIgnore)
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     return false;
   } else if (m_CompressionType == 1) {
     read(m_NextChunk);
@@ -416,7 +416,7 @@ uint8_t GamebryoSaveGame::FileWrapper::readChar(int bytesToIgnore)
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     uint8_t version;
     read(version);
     return version;
@@ -439,7 +439,7 @@ uint16_t GamebryoSaveGame::FileWrapper::readShort(int bytesToIgnore)
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     uint16_t size;
     read(size);
     return size;
@@ -461,7 +461,7 @@ uint32_t GamebryoSaveGame::FileWrapper::readInt(int bytesToIgnore)
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     uint32_t size;
     read(size);
     return size;
@@ -483,7 +483,7 @@ uint64_t GamebryoSaveGame::FileWrapper::readLong(int bytesToIgnore)
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     uint64_t size;
     read(size);
     return size;
@@ -505,7 +505,7 @@ float_t GamebryoSaveGame::FileWrapper::readFloat(int bytesToIgnore)
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     float_t value;
     read(value);
     return value;
@@ -528,7 +528,7 @@ QStringList GamebryoSaveGame::FileWrapper::readPlugins(int bytesToIgnore, int ex
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     uint8_t count;
     read(count);
     return readPluginData(count, extraData, corePlugins);
@@ -547,7 +547,7 @@ GamebryoSaveGame::FileWrapper::readLightPlugins(int bytesToIgnore, int extraData
 {
   if (m_CompressionType == 0) {
     if (bytesToIgnore > 0)  // Just to make certain
-      skip<char>(bytesToIgnore);
+      skip<uint8_t>(bytesToIgnore);
     uint16_t count;
     read(count);
     return readPluginData(count, extraData, corePlugins);

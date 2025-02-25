@@ -27,28 +27,28 @@ Fallout76SaveGame::Fallout76SaveGame(QString const& fileName, GameFallout76 cons
 }
 
 void Fallout76SaveGame::fetchInformationFields(FileWrapper& file, QString playerName,
-                                               [[maybe_unused]] unsigned short playerLevel,
+                                               uint16_t playerLevel,
                                                QString playerLocation,
-                                               unsigned long saveNumber,
-                                               [[maybe_unused]] FILETIME& creationTime) const
+                                               uint32_t saveNumber,
+                                               FILETIME& creationTime) const
 {
 
-  file.skip<unsigned long>();  // header size
+  file.skip<uint32_t>();  // header size
   file.skip<uint32_t>();       // header version
   file.read(saveNumber);
 
   file.read(playerName);
 
-  unsigned long temp;
+  uint32_t temp;
   file.read(temp);
-  // playerLevel = static_cast<unsigned short>(temp);
+  playerLevel = static_cast<uint16_t>(temp);
   file.read(playerLocation);
 
   QString ignore;
   file.read(ignore);  // playtime as ascii hh.mm.ss
   file.read(ignore);  // race name (i.e. BretonRace)
 
-  file.skip<unsigned short>();  // Player gender (0 = male)
+  file.skip<uint16_t>();  // Player gender (0 = male)
   file.skip<float>(2);          // experience gathered, experience required
 
   FILETIME ftime;

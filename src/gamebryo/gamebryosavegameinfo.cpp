@@ -85,7 +85,7 @@ GamebryoSaveGameInfo::getMissingAssets(MOBase::ISaveGame const& save) const
     for (const QString& esp : esps) {
       MissingAssets::iterator iter = missingAssets.find(esp);
       if (iter != missingAssets.end()) {
-        if (!iter->contains(u"<overwrite>"_s)) {
+        if (!iter->contains("<overwrite>"_L1)) {
           iter->push_back(u"<overwrite>"_s);
         }
       }

@@ -9,27 +9,27 @@ FalloutTTWSaveGame::FalloutTTWSaveGame(QString const& fileName,
     : GamebryoSaveGame(fileName, game)
 {
   FileWrapper file(getFilepath(), u"FO3SAVEGAME"_s);
-  unsigned long width, height;
+  uint32_t width, height;
   fetchInformationFields(file, width, height, m_SaveNumber, m_PCName, m_PCLevel,
                          m_PCLocation);
 }
 
-void FalloutTTWSaveGame::fetchInformationFields(FileWrapper& file, unsigned long& width,
-                                                unsigned long& height,
-                                                unsigned long& saveNumber,
+void FalloutTTWSaveGame::fetchInformationFields(FileWrapper& file, uint32_t& width,
+                                                uint32_t& height,
+                                                uint32_t& saveNumber,
                                                 QString& playerName,
-                                                unsigned short& playerLevel,
+                                                uint16_t& playerLevel,
                                                 QString& playerLocation) const
 {
-  file.skip<unsigned long>();  // Save header size
+  file.skip<uint32_t>();  // Save header size
 
-  file.skip<unsigned long>();  // File version?
-  file.skip<unsigned char>();  // Delimiter
+  file.skip<uint32_t>();  // File version?
+  file.skip<uint8_t>();  // Delimiter
 
   // A huge wodge of text with no length but a delimiter. Given the null bytes
   // in it I presume it's fixed length (64 bytes + delim) but I have no
   // definite spec
-  for (unsigned char ignore = 0; ignore != 0x7c;) {
+  for (uint8_t ignore = 0; ignore != 0x7c;) {
     file.read(ignore);  // unknown
   }
 
@@ -44,7 +44,7 @@ void FalloutTTWSaveGame::fetchInformationFields(FileWrapper& file, unsigned long
   QString whatthis;
   file.read(whatthis);
 
-  long level;
+  int32_t level;
   file.read(level);
   playerLevel = level;
   file.read(playerLocation);
@@ -57,11 +57,11 @@ FalloutTTWSaveGame::fetchDataFields() const
 
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();
 
-  unsigned long width, height;
+  uint32_t width, height;
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
 
     fetchInformationFields(file, width, height, dummySaveNumber, dummyName, dummyLevel,
                            dummyLocation);
@@ -72,7 +72,7 @@ FalloutTTWSaveGame::fetchDataFields() const
 
   fields->Screenshot = file.readImage(width, height, 256);
 
-  file.skip<char>(5);  // unknown (1 byte), plugin size (4 bytes)
+  file.skip<uint8_t>(5);  // unknown (1 byte), plugin size (4 bytes)
 
   file.setPluginString(GamebryoSaveGame::StringType::TYPE_BSTRING);
   fields->Plugins = file.readPlugins();

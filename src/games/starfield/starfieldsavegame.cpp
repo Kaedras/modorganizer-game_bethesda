@@ -16,7 +16,7 @@ StarfieldSaveGame::StarfieldSaveGame(QString const& fileName, GameStarfield cons
 
   getData(file);
   FILETIME creationTime;
-  unsigned char saveVersion;
+  uint8_t saveVersion;
   fetchInformationFields(file, m_SaveNumber, saveVersion, m_PCName, m_PCLevel,
                          m_PCLocation, creationTime);
   file.closeCompressedData();
@@ -57,13 +57,13 @@ void StarfieldSaveGame::getData(FileWrapper& file) const
 }
 
 void StarfieldSaveGame::fetchInformationFields(
-    FileWrapper& file, unsigned long& saveNumber, unsigned char& saveVersion,
-    QString& playerName, unsigned short& playerLevel, QString& playerLocation,
+    FileWrapper& file, uint32_t& saveNumber, unsigned char& saveVersion,
+    QString& playerName, uint16_t& playerLevel, QString& playerLocation,
     FILETIME& creationTime) const
 {
-  [[maybe_unused]] char fileID[12];  // SFS_SAVEGAME
-  [[maybe_unused]] unsigned int headerSize;
-  [[maybe_unused]] unsigned int version;
+  char fileID[12];  // SFS_SAVEGAME
+  uint32_t headerSize;
+  uint32_t version;
   // file.read(fileID, 12);
   headerSize  = file.readInt(12);
   version     = file.readInt();
@@ -71,22 +71,22 @@ void StarfieldSaveGame::fetchInformationFields(
   saveNumber  = file.readInt();
   file.read(playerName);
 
-  unsigned int temp;
+  uint32_t temp;
   temp        = file.readInt();
-  playerLevel = static_cast<unsigned short>(temp);
+  playerLevel = static_cast<uint16_t>(temp);
   file.read(playerLocation);
 
   QString ignore;
   file.read(ignore);  // playtime as ascii hh.mm.ss
   file.read(ignore);  // race name (i.e. BretonRace)
 
-  [[maybe_unused]] unsigned short gender;
+  uint16_t gender;
   gender = file.readShort();  // Player gender (0 = male)
-  [[maybe_unused]] float experience, experienceRequired;
+  float experience, experienceRequired;
   experience         = file.readFloat();
   experienceRequired = file.readFloat();
 
-  unsigned long long time     = file.readLong();
+  uint64_t time     = file.readLong();
   creationTime.dwLowDateTime  = (DWORD)time;
   creationTime.dwHighDateTime = time >> 32;
 }
@@ -96,13 +96,13 @@ std::unique_ptr<GamebryoSaveGame::DataFields> StarfieldSaveGame::fetchDataFields
   FileWrapper file(getFilepath(), u"BCPS"_s);  // 10bytes
 
   getData(file);
-  [[maybe_unused]] FILETIME creationTime;
-  unsigned char saveVersion;
+  FILETIME creationTime;
+  uint8_t saveVersion;
 
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
     FILETIME dummyTime;
 
     fetchInformationFields(file, dummySaveNumber, saveVersion, dummyName, dummyLevel,
