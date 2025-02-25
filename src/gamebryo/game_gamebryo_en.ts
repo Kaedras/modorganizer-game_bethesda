@@ -9,72 +9,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="18"/>
+        <location filename="gamebryomoddatacontent.cpp" line="19"/>
         <source>Optional Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="19"/>
+        <location filename="gamebryomoddatacontent.cpp" line="20"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="20"/>
+        <location filename="gamebryomoddatacontent.cpp" line="21"/>
         <source>Meshes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="21"/>
+        <location filename="gamebryomoddatacontent.cpp" line="22"/>
         <source>Bethesda Archive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="22"/>
+        <location filename="gamebryomoddatacontent.cpp" line="23"/>
         <source>Scripts (Papyrus)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="23"/>
+        <location filename="gamebryomoddatacontent.cpp" line="24"/>
         <source>Script Extender Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="24"/>
+        <location filename="gamebryomoddatacontent.cpp" line="25"/>
         <source>Script Extender Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="25"/>
+        <location filename="gamebryomoddatacontent.cpp" line="26"/>
         <source>SkyProc Patcher</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="26"/>
+        <location filename="gamebryomoddatacontent.cpp" line="27"/>
         <source>Sound or Music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="27"/>
+        <location filename="gamebryomoddatacontent.cpp" line="28"/>
         <source>Textures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="28"/>
+        <location filename="gamebryomoddatacontent.cpp" line="29"/>
         <source>MCM Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="29"/>
+        <location filename="gamebryomoddatacontent.cpp" line="30"/>
         <source>INI Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="30"/>
+        <location filename="gamebryomoddatacontent.cpp" line="31"/>
         <source>FaceGen Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryomoddatacontent.cpp" line="31"/>
+        <location filename="gamebryomoddatacontent.cpp" line="32"/>
         <source>ModGroup Files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,29 +107,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegameinfowidget.cpp" line="86"/>
+        <location filename="gamebryosavegameinfowidget.cpp" line="80"/>
         <source>Has Script Extender Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegameinfowidget.cpp" line="91"/>
+        <location filename="gamebryosavegameinfowidget.cpp" line="85"/>
         <source>Missing ESPs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegameinfowidget.cpp" line="124"/>
-        <location filename="gamebryosavegameinfowidget.cpp" line="162"/>
-        <location filename="gamebryosavegameinfowidget.cpp" line="201"/>
+        <location filename="gamebryosavegameinfowidget.cpp" line="118"/>
+        <location filename="gamebryosavegameinfowidget.cpp" line="156"/>
+        <location filename="gamebryosavegameinfowidget.cpp" line="195"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegameinfowidget.cpp" line="130"/>
+        <location filename="gamebryosavegameinfowidget.cpp" line="124"/>
         <source>Missing ESHs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegameinfowidget.cpp" line="169"/>
+        <location filename="gamebryosavegameinfowidget.cpp" line="163"/>
         <source>Missing ESLs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,23 +137,23 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="gamebryogameplugins.cpp" line="132"/>
+        <location filename="gamebryogameplugins.cpp" line="133"/>
         <location filename="../creation/creationgameplugins.cpp" line="99"/>
         <source>Some of your plugins have invalid names! These plugins can not be loaded by the game. Please see mo_interface.log for a list of affected plugins and rename them.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegame.cpp" line="55"/>
+        <location filename="gamebryosavegame.cpp" line="49"/>
         <source>%1, #%2, Level %3, %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegame.cpp" line="115"/>
+        <location filename="gamebryosavegame.cpp" line="108"/>
         <source>failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegame.cpp" line="125"/>
+        <location filename="gamebryosavegame.cpp" line="118"/>
         <source>wrong file format - expected %1 got &apos;%2&apos; for %3</source>
         <translation type="unfinished"></translation>
     </message>
