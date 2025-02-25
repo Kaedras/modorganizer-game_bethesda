@@ -1,8 +1,8 @@
 #include "gamebryodataarchives.h"
 
+#include <QSettings>
 #include <registry.h>
 #include <utility.h>
-#include <QSettings>
 
 #include "gamegamebryo.h"
 

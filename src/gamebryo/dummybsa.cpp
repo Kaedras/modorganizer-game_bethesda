@@ -104,8 +104,7 @@ static unsigned long long genHash(const char* fileName)
 }
 
 DummyBSA::DummyBSA(unsigned long bsaVersion)
-    : m_Version(bsaVersion), m_FileName("dummy.dds"),
-      m_TotalFileNameLength(0)
+    : m_Version(bsaVersion), m_FileName("dummy.dds"), m_TotalFileNameLength(0)
 {}
 
 void DummyBSA::writeHeader(QFile& file)

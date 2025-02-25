@@ -50,8 +50,8 @@ bool GamebryoBSAInvalidation::prepareProfile(MOBase::IProfile* profile)
 
   QSettings ini(iniFilePath, QSettings::IniFormat);
 
-  static const auto bInvalidateOlderFiles = u"Archive/bInvalidateOlderFiles"_s;
-  static const auto SInvalidationFile = u"Archive/SInvalidationFile"_s;
+  static const auto bInvalidateOlderFiles   = u"Archive/bInvalidateOlderFiles"_s;
+  static const auto SInvalidationFile       = u"Archive/SInvalidationFile"_s;
   static const auto archiveInvalidationFile = u"ArchiveInvalidation.txt"_s;
 
   // write bInvalidateOlderFiles = 1, if needed

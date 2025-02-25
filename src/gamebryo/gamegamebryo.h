@@ -141,6 +141,7 @@ protected:
   static QString parseSteamLocation(const QString& appid, const QString& directoryName);
 
   static QString getFileVersion(const QString& fileName);
+
 protected:
   void registerFeature(std::shared_ptr<MOBase::GameFeature> feature);
 

@@ -51,7 +51,8 @@ auto GamebryoModDataChecker::possibleFolderNames() const -> const FileNameSet&
  */
 auto GamebryoModDataChecker::possibleFileExtensions() const -> const FileNameSet&
 {
-  static FileNameSet result{u"esp"_s, u"esm"_s, u"esl"_s, u"bsa"_s, u"ba2"_s, u"modgroups"_s, u"ini"_s};
+  static FileNameSet result{u"esp"_s, u"esm"_s,       u"esl"_s, u"bsa"_s,
+                            u"ba2"_s, u"modgroups"_s, u"ini"_s};
   return result;
 }
 

@@ -14,7 +14,8 @@ std::vector<GamebryoModDataContent::Content>
 GamebryoModDataContent::getAllContents() const
 {
   static std::vector<Content> GAMEBRYO_CONTENTS{
-      {CONTENT_PLUGIN, QT_TR_NOOP("Plugins (ESP/ESM/ESL)"), u":/MO/gui/content/plugin"_s},
+      {CONTENT_PLUGIN, QT_TR_NOOP("Plugins (ESP/ESM/ESL)"),
+       u":/MO/gui/content/plugin"_s},
       {CONTENT_OPTIONAL, QT_TR_NOOP("Optional Plugins"), "", true},
       {CONTENT_INTERFACE, QT_TR_NOOP("Interface"), u":/MO/gui/content/interface"_s},
       {CONTENT_MESH, QT_TR_NOOP("Meshes"), u":/MO/gui/content/mesh"_s},
@@ -68,8 +69,8 @@ std::vector<int> GamebryoModDataContent::getContentsFor(
       } else if (m_Enabled[CONTENT_INTERFACE] &&
                  (e->compare(u"interface"_s) == 0 || e->compare(u"menus"_s) == 0)) {
         contents.push_back(CONTENT_INTERFACE);
-      } else if (m_Enabled[CONTENT_SOUND] && (e->compare(u"music"_s) == 0 ||
-                 e->compare(u"sound"_s) == 0)) {
+      } else if (m_Enabled[CONTENT_SOUND] &&
+                 (e->compare(u"music"_s) == 0 || e->compare(u"sound"_s) == 0)) {
         contents.push_back(CONTENT_SOUND);
       } else if (m_Enabled[CONTENT_SCRIPT] && e->compare(u"scripts"_s) == 0) {
         contents.push_back(CONTENT_SCRIPT);

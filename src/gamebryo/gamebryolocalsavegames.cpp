@@ -57,18 +57,18 @@ bool GamebryoLocalSavegames::prepareProfile(MOBase::IProfile* profile)
 {
   bool enable = profile->localSavesEnabled();
 
-  QString basePath    = profile->localSettingsEnabled()
-                            ? profile->absolutePath()
-                            : localGameDirectory().absolutePath();
-  QString iniFilePath = basePath % '/' % m_IniFileName;
+  QString basePath        = profile->localSettingsEnabled()
+                                ? profile->absolutePath()
+                                : localGameDirectory().absolutePath();
+  QString iniFilePath     = basePath % '/' % m_IniFileName;
   QString saveIniFilePath = profile->absolutePath() % '/' % u"savepath.ini"_s;
 
   QSettings ini(iniFilePath, QSettings::IniFormat);
 
-  static const auto skipMe = u"SKIP_ME"_s;
+  static const auto skipMe   = u"SKIP_ME"_s;
   static const auto deleteMe = u"DELETE_ME"_s;
 
-  static const auto sLocalSavePath = u"General/sLocalSavePath"_s;
+  static const auto sLocalSavePath       = u"General/sLocalSavePath"_s;
   static const auto bUseMyGamesDirectory = u"General/bUseMyGamesDirectory"_s;
 
   // Get the current sLocalSavePath
@@ -107,7 +107,7 @@ bool GamebryoLocalSavegames::prepareProfile(MOBase::IProfile* profile)
     // If savepath.ini exists, use it and delete it
     if (QFile::exists(saveIniFilePath)) {
       QSettings saveIni(saveIniFilePath, QSettings::IniFormat);
-      QString savedPath = saveIni.value(sLocalSavePath, deleteMe).toString();
+      QString savedPath    = saveIni.value(sLocalSavePath, deleteMe).toString();
       QString savedMyGames = saveIni.value(bUseMyGamesDirectory, deleteMe).toString();
 
       if (savedPath != deleteMe) {
