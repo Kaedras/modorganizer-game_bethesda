@@ -10,7 +10,7 @@ QString EnderalBSAInvalidation::invalidationBSAName() const
   return "Enderal - Invalidation.bsa";
 }
 
-unsigned long EnderalBSAInvalidation::bsaVersion() const
+uint32_t EnderalBSAInvalidation::bsaVersion() const
 {
   return 0x68;
 }

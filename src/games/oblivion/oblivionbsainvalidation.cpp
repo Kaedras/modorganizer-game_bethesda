@@ -10,7 +10,7 @@ QString OblivionBSAInvalidation::invalidationBSAName() const
   return "Oblivion - Invalidation.bsa";
 }
 
-unsigned long OblivionBSAInvalidation::bsaVersion() const
+uint32_t OblivionBSAInvalidation::bsaVersion() const
 {
   return 0x67;
 }

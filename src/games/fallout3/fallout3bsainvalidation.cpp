@@ -10,7 +10,7 @@ QString Fallout3BSAInvalidation::invalidationBSAName() const
   return "Fallout - Invalidation.bsa";
 }
 
-unsigned long Fallout3BSAInvalidation::bsaVersion() const
+uint32_t Fallout3BSAInvalidation::bsaVersion() const
 {
   return 0x68;
 }

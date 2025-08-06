@@ -23,7 +23,7 @@ public:
 
 private:
   virtual QString invalidationBSAName() const override;
-  virtual unsigned long bsaVersion() const override;
+  virtual uint32_t bsaVersion() const override;
 
 private:
   QString m_IniFileName;

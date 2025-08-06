@@ -25,7 +25,7 @@ QString Fallout4BSAInvalidation::invalidationBSAName() const
   return "";
 }
 
-unsigned long Fallout4BSAInvalidation::bsaVersion() const
+uint32_t Fallout4BSAInvalidation::bsaVersion() const
 {
   return 0x68;
 }

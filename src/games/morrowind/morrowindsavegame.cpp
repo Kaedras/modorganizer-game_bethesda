@@ -23,7 +23,7 @@ QString MorrowindSaveGame::getName() const
   return QString("%1, #%2, %3").arg(m_PCName).arg(m_SaveNumber).arg(m_PCLocation);
 }
 
-unsigned short MorrowindSaveGame::getPCLevel() const
+uint16_t MorrowindSaveGame::getPCLevel() const
 {
   return dynamic_cast<MorrowindDataFields*>(m_DataFields.value().get())->PCLevel;
 }
@@ -36,13 +36,13 @@ void MorrowindSaveGame::fetchInformationFields(FileWrapper& file, QString& saveN
                                                QString& playerLocation, float& gameDays,
                                                QString& playerName) const
 {
-  file.skip<uint32_t>(3);       // data size
-  file.skip<unsigned char>(4);  // HEDR tag
-  file.skip<uint32_t>();        // header size
-  file.skip<float>();           // header version
-  file.skip<uint32_t>();  // following data chunk size? seems to be 9 groupings of 32
-                          // bytes
-  file.skip<unsigned char>(32);  // Author empty for save files
+  file.skip<uint32_t>(3);  // data size
+  file.skip<uint8_t>(4);   // HEDR tag
+  file.skip<uint32_t>();   // header size
+  file.skip<float>();      // header version
+  file.skip<uint32_t>();   // following data chunk size? seems to be 9 groupings of 32
+                           // bytes
+  file.skip<uint8_t>(32);  // Author empty for save files
 
   // The defined save name. This is technically the description, but is likely only
   // 31+\0 chars max.
@@ -61,11 +61,11 @@ void MorrowindSaveGame::fetchInformationFields(FileWrapper& file, QString& saveN
     file.read(len);                 // Length of master name
     file.read(buffer.data(), len);  // Name of master
     QString name = QString::fromLatin1(buffer.data(), len - 1);
-    file.skip<unsigned char>(4);  // DATA record
+    file.skip<uint8_t>(4);  // DATA record
 
     // Typically size 8 - contains length of master data for version checking
     file.read(len);  // Length
-    file.skip<unsigned char>(len);
+    file.skip<uint8_t>(len);
 
     file.read(buffer.data(), 4);  // Get next record type
     plugins.push_back(name);
@@ -108,13 +108,13 @@ std::unique_ptr<GamebryoSaveGame::DataFields> MorrowindSaveGame::fetchDataFields
                            dummy);
   }
 
-  file.skip<unsigned char>(28);  // Skip the SCRD
+  file.skip<uint8_t>(28);  // Skip the SCRD
   // I believe this tells the engine what color each pixel represents and the bitness of
   // the image
 
   // Start of screenshot
-  file.skip<unsigned char>(4);  // SCRS
-  file.skip<uint32_t>();        // Size of screenshot always 65536 (128x128x4) RGBA8888
+  file.skip<uint8_t>(4);  // SCRS
+  file.skip<uint32_t>();  // Size of screenshot always 65536 (128x128x4) RGBA8888
 
   QImage image       = readImageBGRA(file, 128, 128, 0, 1);
   fields->Screenshot = image.scaled(252, 192);
@@ -123,19 +123,19 @@ std::unique_ptr<GamebryoSaveGame::DataFields> MorrowindSaveGame::fetchDataFields
   // it is stored in the fifth byte of the NPDT subrecord of the first NPC_ record
 
   // Globals, Scripts, Regions
-  // file.skip<unsigned char>();
+  // file.skip<uint8_t>();
   std::vector<char> buff(4);
   file.read(buff.data(), 4);
   while (QString::fromLatin1(buff.data(), 4) != "NPC_") {
     uint32_t len;
     file.read(len);
-    file.skip<unsigned char>(8 + len);
+    file.skip<uint8_t>(8 + len);
     file.read(buff.data(), 4);
   }
   while (QString::fromLatin1(buff.data(), 4) == "NPC_") {
     uint32_t size;
     file.read(size);
-    file.skip<unsigned long>(3);
+    file.skip<uint32_t>(3);
     uint32_t len;
     file.read(len);
     file.read(buffer.data(), len);
@@ -144,13 +144,13 @@ std::unique_ptr<GamebryoSaveGame::DataFields> MorrowindSaveGame::fetchDataFields
       while (QString::fromLatin1(buff.data(), 4) != "NPDT") {
         uint32_t len;
         file.read(len);
-        file.skip<unsigned char>(len);
+        file.skip<uint8_t>(len);
         file.read(buff.data(), 4);
       }
-      file.skip<unsigned long>();
+      file.skip<uint32_t>();
       file.read(fields->PCLevel);
     } else {
-      file.skip<unsigned char>(size - len - 8);
+      file.skip<uint8_t>(size - len - 8);
     }
   }
 
@@ -158,12 +158,12 @@ std::unique_ptr<GamebryoSaveGame::DataFields> MorrowindSaveGame::fetchDataFields
 }
 
 QImage MorrowindSaveGame::readImageBGRA(GamebryoSaveGame::FileWrapper& file,
-                                        unsigned long width, unsigned long height,
-                                        int scale = 0, bool alpha = false) const
+                                        uint32_t width, uint32_t height, int scale = 0,
+                                        bool alpha = false) const
 {
   QImage image(width, height, QImage::Format_RGBA8888);
-  for (unsigned long h = 0; h < width; h++) {
-    for (unsigned long w = 0; w < width; w++) {
+  for (uint32_t h = 0; h < width; h++) {
+    for (uint32_t w = 0; w < width; w++) {
       uint8_t blue;
       file.read(blue);
       uint8_t green;

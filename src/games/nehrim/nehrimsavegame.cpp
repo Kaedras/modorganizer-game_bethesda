@@ -14,20 +14,18 @@ NehrimSaveGame::NehrimSaveGame(QString const& fileName, GameNehrim const* game)
   setCreationTime(creationTime);
 }
 
-void NehrimSaveGame::fetchInformationFields(FileWrapper& file,
-                                            unsigned long& saveNumber,
-                                            QString& playerName,
-                                            unsigned short& playerLevel,
+void NehrimSaveGame::fetchInformationFields(FileWrapper& file, uint32_t& saveNumber,
+                                            QString& playerName, uint16_t& playerLevel,
                                             QString& playerLocation,
                                             SYSTEMTIME& creationTime) const
 {
-  file.skip<unsigned char>();  // Major version
-  file.skip<unsigned char>();  // Minor version
+  file.skip<uint8_t>();  // Major version
+  file.skip<uint8_t>();  // Minor version
 
   file.skip<SYSTEMTIME>();  // exe last modified (!)
 
-  file.skip<unsigned long>();  // Header version
-  file.skip<unsigned long>();  // Header size
+  file.skip<uint32_t>();  // Header version
+  file.skip<uint32_t>();  // Header size
 
   file.read(saveNumber);
 
@@ -35,8 +33,8 @@ void NehrimSaveGame::fetchInformationFields(FileWrapper& file,
   file.read(playerLevel);
   file.read(playerLocation);
 
-  file.skip<float>();          // game days
-  file.skip<unsigned long>();  // game ticks
+  file.skip<float>();     // game days
+  file.skip<uint32_t>();  // game ticks
 
   // there is a save time stored here. So use it rather than the file time, which
   // could have been copied.
@@ -54,8 +52,8 @@ std::unique_ptr<GamebryoSaveGame::DataFields> NehrimSaveGame::fetchDataFields() 
 
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
     SYSTEMTIME dummyTime;
 
     fetchInformationFields(file, dummySaveNumber, dummyName, dummyLevel, dummyLocation,
@@ -64,7 +62,7 @@ std::unique_ptr<GamebryoSaveGame::DataFields> NehrimSaveGame::fetchDataFields() 
 
   // Note that screenshot size, width, height and data are apparently the same
   // structure
-  file.skip<unsigned long>();  // Screenshot size.
+  file.skip<uint32_t>();  // Screenshot size.
 
   fields->Screenshot = file.readImage();
 

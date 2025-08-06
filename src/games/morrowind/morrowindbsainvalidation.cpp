@@ -10,7 +10,7 @@ QString MorrowindBSAInvalidation::invalidationBSAName() const
   return "Morrowind - Invalidation.bsa";
 }
 
-unsigned long MorrowindBSAInvalidation::bsaVersion() const
+uint32_t MorrowindBSAInvalidation::bsaVersion() const
 {
   return 0x68;
 }

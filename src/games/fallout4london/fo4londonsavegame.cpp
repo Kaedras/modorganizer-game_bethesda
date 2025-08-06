@@ -24,26 +24,26 @@ Fallout4LondonSaveGame::Fallout4LondonSaveGame(QString const& fileName,
 }
 
 void Fallout4LondonSaveGame::fetchInformationFields(
-    FileWrapper& file, unsigned long& saveNumber, QString& playerName,
-    unsigned short& playerLevel, QString& playerLocation, FILETIME& creationTime) const
+    FileWrapper& file, uint32_t& saveNumber, QString& playerName, uint16_t& playerLevel,
+    QString& playerLocation, FILETIME& creationTime) const
 {
-  file.skip<unsigned long>();  // header size
-  file.skip<uint32_t>();       // header version
+  file.skip<uint32_t>();  // header size
+  file.skip<uint32_t>();  // header version
   file.read(saveNumber);
 
   file.read(playerName);
 
-  unsigned long temp;
+  uint32_t temp;
   file.read(temp);
-  playerLevel = static_cast<unsigned short>(temp);
+  playerLevel = static_cast<uint16_t>(temp);
   file.read(playerLocation);
 
   QString ignore;
   file.read(ignore);  // playtime as ascii hh.mm.ss
   file.read(ignore);  // race name (i.e. BretonRace)
 
-  file.skip<unsigned short>();  // Player gender (0 = male)
-  file.skip<float>(2);          // experience gathered, experience required
+  file.skip<uint16_t>();  // Player gender (0 = male)
+  file.skip<float>(2);    // experience gathered, experience required
 
   file.read(creationTime);
 }
@@ -55,8 +55,8 @@ Fallout4LondonSaveGame::fetchDataFields() const
 
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
     FILETIME dummyTime;
 
     fetchInformationFields(file, dummySaveNumber, dummyName, dummyLevel, dummyLocation,

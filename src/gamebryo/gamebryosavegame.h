@@ -42,9 +42,9 @@ public:
 
   // Simple getters
   virtual QString getPCName() const { return m_PCName; }
-  virtual unsigned short getPCLevel() const { return m_PCLevel; }
+  virtual uint16_t getPCLevel() const { return m_PCLevel; }
   virtual QString getPCLocation() const { return m_PCLocation; }
-  virtual unsigned long getSaveNumber() const { return m_SaveNumber; }
+  virtual uint32_t getSaveNumber() const { return m_SaveNumber; }
 
   QStringList const& getPlugins() const { return m_DataFields.value()->Plugins; }
   QStringList const& getMediumPlugins() const
@@ -125,7 +125,7 @@ protected:
     template <>
     void read<QString>(QString& value);
 
-    void seek(unsigned long pos)
+    void seek(uint32_t pos)
     {
       if (!m_File.seek(pos)) {
         throw std::runtime_error("unexpected end of file");
@@ -140,7 +140,7 @@ protected:
     QImage readImage(int scale = 0, bool alpha = false);
 
     /* Reads RGB image from save */
-    QImage readImage(unsigned long width, unsigned long height, int scale = 0,
+    QImage readImage(uint32_t width, uint32_t height, int scale = 0,
                      bool alpha = false);
 
     /* Sets the compression type. */
@@ -210,9 +210,9 @@ protected:
 
   QString m_FileName;
   QString m_PCName;
-  unsigned short m_PCLevel;
+  uint16_t m_PCLevel;
   QString m_PCLocation;
-  unsigned long m_SaveNumber;
+  uint32_t m_SaveNumber;
   QDateTime m_CreationTime;
 
   // Those three fields are usually much slower to fetch than

@@ -177,10 +177,10 @@ template <>
 void GamebryoSaveGame::FileWrapper::read<QString>(QString& value)
 {
   if (m_CompressionType == 0) {
-    unsigned short length;
+    uint16_t length;
     if (m_PluginString == StringType::TYPE_BSTRING ||
         m_PluginString == StringType::TYPE_BZSTRING) {
-      unsigned char len;
+      uint8_t len;
       read(len);
       length = m_PluginString == StringType::TYPE_BZSTRING ? len + 1 : len;
     } else {
@@ -209,10 +209,10 @@ void GamebryoSaveGame::FileWrapper::read<QString>(QString& value)
     else
       value = QString::fromLocal8Bit(buffer.constData());
   } else if (m_CompressionType == 1 || m_CompressionType == 2) {
-    unsigned short length;
+    uint16_t length;
     if (m_PluginString == StringType::TYPE_BSTRING ||
         m_PluginString == StringType::TYPE_BZSTRING) {
-      unsigned char len;
+      uint8_t len;
       readQDataStream(*m_Data, len);
       length = m_PluginString == StringType::TYPE_BZSTRING ? len + 1 : len;
     } else {
@@ -256,19 +256,18 @@ void GamebryoSaveGame::FileWrapper::read(void* buff, std::size_t length)
 
 QImage GamebryoSaveGame::FileWrapper::readImage(int scale, bool alpha)
 {
-  unsigned long width;
+  uint32_t width;
   read(width);
-  unsigned long height;
+  uint32_t height;
   read(height);
   return readImage(width, height, scale, alpha);
 }
 
-QImage GamebryoSaveGame::FileWrapper::readImage(unsigned long width,
-                                                unsigned long height, int scale,
-                                                bool alpha)
+QImage GamebryoSaveGame::FileWrapper::readImage(uint32_t width, uint32_t height,
+                                                int scale, bool alpha)
 {
   int bpp = alpha ? 4 : 3;
-  QScopedArrayPointer<unsigned char> buffer(new unsigned char[width * height * bpp]);
+  QScopedArrayPointer<uint8_t> buffer(new uint8_t[width * height * bpp]);
   read(buffer.data(), width * height * bpp);
   QImage image(buffer.data(), width, height,
                alpha ? QImage::Format_RGBA8888_Premultiplied : QImage::Format_RGB888);

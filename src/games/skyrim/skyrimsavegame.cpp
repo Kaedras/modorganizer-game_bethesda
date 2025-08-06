@@ -20,19 +20,20 @@ SkyrimSaveGame::SkyrimSaveGame(QString const& fileName, GameSkyrim const* game)
   setCreationTime(ctime);
 }
 
-void SkyrimSaveGame::fetchInformationFields(
-    FileWrapper& file, unsigned long& saveNumber, QString& playerName,
-    unsigned short& playerLevel, QString& playerLocation, FILETIME& creationTime) const
+void SkyrimSaveGame::fetchInformationFields(FileWrapper& file, uint32_t& saveNumber,
+                                            QString& playerName, uint16_t& playerLevel,
+                                            QString& playerLocation,
+                                            FILETIME& creationTime) const
 {
-  file.skip<unsigned long>();  // header size
-  file.skip<unsigned long>();  // header version
+  file.skip<uint32_t>();  // header size
+  file.skip<uint32_t>();  // header version
   file.read(saveNumber);
 
   file.read(playerName);
 
-  unsigned long temp;
+  uint32_t temp;
   file.read(temp);
-  playerLevel = static_cast<unsigned short>(temp);
+  playerLevel = static_cast<uint16_t>(temp);
 
   file.setPluginStringFormat(GamebryoSaveGame::StringFormat::LOCAL8BIT);
   file.read(playerLocation);
@@ -44,8 +45,8 @@ void SkyrimSaveGame::fetchInformationFields(
   QString race;
   file.read(race);  // race name (i.e. BretonRace)
 
-  file.skip<unsigned short>();  // Player gender (0 = male)
-  file.skip<float>(2);          // experience gathered, experience required
+  file.skip<uint16_t>();  // Player gender (0 = male)
+  file.skip<float>(2);    // experience gathered, experience required
 
   file.read(creationTime);
 }
@@ -57,8 +58,8 @@ std::unique_ptr<GamebryoSaveGame::DataFields> SkyrimSaveGame::fetchDataFields() 
 
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
     FILETIME dummyTime;
 
     fetchInformationFields(file, dummySaveNumber, dummyName, dummyLevel, dummyLocation,
@@ -67,8 +68,8 @@ std::unique_ptr<GamebryoSaveGame::DataFields> SkyrimSaveGame::fetchDataFields() 
 
   fields->Screenshot = file.readImage();
 
-  file.skip<unsigned char>();  // form version
-  file.skip<unsigned long>();  // plugin info size
+  file.skip<uint8_t>();   // form version
+  file.skip<uint32_t>();  // plugin info size
 
   fields->Plugins = file.readPlugins();
 

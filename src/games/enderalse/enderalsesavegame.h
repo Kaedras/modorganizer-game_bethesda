@@ -16,9 +16,9 @@ public:
 
 protected:
   // Fetch easy-to-access information.
-  void fetchInformationFields(FileWrapper& wrapper, unsigned long& version,
-                              QString& playerName, unsigned short& playerLevel,
-                              QString& playerLocation, unsigned long& saveNumber,
+  void fetchInformationFields(FileWrapper& wrapper, uint32_t& version,
+                              QString& playerName, uint16_t& playerLevel,
+                              QString& playerLocation, uint32_t& saveNumber,
                               FILETIME& creationTime) const;
 
   std::unique_ptr<DataFields> fetchDataFields() const override;

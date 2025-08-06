@@ -25,7 +25,7 @@ QString StarfieldBSAInvalidation::invalidationBSAName() const
   return "";
 }
 
-unsigned long StarfieldBSAInvalidation::bsaVersion() const
+uint32_t StarfieldBSAInvalidation::bsaVersion() const
 {
   return 0x68;
 }

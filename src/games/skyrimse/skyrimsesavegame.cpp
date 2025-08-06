@@ -7,7 +7,7 @@ SkyrimSESaveGame::SkyrimSESaveGame(QString const& fileName, GameSkyrimSE const* 
 {
   FileWrapper file(fileName, "TESV_SAVEGAME");  // 10bytes
 
-  unsigned long version;
+  uint32_t version;
   FILETIME ftime;
   fetchInformationFields(file, version, m_PCName, m_PCLevel, m_PCLocation, m_SaveNumber,
                          ftime);
@@ -31,22 +31,19 @@ SkyrimSESaveGame::SkyrimSESaveGame(QString const& fileName, GameSkyrimSE const* 
   setCreationTime(ctime);
 }
 
-void SkyrimSESaveGame::fetchInformationFields(FileWrapper& file, unsigned long& version,
-                                              QString& playerName,
-                                              unsigned short& playerLevel,
-                                              QString& playerLocation,
-                                              unsigned long& saveNumber,
-                                              FILETIME& creationTime) const
+void SkyrimSESaveGame::fetchInformationFields(
+    FileWrapper& file, uint32_t& version, QString& playerName, uint16_t& playerLevel,
+    QString& playerLocation, uint32_t& saveNumber, FILETIME& creationTime) const
 {
-  unsigned long headerSize;
+  uint32_t headerSize;
   file.read(headerSize);  // header size "TESV_SAVEGAME"
   file.read(version);
   file.read(saveNumber);
   file.read(playerName);
 
-  unsigned long temp;
+  uint32_t temp;
   file.read(temp);
-  playerLevel = static_cast<unsigned short>(temp);
+  playerLevel = static_cast<uint16_t>(temp);
   file.read(playerLocation);
 
   QString timeOfDay;
@@ -55,8 +52,8 @@ void SkyrimSESaveGame::fetchInformationFields(FileWrapper& file, unsigned long& 
   QString race;
   file.read(race);  // race name (i.e. BretonRace)
 
-  file.skip<unsigned short>();  // Player gender (0 = male)
-  file.skip<float>(2);          // experience gathered, experience required
+  file.skip<uint16_t>();  // Player gender (0 = male)
+  file.skip<float>(2);    // experience gathered, experience required
 
   file.read(creationTime);  // filetime
 }
@@ -65,11 +62,11 @@ std::unique_ptr<GamebryoSaveGame::DataFields> SkyrimSESaveGame::fetchDataFields(
 {
   FileWrapper file(getFilepath(), "TESV_SAVEGAME");  // 10bytes
 
-  unsigned long version = 0;
+  uint32_t version = 0;
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
     FILETIME dummyTime;
 
     fetchInformationFields(file, version, dummyName, dummyLevel, dummyLocation,
@@ -78,8 +75,8 @@ std::unique_ptr<GamebryoSaveGame::DataFields> SkyrimSESaveGame::fetchDataFields(
 
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();
 
-  unsigned long width;
-  unsigned long height;
+  uint32_t width;
+  uint32_t height;
   file.read(width);
   file.read(height);
 

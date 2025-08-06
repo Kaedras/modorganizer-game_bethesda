@@ -11,7 +11,7 @@ StarfieldSaveGame::StarfieldSaveGame(QString const& fileName, GameStarfield cons
 
   getData(file);
   FILETIME creationTime;
-  unsigned char saveVersion;
+  uint8_t saveVersion;
   fetchInformationFields(file, m_SaveNumber, saveVersion, m_PCName, m_PCLevel,
                          m_PCLocation, creationTime);
   file.closeCompressedData();
@@ -52,9 +52,8 @@ void StarfieldSaveGame::getData(FileWrapper& file) const
 }
 
 void StarfieldSaveGame::fetchInformationFields(
-    FileWrapper& file, unsigned long& saveNumber, unsigned char& saveVersion,
-    QString& playerName, unsigned short& playerLevel, QString& playerLocation,
-    FILETIME& creationTime) const
+    FileWrapper& file, uint32_t& saveNumber, uint8_t& saveVersion, QString& playerName,
+    uint16_t& playerLevel, QString& playerLocation, FILETIME& creationTime) const
 {
   char fileID[12];  // SFS_SAVEGAME
   unsigned int headerSize;
@@ -68,20 +67,20 @@ void StarfieldSaveGame::fetchInformationFields(
 
   unsigned int temp;
   temp        = file.readInt();
-  playerLevel = static_cast<unsigned short>(temp);
+  playerLevel = static_cast<uint16_t>(temp);
   file.read(playerLocation);
 
   QString ignore;
   file.read(ignore);  // playtime as ascii hh.mm.ss
   file.read(ignore);  // race name (i.e. BretonRace)
 
-  unsigned short gender;
+  uint16_t gender;
   gender = file.readShort();  // Player gender (0 = male)
   float experience, experienceRequired;
   experience         = file.readFloat();
   experienceRequired = file.readFloat();
 
-  unsigned long long time     = file.readLong();
+  uint64_t time               = file.readLong();
   creationTime.dwLowDateTime  = (DWORD)time;
   creationTime.dwHighDateTime = time >> 32;
 }
@@ -92,12 +91,12 @@ std::unique_ptr<GamebryoSaveGame::DataFields> StarfieldSaveGame::fetchDataFields
 
   getData(file);
   FILETIME creationTime;
-  unsigned char saveVersion;
+  uint8_t saveVersion;
 
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
     FILETIME dummyTime;
 
     fetchInformationFields(file, dummySaveNumber, saveVersion, dummyName, dummyLevel,

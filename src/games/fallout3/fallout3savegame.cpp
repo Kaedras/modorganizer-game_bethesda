@@ -7,25 +7,24 @@ Fallout3SaveGame::Fallout3SaveGame(QString const& fileName, GameFallout3 const* 
 {
   FileWrapper file(getFilepath(), "FO3SAVEGAME");
 
-  unsigned long width, height;
+  uint32_t width, height;
   fetchInformationFields(file, width, height, m_SaveNumber, m_PCName, m_PCLevel,
                          m_PCLocation);
 }
 
-void Fallout3SaveGame::fetchInformationFields(FileWrapper& file, unsigned long& width,
-                                              unsigned long& height,
-                                              unsigned long& saveNumber,
+void Fallout3SaveGame::fetchInformationFields(FileWrapper& file, uint32_t& width,
+                                              uint32_t& height, uint32_t& saveNumber,
                                               QString& playerName,
-                                              unsigned short& playerLevel,
+                                              uint16_t& playerLevel,
                                               QString& playerLocation) const
 {
-  file.skip<unsigned long>();  // Save header size
+  file.skip<uint32_t>();  // Save header size
 
   file.setHasFieldMarkers(true);
   file.setPluginString(GamebryoSaveGame::StringType::TYPE_BZSTRING);
 
-  file.skip<unsigned long>();  // File version ?
-  file.skip<unsigned char>();  // delimiter
+  file.skip<uint32_t>();  // File version ?
+  file.skip<uint8_t>();   // delimiter
 
   file.read(width);
   file.read(height);
@@ -35,7 +34,7 @@ void Fallout3SaveGame::fetchInformationFields(FileWrapper& file, unsigned long& 
   QString whatthis;
   file.read(whatthis);
 
-  long level;
+  int32_t level;
   file.read(level);
   playerLevel = level;
 
@@ -48,11 +47,11 @@ std::unique_ptr<GamebryoSaveGame::DataFields> Fallout3SaveGame::fetchDataFields(
 
   std::unique_ptr<DataFields> fields = std::make_unique<DataFields>();
 
-  unsigned long width, height;
+  uint32_t width, height;
   {
     QString dummyName, dummyLocation;
-    unsigned short dummyLevel;
-    unsigned long dummySaveNumber;
+    uint16_t dummyLevel;
+    uint32_t dummySaveNumber;
 
     fetchInformationFields(file, width, height, dummySaveNumber, dummyName, dummyLevel,
                            dummyLocation);

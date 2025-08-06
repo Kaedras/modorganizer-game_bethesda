@@ -22,31 +22,31 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-static void writeUlong(unsigned char* buffer, int offset, unsigned long value)
+static void writeUlong(uint8_t* buffer, int offset, uint32_t value)
 {
   union
   {
-    unsigned long ulValue;
-    unsigned char cValue[4];
+    uint32_t ulValue;
+    uint8_t cValue[4];
   };
   ulValue = value;
   memcpy(buffer + offset, cValue, 4);
 }
 
-static void writeUlonglong(unsigned char* buffer, int offset, unsigned long long value)
+static void writeUlonglong(uint8_t* buffer, int offset, uint64_t value)
 {
   union
   {
-    unsigned long long ullValue;
-    unsigned char cValue[8];
+    uint64_t ullValue;
+    uint8_t cValue[8];
   };
   ullValue = value;
   memcpy(buffer + offset, cValue, 8);
 }
 
-static unsigned long genHashInt(const unsigned char* pos, const unsigned char* end)
+static uint32_t genHashInt(const uint8_t* pos, const uint8_t* end)
 {
-  unsigned long hash = 0;
+  uint32_t hash = 0;
   for (; pos < end; ++pos) {
     hash *= 0x1003f;
     hash += *pos;
@@ -54,7 +54,7 @@ static unsigned long genHashInt(const unsigned char* pos, const unsigned char* e
   return hash;
 }
 
-static unsigned long long genHash(const char* fileName)
+static uint64_t genHash(const char* fileName)
 {
   char fileNameLower[MAX_PATH + 1];
   int i = 0;
@@ -66,17 +66,17 @@ static unsigned long long genHash(const char* fileName)
   }
   fileNameLower[i] = '\0';
 
-  unsigned char* fileNameLowerU = reinterpret_cast<unsigned char*>(fileNameLower);
+  uint8_t* fileNameLowerU = reinterpret_cast<uint8_t*>(fileNameLower);
 
   char* ext = strrchr(fileNameLower, '.');
   if (ext == nullptr) {
     ext = fileNameLower + strlen(fileNameLower);
   }
-  unsigned char* extU = reinterpret_cast<unsigned char*>(ext);
+  uint8_t* extU = reinterpret_cast<uint8_t*>(ext);
 
   int length = ext - fileNameLower;
 
-  unsigned long long hash = 0ULL;
+  uint64_t hash = 0ULL;
 
   if (length > 0) {
     hash = *(extU - 1) | ((length > 2 ? *(ext - 2) : 0) << 8) | (length << 16) |
@@ -94,23 +94,22 @@ static unsigned long long genHash(const char* fileName)
       hash |= 0x80000000;
     }
 
-    unsigned long long temp =
-        static_cast<unsigned long long>(genHashInt(fileNameLowerU + 1, extU - 2));
-    temp += static_cast<unsigned long long>(genHashInt(extU, extU + strlen(ext)));
+    uint64_t temp = static_cast<uint64_t>(genHashInt(fileNameLowerU + 1, extU - 2));
+    temp += static_cast<uint64_t>(genHashInt(extU, extU + strlen(ext)));
 
     hash |= (temp & 0xFFFFFFFF) << 32;
   }
   return hash;
 }
 
-DummyBSA::DummyBSA(unsigned long bsaVersion)
+DummyBSA::DummyBSA(uint32_t bsaVersion)
     : m_Version(bsaVersion), m_FolderName(""), m_FileName("dummy.dds"),
       m_TotalFileNameLength(0)
 {}
 
 void DummyBSA::writeHeader(QFile& file)
 {
-  unsigned char header[] = {
+  uint8_t header[] = {
       'B',  'S',  'A',  '\0',  // magic string
       0xDE, 0xAD, 0xBE, 0xEF,  // version - insert later
       0x24, 0x00, 0x00, 0x00,  // offset to folder recors. header size is static
@@ -125,8 +124,7 @@ void DummyBSA::writeHeader(QFile& file)
   writeUlong(header, 4, m_Version);
   writeUlong(header, 12, 0x01 | 0x02);  // has directories and has files.
   writeUlong(header, 24,
-             static_cast<unsigned long>(m_FolderName.length()) +
-                 1);                              // empty folder name
+             static_cast<uint32_t>(m_FolderName.length()) + 1);  // empty folder name
   writeUlong(header, 28, m_TotalFileNameLength);  // single character file name
 
   writeUlong(header, 32, 2);  // has dds
@@ -136,7 +134,7 @@ void DummyBSA::writeHeader(QFile& file)
 
 void DummyBSA::writeFolderRecord(QFile& file, const std::string& folderName)
 {
-  unsigned char folderRecord[] = {
+  uint8_t folderRecord[] = {
       0xDE, 0xAD, 0xBE, 0xEF, 0xDE, 0xAD, 0xBE, 0xEF,  // folder hash
       0x01, 0x00, 0x00, 0x00,                          // file count
       0xDE, 0xAD, 0xBE, 0xEF,                          // offset to folder name
@@ -151,7 +149,7 @@ void DummyBSA::writeFolderRecord(QFile& file, const std::string& folderName)
 
 void DummyBSA::writeFileRecord(QFile& file, const std::string& fileName)
 {
-  unsigned char fileRecord[] = {
+  uint8_t fileRecord[] = {
       0xDE, 0xAD, 0xBE, 0xEF, 0xDE, 0xAD, 0xBE, 0xEF,  // file name hash
       0xDE, 0xAD, 0xBE, 0xEF,                          // size
       0xDE, 0xAD, 0xBE, 0xEF,                          // offset to file data
@@ -162,7 +160,7 @@ void DummyBSA::writeFileRecord(QFile& file, const std::string& fileName)
   writeUlong(fileRecord, 8, 0);
   writeUlong(
       fileRecord, 12,
-      0x44 + static_cast<unsigned long>(fileName.length() + 1) +
+      0x44 + static_cast<uint32_t>(fileName.length() + 1) +
           4);  // after this record we expect the filename and 4 bytes of file size
 
   file.write(reinterpret_cast<char*>(fileRecord), sizeof(fileRecord));
@@ -180,7 +178,7 @@ void DummyBSA::write(const QString& fileName)
   QFile file(fileName);
   file.open(QIODevice::WriteOnly);
 
-  m_TotalFileNameLength = static_cast<unsigned long>(m_FileName.length() + 1);
+  m_TotalFileNameLength = static_cast<uint32_t>(m_FileName.length() + 1);
 
   writeHeader(file);
   writeFolderRecord(file, m_FolderName);

@@ -10,7 +10,7 @@ QString NehrimBSAInvalidation::invalidationBSAName() const
   return "Nehrim - Invalidation.bsa";
 }
 
-unsigned long NehrimBSAInvalidation::bsaVersion() const
+uint32_t NehrimBSAInvalidation::bsaVersion() const
 {
   return 0x67;
 }
