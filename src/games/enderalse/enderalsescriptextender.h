@@ -1,5 +1,5 @@
 #ifndef ENDERALSESCRIPTEXTENDER_H
-#define ENDERALESCRIPTEXTENDER_H
+#define ENDERALSESCRIPTEXTENDER_H
 
 #include "gamebryoscriptextender.h"
 
