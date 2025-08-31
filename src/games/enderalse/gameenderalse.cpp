@@ -39,7 +39,7 @@ void GameEnderalSE::setVariant(QString variant)
 
 void GameEnderalSE::checkVariants()
 {
-  QFileInfo gog_dll(m_GamePath + "\\Galaxy64.dll");
+  QFileInfo gog_dll(m_GamePath + "/Galaxy64.dll");
   if (gog_dll.exists())
     setVariant("GOG");
   else
@@ -74,7 +74,7 @@ QString GameEnderalSE::identifyGamePath() const
     }
   } catch (MOBase::MyException) {
     result = MOBase::findSteamGame("Enderal Special Edition",
-                                   "Data\\Enderal - Forgotten Stories.esm");
+                                   "Data/Enderal - Forgotten Stories.esm");
   }
   return result;
 }
@@ -218,7 +218,7 @@ void GameEnderalSE::initializeProfile(const QDir& path, ProfileSettings settings
       // there is no default ini, actually they are going to put them in for us!
       copyToProfile(gameDirectory().absolutePath(), path, "enderal_default.ini",
                     "Enderal.ini");
-      copyToProfile(gameDirectory().absolutePath(), path, "enderalprefs_default.ini",
+      copyToProfile(gameDirectory().absolutePath(), path, "EnderalPrefs_default.ini",
                     "EnderalPrefs.ini");
     } else {
       copyToProfile(myGamesPath(), path, "Enderal.ini");
@@ -252,13 +252,13 @@ QString GameEnderalSE::steamAPPId() const
 
 QStringList GameEnderalSE::primaryPlugins() const
 {
-  return {"skyrim.esm", "update.esm", "dawnguard.esm", "hearthfires.esm",
-          "dragonborn.esm",
+  return {"Skyrim.esm", "Update.esm", "Dawnguard.esm", "HearthFires.esm",
+          "Dragonborn.esm",
 
           // these two plugins are considered "primary" for users but are not
           // automatically loaded by the game so we need to force-write them
           // to the plugin list
-          "enderal - forgotten stories.esm", "skyui_se.esp"};
+          "Enderal - Forgotten Stories.esm", "skyui_se.esp"};
 }
 
 QStringList GameEnderalSE::DLCPlugins() const

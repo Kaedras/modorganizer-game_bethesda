@@ -35,7 +35,7 @@ bool GameNehrim::init(IOrganizer* moInfo)
   registerFeature(dataArchives);
   registerFeature(std::make_shared<NehrimBSAInvalidation>(dataArchives.get(), this));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "oblivion.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "Oblivion.ini"));
   registerFeature(std::make_shared<NehrimModDataChecker>(this));
   registerFeature(std::make_shared<NehrimModDataContent>(m_Organizer->gameFeatures()));
   registerFeature(std::make_shared<GamebryoGamePlugins>(moInfo));
@@ -112,11 +112,11 @@ void GameNehrim::initializeProfile(const QDir& path, ProfileSettings settings) c
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/oblivion.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "oblivion_default.ini",
-                    "oblivion.ini");
+        !QFileInfo(myGamesPath() + "/Oblivion.ini").exists()) {
+      copyToProfile(gameDirectory().absolutePath(), path, "Oblivion_default.ini",
+                    "Oblivion.ini");
     } else {
-      copyToProfile(myGamesPath(), path, "oblivion.ini");
+      copyToProfile(myGamesPath(), path, "Oblivion.ini");
     }
 
     copyToProfile(myGamesPath(), path, "oblivionprefs.ini");
@@ -160,7 +160,7 @@ QString GameNehrim::gameNexusName() const
 
 QStringList GameNehrim::iniFiles() const
 {
-  return {"oblivion.ini", "oblivionprefs.ini"};
+  return {"Oblivion.ini", "oblivionprefs.ini"};
 }
 
 QStringList GameNehrim::DLCPlugins() const

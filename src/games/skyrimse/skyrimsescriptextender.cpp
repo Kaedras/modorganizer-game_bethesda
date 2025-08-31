@@ -14,5 +14,5 @@ QString SkyrimSEScriptExtender::BinaryName() const
 
 QString SkyrimSEScriptExtender::PluginPath() const
 {
-  return "skse/plugins";
+  return "SKSE/plugins";
 }

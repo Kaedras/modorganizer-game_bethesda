@@ -14,5 +14,5 @@ QString EnderalScriptExtender::BinaryName() const
 
 QString EnderalScriptExtender::PluginPath() const
 {
-  return "skse/plugins";
+  return "SKSE/plugins";
 }

@@ -147,13 +147,13 @@ void GameSkyrimVR::initializeProfile(const QDir& path, ProfileSettings settings)
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/skyrimvr.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "skyrim.ini", "skyrimvr.ini");
+        !QFileInfo(myGamesPath() + "/SkyrimVR.ini").exists()) {
+      copyToProfile(gameDirectory().absolutePath(), path, "Skyrim.ini", "SkyrimVR.ini");
     } else {
-      copyToProfile(myGamesPath(), path, "skyrimvr.ini");
+      copyToProfile(myGamesPath(), path, "SkyrimVR.ini");
     }
 
-    copyToProfile(myGamesPath(), path, "skyrimprefs.ini");
+    copyToProfile(myGamesPath(), path, "SkyrimPrefs.ini");
   }
 }
 
@@ -180,8 +180,8 @@ QString GameSkyrimVR::steamAPPId() const
 
 QStringList GameSkyrimVR::primaryPlugins() const
 {
-  QStringList plugins = {"skyrim.esm",      "update.esm",     "dawnguard.esm",
-                         "hearthfires.esm", "dragonborn.esm", "skyrimvr.esm"};
+  QStringList plugins = {"Skyrim.esm",      "Update.esm",     "Dawnguard.esm",
+                         "HearthFires.esm", "Dragonborn.esm", "SkyrimVR.esm"};
 
   plugins.append(CCPlugins());
 
@@ -219,12 +219,12 @@ QString GameSkyrimVR::gameNexusName() const
 
 QStringList GameSkyrimVR::iniFiles() const
 {
-  return {"skyrimvr.ini", "skyrimprefs.ini"};
+  return {"SkyrimVR.ini", "SkyrimPrefs.ini"};
 }
 
 QStringList GameSkyrimVR::DLCPlugins() const
 {
-  return {"dawnguard.esm", "hearthfires.esm", "dragonborn.esm"};
+  return {"Dawnguard.esm", "HearthFires.esm", "Dragonborn.esm"};
 }
 
 QStringList GameSkyrimVR::CCPlugins() const

@@ -35,7 +35,7 @@ bool GameOblivion::init(IOrganizer* moInfo)
   registerFeature(dataArchives);
   registerFeature(std::make_shared<OblivionBSAInvalidation>(dataArchives.get(), this));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
-  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "oblivion.ini"));
+  registerFeature(std::make_shared<GamebryoLocalSavegames>(this, "Oblivion.ini"));
   registerFeature(std::make_shared<OblivionModDataChecker>(this));
   registerFeature(
       std::make_shared<OblivionModDataContent>(m_Organizer->gameFeatures()));
@@ -107,16 +107,16 @@ QList<PluginSetting> GameOblivion::settings() const
 void GameOblivion::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Oblivion", path, "plugins.txt");
+    copyToProfile(localAppFolder() + "/Oblivion", path, "Plugins.txt");
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/oblivion.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "oblivion_default.ini",
-                    "oblivion.ini");
+        !QFileInfo(myGamesPath() + "/Oblivion.ini").exists()) {
+      copyToProfile(gameDirectory().absolutePath(), path, "Oblivion_default.ini",
+                    "Oblivion.ini");
     } else {
-      copyToProfile(myGamesPath(), path, "oblivion.ini");
+      copyToProfile(myGamesPath(), path, "Oblivion.ini");
     }
 
     copyToProfile(myGamesPath(), path, "oblivionprefs.ini");
@@ -146,7 +146,7 @@ QString GameOblivion::steamAPPId() const
 
 QStringList GameOblivion::primaryPlugins() const
 {
-  return {"oblivion.esm", "update.esm"};
+  return {"Oblivion.esm", "update.esm"};
 }
 
 QString GameOblivion::gameShortName() const
@@ -170,7 +170,7 @@ QString GameOblivion::gameNexusName() const
 
 QStringList GameOblivion::iniFiles() const
 {
-  return {"oblivion.ini", "oblivionprefs.ini"};
+  return {"Oblivion.ini", "oblivionprefs.ini"};
 }
 
 QStringList GameOblivion::DLCPlugins() const

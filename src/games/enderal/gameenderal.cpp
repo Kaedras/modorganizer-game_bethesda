@@ -46,7 +46,7 @@ bool GameEnderal::init(IOrganizer* moInfo)
   registerFeature(dataArchives);
   registerFeature(std::make_shared<EnderalBSAInvalidation>(dataArchives.get(), this));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
-  registerFeature(std::make_shared<EnderalLocalSavegames>(this, "enderal.ini"));
+  registerFeature(std::make_shared<EnderalLocalSavegames>(this, "Enderal.ini"));
   registerFeature(std::make_shared<EnderalModDataChecker>(this));
   registerFeature(std::make_shared<EnderalModDataContent>(moInfo->gameFeatures()));
   registerFeature(std::make_shared<EnderalGamePlugins>(moInfo));
@@ -121,16 +121,16 @@ void GameEnderal::initializeProfile(const QDir& path, ProfileSettings settings) 
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/enderal.ini").exists()) {
+        !QFileInfo(myGamesPath() + "/Enderal.ini").exists()) {
 
       // there is no default ini, actually they are going to put them in for us!
       copyToProfile(gameDirectory().absolutePath(), path, "enderal_default.ini",
-                    "enderal.ini");
-      copyToProfile(gameDirectory().absolutePath(), path, "enderalprefs_default.ini",
-                    "enderalprefs.ini");
+                    "Enderal.ini");
+      copyToProfile(gameDirectory().absolutePath(), path, "EnderalPrefs_default.ini",
+                    "EnderalPrefs.ini");
     } else {
-      copyToProfile(myGamesPath(), path, "enderal.ini");
-      copyToProfile(myGamesPath(), path, "enderalprefs.ini");
+      copyToProfile(myGamesPath(), path, "Enderal.ini");
+      copyToProfile(myGamesPath(), path, "EnderalPrefs.ini");
     }
   }
 }
@@ -210,7 +210,7 @@ QStringList GameEnderal::validShortNames() const
 
 QStringList GameEnderal::iniFiles() const
 {
-  return {"enderal.ini", "enderalprefs.ini"};
+  return {"Enderal.ini", "EnderalPrefs.ini"};
 }
 
 QStringList GameEnderal::DLCPlugins() const
@@ -241,7 +241,7 @@ QString GameEnderal::identifyGamePath() const
     result =
         findInRegistry(HKEY_CURRENT_USER, path.toStdWString().c_str(), L"Install_Path");
   } catch (MOBase::MyException) {
-    result = MOBase::findSteamGame("Enderal", "Data\\Enderal - Forgotten Stories.esm");
+    result = MOBase::findSteamGame("Enderal", "Data/Enderal - Forgotten Stories.esm");
   }
   return result;
 }
