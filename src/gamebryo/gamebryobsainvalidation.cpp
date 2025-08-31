@@ -10,7 +10,13 @@
 #include <QDir>
 #include <QStringList>
 
-#include <Windows.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
+
+using namespace MOBase;
 
 GamebryoBSAInvalidation::GamebryoBSAInvalidation(MOBase::DataArchives* dataArchives,
                                                  const QString& iniFilename,

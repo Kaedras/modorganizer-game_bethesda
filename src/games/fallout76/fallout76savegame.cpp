@@ -1,6 +1,13 @@
 #include "fallout76savegame.h"
 
 #include "gamefallout76.h"
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
+
+#include <utility.h>
 
 Fallout76SaveGame::Fallout76SaveGame(QString const& fileName, GameFallout76 const* game)
     : GamebryoSaveGame(fileName, game, true)
@@ -13,10 +20,8 @@ Fallout76SaveGame::Fallout76SaveGame(QString const& fileName, GameFallout76 cons
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&ftime, &ctime);
 
-  setCreationTime(ctime);
+  setCreationTime(MOBase::fileTimeToQDateTime(ftime));
 }
 
 void Fallout76SaveGame::fetchInformationFields(FileWrapper& file, QString playerName,

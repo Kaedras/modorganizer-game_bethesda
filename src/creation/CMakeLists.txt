@@ -8,4 +8,8 @@ mo2_default_source_group()
 target_link_libraries(game_creation PUBLIC game_gamebryo PRIVATE lz4::lz4)
 target_include_directories(game_creation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+if(UNIX)
+    target_compile_options(game_creation PRIVATE -fPIC)
+endif()
+
 install(FILES $<TARGET_FILE:game_creation> DESTINATION lib)

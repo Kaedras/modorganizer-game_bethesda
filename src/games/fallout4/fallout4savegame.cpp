@@ -1,8 +1,13 @@
 #include "fallout4savegame.h"
 
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 #include "gamefallout4.h"
+#include <utility.h>
 
 Fallout4SaveGame::Fallout4SaveGame(QString const& fileName, GameFallout4 const* game)
     : GamebryoSaveGame(fileName, game, true)
@@ -16,10 +21,7 @@ Fallout4SaveGame::Fallout4SaveGame(QString const& fileName, GameFallout4 const* 
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&creationTime, &ctime);
-
-  setCreationTime(ctime);
+  setCreationTime(MOBase::fileTimeToQDateTime(creationTime));
 }
 
 void Fallout4SaveGame::fetchInformationFields(FileWrapper& file, uint32_t& saveNumber,

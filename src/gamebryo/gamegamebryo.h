@@ -15,11 +15,19 @@ class UnmanagedMods;
 
 #include <QObject>
 #include <QString>
-#include <ShlObj.h>
-#include <dbghelp.h>
 #include <ipluginfilemapper.h>
 #include <iplugingame.h>
 #include <memory>
+
+#ifdef __unix__
+#include <linux/compatibility.h>
+static constexpr HKEY HKEY_CURRENT_USER  = 0;
+static constexpr HKEY HKEY_LOCAL_MACHINE = 0;
+
+#else
+#include <ShlObj.h>
+#include <dbghelp.h>
+#endif
 
 #include "gamebryosavegame.h"
 #include "igamefeatures.h"
@@ -99,9 +107,15 @@ protected:
 
   QFileInfo findInGameFolder(const QString& relativePath) const;
   QString selectedVariant() const;
-  WORD getArch(QString const& program) const;
+  uint16_t getArch(QString const& program) const;
 
   static QString localAppFolder();
+
+#ifdef __unix__
+  // get location inside the wine prefix
+  static QString localAppFolder(const QString& appID);
+#endif
+
   // Arguably this shouldn't really be here but every gamebryo program seems to
   // use it
   static QString getLootPath();
@@ -129,6 +143,11 @@ protected:
   static QString getSpecialPath(const QString& name);
 
   static QString determineMyGamesPath(const QString& gameName);
+
+#ifdef __unix__
+  // get "My Games" location from wine prefix
+  static QString determineMyGamesPath(const QString& gameName, const QString& appID);
+#endif
 
   static QString parseEpicGamesLocation(const QStringList& manifests);
 

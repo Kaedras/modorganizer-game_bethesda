@@ -27,6 +27,10 @@
 
 #include "scopeguard.h"
 
+#ifdef __unix__
+#include <registry.h>
+#endif
+
 using namespace MOBase;
 
 GameFallout4London::GameFallout4London() {}

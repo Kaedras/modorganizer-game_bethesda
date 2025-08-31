@@ -2,8 +2,13 @@
 
 #include <QPixmap>
 #include <QRegularExpression>
-#include <Windows.h>
 #include <filesystem>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 MorrowindSaveGame::MorrowindSaveGame(QString const& fileName, GameMorrowind const* game)
     : GamebryoSaveGame(fileName, game)

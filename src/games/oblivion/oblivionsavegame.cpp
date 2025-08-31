@@ -1,6 +1,10 @@
 #include "oblivionsavegame.h"
 
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 OblivionSaveGame::OblivionSaveGame(QString const& fileName, GameOblivion const* game)
     : GamebryoSaveGame(fileName, game)

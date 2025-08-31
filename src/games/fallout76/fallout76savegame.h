@@ -1,7 +1,11 @@
 #ifndef FALLOUT76SAVEGAME_H
 #define FALLOUT76SAVEGAME_H
 
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 #include "gamebryosavegame.h"
 

@@ -22,9 +22,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <iprofile.h>
 #include <stddef.h>
 #include <string>
-#include <windows.h>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 #include "gamegamebryo.h"
+
+using namespace MOBase;
 
 GamebryoLocalSavegames::GamebryoLocalSavegames(const GameGamebryo* game,
                                                const QString& iniFileName)

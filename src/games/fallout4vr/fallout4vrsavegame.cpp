@@ -1,6 +1,11 @@
 #include "fallout4vrsavegame.h"
 
+#include <utility.h>
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 #include "gamefallout4vr.h"
 
@@ -17,10 +22,7 @@ Fallout4VRSaveGame::Fallout4VRSaveGame(QString const& fileName,
   // A file time is a 64-bit value that represents the number of 100-nanosecond
   // intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated Universal
   // Time (UTC). So we need to convert that to something useful
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&creationTime, &ctime);
-
-  setCreationTime(ctime);
+  setCreationTime(MOBase::fileTimeToQDateTime(creationTime));
 }
 
 void Fallout4VRSaveGame::fetchInformationFields(FileWrapper& file, uint32_t& saveNumber,

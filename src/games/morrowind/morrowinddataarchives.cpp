@@ -4,6 +4,8 @@
 
 #include "gamegamebryo.h"
 
+using namespace MOBase;
+
 QStringList MorrowindDataArchives::vanillaArchives() const
 {
   return {"Morrowind.bsa"};

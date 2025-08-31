@@ -1,6 +1,5 @@
 #include "morrowindgameplugins.h"
 #include "registry.h"
-#include <Windows.h>
 #include <imodinterface.h>
 #include <iplugingame.h>
 #include <ipluginlist.h>
@@ -14,9 +13,11 @@
 #include <QStringEncoder>
 #include <QStringList>
 
-using MOBase::IOrganizer;
-using MOBase::IPluginList;
-using MOBase::reportError;
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
+using namespace MOBase;
 
 MorrowindGamePlugins::MorrowindGamePlugins(IOrganizer* organizer)
     : GamebryoGamePlugins(organizer)

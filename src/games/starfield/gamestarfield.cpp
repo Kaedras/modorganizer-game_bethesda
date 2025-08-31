@@ -30,6 +30,10 @@
 
 #include "utility.h"
 
+#ifdef __unix__
+#include <registry.h>
+#endif
+
 using namespace MOBase;
 
 GameStarfield::GameStarfield() {}

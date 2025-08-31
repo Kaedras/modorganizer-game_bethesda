@@ -1,6 +1,11 @@
 #include "skyrimvrsavegame.h"
 
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <uibase/linux/compatibility.h>
+#endif
+#include <utility.h>
 
 #include "gameskyrimvr.h"
 
@@ -20,17 +25,10 @@ SkyrimVRSaveGame::SkyrimVRSaveGame(QString const& fileName, GameSkyrimVR const* 
 
   // For some reason, the file time is off by about 6 hours.
   // So we need to subtract those 6 hours from the filetime.
-  _ULARGE_INTEGER time;
-  time.LowPart  = ftime.dwLowDateTime;
-  time.HighPart = ftime.dwHighDateTime;
-  time.QuadPart -= 2.16e11;
-  ftime.dwHighDateTime = time.HighPart;
-  ftime.dwLowDateTime  = time.LowPart;
+  QDateTime qtime = MOBase::fileTimeToQDateTime(ftime);
+  qtime           = qtime.addSecs(-6 * 60 * 60);
 
-  SYSTEMTIME ctime;
-  ::FileTimeToSystemTime(&ftime, &ctime);
-
-  setCreationTime(ctime);
+  setCreationTime(qtime);
 }
 
 void SkyrimVRSaveGame::fetchInformationFields(

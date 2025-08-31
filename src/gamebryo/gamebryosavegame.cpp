@@ -10,7 +10,12 @@
 #include <QScopedArrayPointer>
 #include <QTime>
 
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
+
 #include <lz4.h>
 #include <zlib.h>
 
@@ -89,6 +94,11 @@ void GamebryoSaveGame::setCreationTime(_SYSTEMTIME const& ctime)
   time.setHMS(ctime.wHour, ctime.wMinute, ctime.wSecond, ctime.wMilliseconds);
 
   m_CreationTime = QDateTime(date, time, Qt::UTC);
+}
+
+void GamebryoSaveGame::setCreationTime(QDateTime const& time)
+{
+  m_CreationTime = time;
 }
 
 GamebryoSaveGame::FileWrapper::FileWrapper(QString const& filepath,

@@ -3,7 +3,11 @@
 
 #include "gamebryosavegame.h"
 
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 class GameFallout4VR;
 

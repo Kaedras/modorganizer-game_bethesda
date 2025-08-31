@@ -7,6 +7,8 @@
 #include <imoinfo.h>
 #include <utility.h>
 
+using namespace MOBase;
+
 StarfieldBSAInvalidation::StarfieldBSAInvalidation(MOBase::DataArchives* dataArchives,
                                                    MOBase::IPluginGame const* game)
     : GamebryoBSAInvalidation(dataArchives, "StarfieldCustom.ini", game)

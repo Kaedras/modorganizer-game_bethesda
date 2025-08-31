@@ -19,8 +19,13 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "dummybsa.h"
 #include <QFile>
+
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#else
+#include <linux/compatibility.h>
+#endif
 
 static void writeUlong(uint8_t* buffer, int offset, uint32_t value)
 {

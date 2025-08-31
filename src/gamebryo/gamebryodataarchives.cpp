@@ -1,11 +1,11 @@
 #include "gamebryodataarchives.h"
 
-#include <Windows.h>
-
 #include <registry.h>
 #include <utility.h>
 
 #include "gamegamebryo.h"
+
+using namespace MOBase;
 
 GamebryoDataArchives::GamebryoDataArchives(const GameGamebryo* game) : m_Game{game} {}
 
