@@ -1,8 +1,14 @@
 #include "../gamegamebryo.h"
 
+#include "scopeguard.h"
+#include "utility.h"
+#include "vdf_parser.h"
 #include <Knownfolders.h>
+#include <QDirIterator>
+#include <QJsonDocument>
 #include <Shlobj.h>
 #include <Windows.h>
+#include <fstream>
 #include <winreg.h>
 #include <winver.h>
 
