@@ -1,6 +1,12 @@
 #include "../gamegamebryo.h"
 #include "vdf_parser.h"
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 8, 0))
+#include <QDirIterator>
+#else
+#include <QDirListing>
+#endif
+
 #include <steamutility.h>
 
 #include <QStandardPaths>
@@ -17,12 +23,25 @@ namespace
 
 QString findFileName(QString const& path, QString const& fileName)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 8, 0))
+  QDirIterator it(path);
+
+  while (it.hasNext()) {
+    QFileInfo info(it.nextFileInfo());
+    if (info.isFile()) {
+      if (info.fileName().compare(fileName, Qt::CaseInsensitive) == 0) {
+        return info.fileName();
+      }
+    }
+  }
+#else
   for (const auto& dirEntry : QDirListing(path, QDirListing::IteratorFlag::FilesOnly)) {
     if (dirEntry.fileName().compare(fileName, Qt::CaseInsensitive) == 0) {
       return dirEntry.fileName();
     }
   }
-  return "";
+#endif
+  return fileName;
 }
 
 }  // namespace
