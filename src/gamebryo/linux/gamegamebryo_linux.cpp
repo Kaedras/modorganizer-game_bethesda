@@ -72,8 +72,8 @@ void GameGamebryo::copyToProfile(QString const& sourcePath,
 {
   QString srcName  = findFileName(sourcePath, sourceFileName);
   QString filePath = destinationDirectory.absoluteFilePath(destinationFileName);
-  if (!QFileInfo(filePath).exists()) {
-    if (!MOBase::shellCopy(sourcePath + "/" + srcName, filePath)) {
+  if (!QFileInfo::exists(filePath)) {
+    if (!MOBase::shellCopy(sourcePath % "/"_L1 % srcName, filePath)) {
       // if copy file fails, create the file empty
       QFile(filePath).open(QIODevice::WriteOnly);
     }
@@ -84,8 +84,7 @@ QString GameGamebryo::localAppFolder(const QString& appID)
 {
   QString compatData = MOBase::findCompatDataByAppID(appID);
 
-  QString path =
-      compatData % QStringLiteral("/pfx/drive_c/users/steamuser/AppData/Local/");
+  QString path = compatData % "/pfx/drive_c/users/steamuser/AppData/Local/"_L1;
   if (QFile::exists(path)) {
     return path;
   }
