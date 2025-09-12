@@ -4,6 +4,8 @@
 #include "isavegame.h"
 #include "memoizedlock.h"
 
+#include <log.h>
+
 #include <QDateTime>
 #include <QFile>
 #include <QImage>
@@ -234,5 +236,78 @@ protected:
   // Fetch the field.
   virtual std::unique_ptr<DataFields> fetchDataFields() const = 0;
 };
+
+template <>
+inline void GamebryoSaveGame::FileWrapper::read<QString>(QString& value)
+{
+  if (m_CompressionType == 0) {
+    uint16_t length;
+    if (m_PluginString == StringType::TYPE_BSTRING ||
+        m_PluginString == StringType::TYPE_BZSTRING) {
+      uint8_t len;
+      read(len);
+      length = m_PluginString == StringType::TYPE_BZSTRING ? len + 1 : len;
+    } else {
+      read(length);
+    }
+
+    if (m_HasFieldMarkers) {
+      skip<char>();
+    }
+
+    QByteArray buffer;
+    buffer.resize(length);
+
+    read(buffer.data(),
+         m_PluginString == StringType::TYPE_BZSTRING ? length - 1 : length);
+
+    if (m_PluginString == StringType::TYPE_BZSTRING)
+      buffer[length - 1] = '\0';
+
+    if (m_HasFieldMarkers) {
+      skip<char>();
+    }
+
+    if (m_PluginStringFormat == StringFormat::UTF8)
+      value = QString::fromUtf8(buffer.constData());
+    else
+      value = QString::fromLocal8Bit(buffer.constData());
+  } else if (m_CompressionType == 1 || m_CompressionType == 2) {
+    uint16_t length;
+    if (m_PluginString == StringType::TYPE_BSTRING ||
+        m_PluginString == StringType::TYPE_BZSTRING) {
+      uint8_t len;
+      readQDataStream(*m_Data, len);
+      length = m_PluginString == StringType::TYPE_BZSTRING ? len + 1 : len;
+    } else {
+      readQDataStream(*m_Data, length);
+    }
+
+    if (m_HasFieldMarkers) {
+      skip<char>();
+    }
+
+    QByteArray buffer;
+    buffer.resize(length);
+
+    readQDataStream(*m_Data, buffer.data(),
+                    m_PluginString == StringType::TYPE_BZSTRING ? length - 1 : length);
+
+    if (m_PluginString == StringType::TYPE_BZSTRING)
+      buffer[length - 1] = '\0';
+
+    if (m_HasFieldMarkers) {
+      m_Data->skipRawData(1);
+    }
+
+    if (m_PluginStringFormat == StringFormat::UTF8)
+      value = QString::fromUtf8(buffer.constData());
+    else
+      value = QString::fromLocal8Bit(buffer.constData());
+  } else {
+    MOBase::log::warn("Please create an issue on the MO github labeled \"Found unknown "
+                      "Compressed\" with your savefile attached");
+  }
+}
 
 #endif  // GAMEBRYOSAVEGAME_H
