@@ -191,7 +191,11 @@ protected:
 
   private:
     template <typename T>
-    void readQDataStream(QDataStream& data, T& value);
+    void readQDataStream(QDataStream& data, T& value)
+    {
+      static_assert(std::is_trivial_v<T> && std::is_standard_layout_v<T>);
+      readQDataStream(data, &value, sizeof(T));
+    }
 
     void readQDataStream(QDataStream& data, void* buff, std::size_t length);
 

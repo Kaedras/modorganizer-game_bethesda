@@ -160,13 +160,6 @@ void GamebryoSaveGame::FileWrapper::readQDataStream(QDataStream& data, void* buf
   }
 }
 
-template <typename T>
-void GamebryoSaveGame::FileWrapper::readQDataStream(QDataStream& data, T& value)
-{
-  static_assert(std::is_trivial_v<T> && std::is_standard_layout_v<T>);
-  readQDataStream(data, &value, sizeof(T));
-}
-
 void GamebryoSaveGame::FileWrapper::skipQDataStream(QDataStream& data,
                                                     std::size_t length)
 {
