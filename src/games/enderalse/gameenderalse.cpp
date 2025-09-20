@@ -321,7 +321,8 @@ MappingType GameEnderalSE::mappings() const
 {
   MappingType result;
 
-  for (const QString& profileFile : {"plugins.txt", "loadorder.txt"}) {
+  for (const QString& profileFile :
+       {QStringLiteral("plugins.txt"), QStringLiteral("loadorder.txt")}) {
     result.push_back({m_Organizer->profilePath() + "/" + profileFile,
                       localAppFolder() + "/" + gameDirectoryName() + "/" + profileFile,
                       false});
