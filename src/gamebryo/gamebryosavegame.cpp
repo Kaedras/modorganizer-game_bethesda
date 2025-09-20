@@ -29,8 +29,8 @@
 
 GamebryoSaveGame::GamebryoSaveGame(QString const& file, GameGamebryo const* game,
                                    bool const lightEnabled, bool const mediumEnabled)
-    : m_FileName(file), m_CreationTime(QFileInfo(file).lastModified()), m_Game(game),
-      m_MediumEnabled(mediumEnabled), m_LightEnabled(lightEnabled),
+    : m_Game(game), m_MediumEnabled(mediumEnabled), m_LightEnabled(lightEnabled),
+      m_FileName(file), m_CreationTime(QFileInfo(file).lastModified()),
       m_DataFields([this]() {
         return fetchDataFields();
       })
@@ -103,9 +103,8 @@ void GamebryoSaveGame::setCreationTime(QDateTime const& time)
 
 GamebryoSaveGame::FileWrapper::FileWrapper(QString const& filepath,
                                            QString const& expected)
-    : m_File(filepath), m_HasFieldMarkers(false),
-      m_PluginString(StringType::TYPE_WSTRING),
-      m_PluginStringFormat(StringFormat::UTF8), m_NextChunk(0)
+    : m_File(filepath), m_NextChunk(0), m_HasFieldMarkers(false),
+      m_PluginString(StringType::TYPE_WSTRING), m_PluginStringFormat(StringFormat::UTF8)
 {
   if (!m_File.open(QIODevice::ReadOnly)) {
     throw std::runtime_error(
