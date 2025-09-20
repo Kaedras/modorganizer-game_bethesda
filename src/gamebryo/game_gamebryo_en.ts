@@ -137,33 +137,33 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="gamebryogameplugins.cpp" line="131"/>
+        <location filename="gamebryogameplugins.cpp" line="130"/>
         <location filename="../creation/creationgameplugins.cpp" line="97"/>
         <source>Some of your plugins have invalid names! These plugins can not be loaded by the game. Please see mo_interface.log for a list of affected plugins and rename them.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegame.cpp" line="48"/>
+        <location filename="gamebryosavegame.cpp" line="53"/>
         <source>%1, #%2, Level %3, %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegame.cpp" line="102"/>
+        <location filename="gamebryosavegame.cpp" line="111"/>
         <source>failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamebryosavegame.cpp" line="112"/>
+        <location filename="gamebryosavegame.cpp" line="121"/>
         <source>wrong file format - expected %1 got &apos;%2&apos; for %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamegamebryo.cpp" line="319"/>
+        <location filename="win32/gamegamebryo_win32.cpp" line="66"/>
         <source>failed to query registry path (preflight): %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamegamebryo.cpp" line="327"/>
+        <location filename="win32/gamegamebryo_win32.cpp" line="74"/>
         <source>failed to query registry path (read): %1</source>
         <translation type="unfinished"></translation>
     </message>
