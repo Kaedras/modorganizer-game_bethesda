@@ -1,11 +1,6 @@
 #include "../gamegamebryo.h"
+#include "util.h"
 #include "vdf_parser.h"
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 8, 0))
-#include <QDirIterator>
-#else
-#include <QDirListing>
-#endif
 
 #include <steamutility.h>
 
@@ -17,34 +12,6 @@
 #define STUB() std::cout << __FUNCTION__ << ": STUB\n"
 
 using namespace Qt::StringLiterals;
-
-namespace
-{
-
-QString findFileName(QString const& path, QString const& fileName)
-{
-#if (QT_VERSION < QT_VERSION_CHECK(6, 8, 0))
-  QDirIterator it(path);
-
-  while (it.hasNext()) {
-    QFileInfo info(it.nextFileInfo());
-    if (info.isFile()) {
-      if (info.fileName().compare(fileName, Qt::CaseInsensitive) == 0) {
-        return info.fileName();
-      }
-    }
-  }
-#else
-  for (const auto& dirEntry : QDirListing(path, QDirListing::IteratorFlag::FilesOnly)) {
-    if (dirEntry.fileName().compare(fileName, Qt::CaseInsensitive) == 0) {
-      return dirEntry.fileName();
-    }
-  }
-#endif
-  return fileName;
-}
-
-}  // namespace
 
 QString GameGamebryo::identifyGamePath() const
 {
@@ -61,7 +28,7 @@ void GameGamebryo::copyToProfile(QString const& sourcePath,
                                  QDir const& destinationDirectory,
                                  QString const& sourceFileName)
 {
-  QString src = findFileName(sourcePath, sourceFileName);
+  QString src = findFileNameCaseInsensitive(sourcePath, sourceFileName);
   copyToProfile(sourcePath, destinationDirectory, src, src);
 }
 
@@ -70,7 +37,7 @@ void GameGamebryo::copyToProfile(QString const& sourcePath,
                                  QString const& sourceFileName,
                                  QString const& destinationFileName)
 {
-  QString srcName  = findFileName(sourcePath, sourceFileName);
+  QString srcName  = findFileNameCaseInsensitive(sourcePath, sourceFileName);
   QString filePath = destinationDirectory.absoluteFilePath(destinationFileName);
   if (!QFileInfo::exists(filePath)) {
     if (!MOBase::shellCopy(sourcePath % "/"_L1 % srcName, filePath)) {
@@ -145,6 +112,7 @@ QString GameGamebryo::determineMyGamesPath(const QString& gameName)
 
   return {};
 }
+
 QString GameGamebryo::determineMyGamesPath(const QString& gameName,
                                            const QString& appID)
 {

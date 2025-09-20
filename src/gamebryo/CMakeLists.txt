@@ -20,6 +20,7 @@ add_library(game_gamebryo STATIC
 	gamebryodataarchives.cpp
 	gamebryodataarchives.h
 	gamebryogameplugins.cpp
+	${os_name}/gamegamebryoplugins_${os_name}.cpp
 	gamebryogameplugins.h
 	gamebryolocalsavegames.cpp
 	gamebryolocalsavegames.h
@@ -42,6 +43,7 @@ add_library(game_gamebryo STATIC
 	${os_name}/gamegamebryo_${os_name}.cpp
 	gamegamebryo.h
 	vdf_parser.h
+	$<$<BOOL:${UNIX}>:linux/util.h linux/util.cpp>
 )
 mo2_configure_target(game_gamebryo
 	WARNINGS 4
