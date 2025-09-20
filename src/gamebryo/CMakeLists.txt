@@ -6,10 +6,8 @@ find_package(ZLIB REQUIRED)
 
 if (UNIX)
 	set(os_name linux)
-	set(os_specific_deps)
 else()
 	set(os_name win32)
-	set(os_specific_deps Dbghelp)
 endif()
 
 add_library(game_gamebryo STATIC
@@ -51,7 +49,7 @@ mo2_configure_target(game_gamebryo
 	TRANSLATIONS ON
 	EXTRA_TRANSLATIONS ${CMAKE_CURRENT_LIST_DIR}/../creation)
 mo2_default_source_group()
-target_link_libraries(game_gamebryo PUBLIC mo2::uibase PRIVATE ZLIB::ZLIB lz4::lz4 ${os_specific_deps})
+target_link_libraries(game_gamebryo PUBLIC mo2::uibase PRIVATE ZLIB::ZLIB lz4::lz4 $<$<BOOL:${WIN32}>:Dbghelp>)
 target_include_directories(game_gamebryo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(UNIX)
