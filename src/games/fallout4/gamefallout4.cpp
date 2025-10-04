@@ -202,10 +202,10 @@ QStringList GameFallout4::testFilePlugins() const
 
 QStringList GameFallout4::primaryPlugins() const
 {
-  QStringList plugins = {"fallout4.esm",      "dlcrobot.esm",
-                         "dlcworkshop01.esm", "dlccoast.esm",
-                         "dlcworkshop02.esm", "dlcworkshop03.esm",
-                         "dlcnukaworld.esm",  "dlcultrahighresolution.esm"};
+  QStringList plugins = {"Fallout4.esm",      "DLCRobot.esm",
+                         "DLCworkshop01.esm", "DLCCoast.esm",
+                         "DLCworkshop02.esm", "DLCworkshop03.esm",
+                         "DLCNukaWorld.esm",  "DLCUltraHighResolution.esm"};
 
   auto testPlugins = testFilePlugins();
   if (loadOrderMechanism() == LoadOrderMechanism::None) {
@@ -234,18 +234,18 @@ QString GameFallout4::gameNexusName() const
 
 QStringList GameFallout4::iniFiles() const
 {
-  return {"fallout4.ini", "fallout4prefs.ini", "fallout4custom.ini"};
+  return {"Fallout4.ini", "Fallout4Prefs.ini", "Fallout4Custom.ini"};
 }
 
 QStringList GameFallout4::DLCPlugins() const
 {
-  return {"dlcrobot.esm",
-          "dlcworkshop01.esm",
-          "dlccoast.esm",
-          "dlcworkshop02.esm",
-          "dlcworkshop03.esm",
-          "dlcnukaworld.esm",
-          "dlcultrahighresolution.esm"};
+  return {"DLCRobot.esm",
+          "DLCworkshop01.esm",
+          "DLCCoast.esm",
+          "DLCworkshop02.esm",
+          "DLCworkshop03.esm",
+          "DLCNukaWorld.esm",
+          "DLCUltraHighResolution.esm"};
 }
 
 QStringList GameFallout4::CCPlugins() const

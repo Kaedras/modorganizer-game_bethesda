@@ -165,7 +165,7 @@ QString GameMorrowind::steamAPPId() const
 
 QStringList GameMorrowind::primaryPlugins() const
 {
-  return {"morrowind.esm"};
+  return {"Morrowind.esm"};
 }
 
 QString GameMorrowind::binaryName() const
