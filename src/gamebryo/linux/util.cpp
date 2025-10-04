@@ -21,6 +21,10 @@ QString findFileCaseInsensitive(const QString& path) noexcept
 
 QString findFileNameCaseInsensitive(const QDir& path, const QString& fileName) noexcept
 {
+  if (QFileInfo::exists(path.absoluteFilePath(fileName))) {
+    return fileName;
+  }
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 8, 0))
   QDirIterator it(path);
 
