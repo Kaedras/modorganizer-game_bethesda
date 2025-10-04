@@ -235,6 +235,7 @@ int GameEnderal::nexusGameID() const
 
 QString GameEnderal::identifyGamePath() const
 {
+#ifdef _WIN32
   QString path = "Software\\SureAI\\Enderal";
   QString result;
   try {
@@ -244,4 +245,7 @@ QString GameEnderal::identifyGamePath() const
     result = MOBase::findSteamGame("Enderal", "Data/Enderal - Forgotten Stories.esm");
   }
   return result;
+#else
+  return MOBase::findSteamGame("Enderal", "Data/Enderal - Forgotten Stories.esm");
+#endif
 }

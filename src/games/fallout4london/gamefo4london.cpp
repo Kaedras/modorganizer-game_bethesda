@@ -29,6 +29,7 @@
 
 #ifdef __unix__
 #include <registry.h>
+#include <steamutility.h>
 #endif
 
 using namespace MOBase;
@@ -73,9 +74,13 @@ void GameFallout4London::detectGame()
 QString GameFallout4London::identifyGamePath() const
 {
   // TODO: Add GOG support
+#ifdef _WIN32
   QString path = "Software\\Bethesda Softworks\\Fallout4";
   return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
                         L"Installed Path");
+#else
+  return findSteamGame("Fallout 4", "Data/londonworldspace.esm");
+#endif
 }
 
 QList<ExecutableInfo> GameFallout4London::executables() const

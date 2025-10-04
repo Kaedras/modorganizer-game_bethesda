@@ -4,12 +4,12 @@
 <context>
     <name>GameFallout4VR</name>
     <message>
-        <location filename="gamefallout4vr.cpp" line="82"/>
+        <location filename="gamefallout4vr.cpp" line="86"/>
         <source>Fallout 4 VR Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefallout4vr.cpp" line="92"/>
+        <location filename="gamefallout4vr.cpp" line="96"/>
         <source>Adds support for the game Fallout 4 VR.
 Splash by %1</source>
         <translation type="unfinished"></translation>

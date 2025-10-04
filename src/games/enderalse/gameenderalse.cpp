@@ -60,6 +60,7 @@ void GameEnderalSE::detectGame()
 
 QString GameEnderalSE::identifyGamePath() const
 {
+#ifdef _WIN32
   QMap<QString, QString> paths = {
       {"Software\\Bethesda Softworks\\" + gameName(), "Installed Path"},
       {"Software\\GOG.com\\Games\\1708684988", "path"},
@@ -77,6 +78,11 @@ QString GameEnderalSE::identifyGamePath() const
                                    "Data/Enderal - Forgotten Stories.esm");
   }
   return result;
+#else
+  // TODO: add gog support
+  return MOBase::findSteamGame("Enderal Special Edition",
+                               "Data/Enderal - Forgotten Stories.esm");
+#endif
 }
 
 void GameEnderalSE::setGamePath(const QString& path)

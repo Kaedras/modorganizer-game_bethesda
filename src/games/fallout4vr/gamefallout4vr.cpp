@@ -25,6 +25,10 @@
 
 #include "scopeguard.h"
 
+#ifdef __unix__
+#include <steamutility.h>
+#endif
+
 using namespace MOBase;
 
 GameFallout4VR::GameFallout4VR() {}
@@ -112,13 +116,13 @@ void GameFallout4VR::initializeProfile(const QDir& path, ProfileSettings setting
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
     if (settings.testFlag(IPluginGame::PREFER_DEFAULTS) ||
-        !QFileInfo(myGamesPath() + "/fallout4.ini").exists()) {
-      copyToProfile(gameDirectory().absolutePath(), path, "fallout4.ini");
+        !QFileInfo(myGamesPath() + "/Fallout4.ini").exists()) {
+      copyToProfile(gameDirectory().absolutePath(), path, "Fallout4.ini");
     } else {
-      copyToProfile(myGamesPath(), path, "fallout4.ini");
+      copyToProfile(myGamesPath(), path, "Fallout4.ini");
     }
 
-    copyToProfile(myGamesPath(), path, "fallout4prefs.ini");
+    copyToProfile(myGamesPath(), path, "Fallout4Prefs.ini");
     copyToProfile(myGamesPath(), path, "fallout4custom.ini");
   }
 }
@@ -146,7 +150,7 @@ QString GameFallout4VR::steamAPPId() const
 
 QStringList GameFallout4VR::primaryPlugins() const
 {
-  QStringList plugins = {"fallout4.esm", "fallout4_vr.esm"};
+  QStringList plugins = {"Fallout4.esm", "fallout4_vr.esm"};
 
   plugins.append(CCPlugins());
 
@@ -175,18 +179,18 @@ QString GameFallout4VR::gameNexusName() const
 
 QStringList GameFallout4VR::iniFiles() const
 {
-  return {"fallout4.ini", "fallout4custom.ini", "fallout4prefs.ini"};
+  return {"Fallout4.ini", "fallout4custom.ini", "Fallout4Prefs.ini"};
 }
 
 QStringList GameFallout4VR::DLCPlugins() const
 {
-  return {"dlcrobot.esm",
-          "dlcworkshop01.esm",
-          "dlccoast.esm",
-          "dlcworkshop02.esm",
-          "dlcworkshop03.esm",
-          "dlcnukaworld.esm",
-          "dlcultrahighresolution.esm"};
+  return {"DLCRobot.esm",
+          "DLCworkshop01.esm",
+          "DLCCoast.esm",
+          "DLCworkshop02.esm",
+          "DLCworkshop03.esm",
+          "DLCNukaWorld.esm",
+          "DLCUltraHighResolution.esm"};
 }
 
 QStringList GameFallout4VR::CCPlugins() const
@@ -241,7 +245,11 @@ QString GameFallout4VR::getLauncherName() const
 
 QString GameFallout4VR::identifyGamePath() const
 {
+#ifdef _WIN32
   QString path = "Software\\Bethesda Softworks\\" + gameName();
   return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
                         L"Installed Path");
+#else
+  return findSteamGame(gameName(), "Data/Fallout4.esm");
+#endif
 }

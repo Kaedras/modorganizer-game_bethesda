@@ -18,7 +18,7 @@ GameGamebryo::GameGamebryo() : m_GameVariant(u"Steam"_s) {}
 
 QString GameGamebryo::identifyGamePath() const
 {
-  return parseSteamLocation(steamAPPId(), gameShortName());
+  return parseSteamLocation(steamAPPId(), gameName());
 }
 
 QString GameGamebryo::getLootPath()

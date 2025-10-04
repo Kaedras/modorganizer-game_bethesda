@@ -19,6 +19,9 @@
 #include <QFileInfo>
 
 #include <memory>
+#ifdef __unix__
+#include <steamutility.h>
+#endif
 
 using namespace MOBase;
 
@@ -66,7 +69,7 @@ QList<ExecutableForcedLoadSetting> GameNehrim::executableForcedLoads() const
 {
   // TODO Search game directory for OBSE DLLs
   return QList<ExecutableForcedLoadSetting>()
-         << ExecutableForcedLoadSetting("Oblvion.exe", "obse_1_2_416.dll")
+         << ExecutableForcedLoadSetting("Oblivion.exe", "obse_1_2_416.dll")
                 .withForced()
                 .withEnabled()
          << ExecutableForcedLoadSetting("TESConstructionSet.exe", "obse_editor_1_2.dll")
@@ -107,7 +110,7 @@ QList<PluginSetting> GameNehrim::settings() const
 void GameNehrim::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Oblvion", path, "plugins.txt");
+    copyToProfile(localAppFolder() + "/Oblivion", path, "plugins.txt");
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
@@ -140,7 +143,7 @@ std::shared_ptr<const GamebryoSaveGame> GameNehrim::makeSaveGame(QString filePat
 
 QString GameNehrim::steamAPPId() const
 {
-  return "22330";
+  return "1014940";
 }
 
 QStringList GameNehrim::primaryPlugins() const
@@ -190,9 +193,18 @@ QStringList GameNehrim::validShortNames() const
 
 QString GameNehrim::identifyGamePath() const
 {
-  QString path = "Software\\Bethesda Softworks\\Oblivion";
-  return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
-                        L"Installed Path");
+#ifdef _WIN32
+  QString path     = "Software\\Bethesda Softworks\\Oblivion";
+  QString location = findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
+                                    L"Installed Path");
+#else
+  QString location = findSteamGame("Nehrim", "NehrimFiles/Data/Nehrim.esm");
+#endif
+
+  if (!location.isEmpty()) {
+    location.append("/NehrimFiles");
+  }
+  return location;
 }
 
 QString GameNehrim::binaryName() const

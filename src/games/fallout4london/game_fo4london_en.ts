@@ -4,22 +4,22 @@
 <context>
     <name>GameFallout4London</name>
     <message>
-        <location filename="gamefo4london.cpp" line="108"/>
+        <location filename="gamefo4london.cpp" line="113"/>
         <source>Fallout 4 London Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefo4london.cpp" line="118"/>
+        <location filename="gamefo4london.cpp" line="123"/>
         <source>Adds support for the game Fallout 4 London.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefo4london.cpp" line="354"/>
+        <location filename="gamefo4london.cpp" line="359"/>
         <source>sTestFile entries are present</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamefo4london.cpp" line="362"/>
+        <location filename="gamefo4london.cpp" line="367"/>
         <source>&lt;p&gt;You have sTestFile settings in your Fallout4Custom.ini. These must be removed or the game will not read the plugins.txt file. Management is disabled.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>

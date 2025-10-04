@@ -74,7 +74,11 @@ QDir GameFalloutNV::documentsDirectory() const
 
 QString GameFalloutNV::identifyGamePath() const
 {
+#ifdef _WIN32
   auto result = GameGamebryo::identifyGamePath();  // Default registry path
+#else
+  auto result = parseSteamLocation(steamAPPId(), "Fallout New Vegas");
+#endif
   // EPIC Game Store
   if (result.isEmpty()) {
     /**
