@@ -7,7 +7,7 @@
     "standalone": {
       "description": "Build Standalone.",
       "dependencies": [
-        "mo2-cmake"
+        "mo2-cmake", "mo2-uibase"
       ]
     }
   },

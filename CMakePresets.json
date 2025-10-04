@@ -57,6 +57,16 @@
       "generator": "Ninja Multi-Config",
       "inherits": ["cmake-dev", "vcpkg-dev"],
       "name": "linux"
+    },
+    {
+      "cacheVariables": {
+        "VCPKG_MANIFEST_FEATURES": {
+          "type": "STRING",
+          "value": "standalone"
+        }
+      },
+      "inherits": "linux",
+      "name": "linux-standalone"
     }
   ],
   "buildPresets": [
