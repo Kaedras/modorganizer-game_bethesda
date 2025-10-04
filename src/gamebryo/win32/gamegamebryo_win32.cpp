@@ -12,6 +12,8 @@
 #include <winreg.h>
 #include <winver.h>
 
+GameGamebryo::GameGamebryo() {}
+
 QString GameGamebryo::identifyGamePath() const
 {
   QString path = "Software\\Bethesda Softworks\\" + gameShortName();

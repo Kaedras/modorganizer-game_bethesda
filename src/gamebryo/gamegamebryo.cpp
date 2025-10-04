@@ -31,8 +31,6 @@
 
 using namespace MOBase;
 
-GameGamebryo::GameGamebryo() {}
-
 void GameGamebryo::detectGame()
 {
   m_GamePath    = identifyGamePath();

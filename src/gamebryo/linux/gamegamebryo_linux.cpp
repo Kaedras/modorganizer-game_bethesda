@@ -13,6 +13,9 @@
 
 using namespace Qt::StringLiterals;
 
+// set the default variant to steam to enable getting the appid earlier
+GameGamebryo::GameGamebryo() : m_GameVariant(u"Steam"_s) {}
+
 QString GameGamebryo::identifyGamePath() const
 {
   return parseSteamLocation(steamAPPId(), gameShortName());
