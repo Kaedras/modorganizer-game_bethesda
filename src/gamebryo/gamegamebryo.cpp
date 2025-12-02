@@ -26,6 +26,7 @@
 #include <QtGlobal>
 
 #include <optional>
+#include <steamutility.h>
 #include <string>
 #include <vector>
 
@@ -267,6 +268,35 @@ MappingType GameGamebryo::mappings() const
   }
 
   return result;
+}
+
+QString GameGamebryo::parseSteamLocation(const QString& appid,
+                                         const QString& directoryName)
+{
+  QString steamLocation = findSteam();
+  if (!steamLocation.isEmpty()) {
+    QString steamLibraryLocation;
+    QString steamLibraries(steamLocation + "/config/libraryfolders.vdf");
+    if (QFile(steamLibraries).exists()) {
+      std::ifstream file(steamLibraries.toStdString());
+      auto root = tyti::vdf::read(file);
+      for (auto child : root.childs) {
+        tyti::vdf::object* library = child.second.get();
+        auto apps                  = library->childs["apps"];
+        if (apps->attribs.contains(appid.toStdString())) {
+          steamLibraryLocation = QString::fromStdString(library->attribs["path"]);
+          break;
+        }
+      }
+    }
+    if (!steamLibraryLocation.isEmpty()) {
+      QString gameLocation =
+          steamLibraryLocation + "/steamapps/common/" + directoryName;
+      if (QDir(gameLocation).exists())
+        return gameLocation;
+    }
+  }
+  return "";
 }
 
 void GameGamebryo::registerFeature(std::shared_ptr<MOBase::GameFeature> feature)

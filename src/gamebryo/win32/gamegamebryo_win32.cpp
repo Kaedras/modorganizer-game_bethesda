@@ -187,35 +187,3 @@ QString GameGamebryo::parseEpicGamesLocation(const QStringList& manifests)
   }
   return "";
 }
-
-QString GameGamebryo::parseSteamLocation(const QString& appid,
-                                         const QString& directoryName)
-{
-  QString path = "Software\\Valve\\Steam";
-  QString steamLocation =
-      findInRegistry(HKEY_CURRENT_USER, path.toStdWString().c_str(), L"SteamPath");
-  if (!steamLocation.isEmpty()) {
-    QString steamLibraryLocation;
-    QString steamLibraries(steamLocation + "\\" + "config" + "\\" +
-                           "libraryfolders.vdf");
-    if (QFile(steamLibraries).exists()) {
-      std::ifstream file(steamLibraries.toStdString());
-      auto root = tyti::vdf::read(file);
-      for (auto child : root.childs) {
-        tyti::vdf::object* library = child.second.get();
-        auto apps                  = library->childs["apps"];
-        if (apps->attribs.contains(appid.toStdString())) {
-          steamLibraryLocation = QString::fromStdString(library->attribs["path"]);
-          break;
-        }
-      }
-    }
-    if (!steamLibraryLocation.isEmpty()) {
-      QString gameLocation = steamLibraryLocation + "\\" + "steamapps" + "\\" +
-                             "common" + "\\" + directoryName;
-      if (QDir(gameLocation).exists())
-        return gameLocation;
-    }
-  }
-  return "";
-}
