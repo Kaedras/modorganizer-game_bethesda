@@ -6,6 +6,7 @@
 #include <Knownfolders.h>
 #include <QDirIterator>
 #include <QJsonDocument>
+#include <QStandardPaths>
 #include <Shlobj.h>
 #include <Windows.h>
 #include <fstream>
@@ -25,6 +26,12 @@ QString GameGamebryo::identifyGamePath() const
 {
   return findInRegistry(HKEY_LOCAL_MACHINE, L"Software\\LOOT", L"Installed Path") +
          "/Loot.exe";
+}
+
+QString GameGamebryo::localAppFolder() const
+{
+  return QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation)
+      .first();
 }
 
 void GameGamebryo::copyToProfile(QString const& sourcePath,

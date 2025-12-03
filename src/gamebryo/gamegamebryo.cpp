@@ -246,16 +246,6 @@ QString GameGamebryo::myGamesPath() const
   return m_MyGamesPath;
 }
 
-QString GameGamebryo::localAppFolder()
-{
-  // return values:
-  // linux: ~/.config
-  // os x: ~/Library/Preferences
-  // windows: C:/Users/<USER>/AppData/Local
-  return QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation)
-      .first();
-}
-
 MappingType GameGamebryo::mappings() const
 {
   MappingType result;

@@ -67,6 +67,9 @@ public:  // IPluginGame interface
   virtual QDir dataDirectory() const override;
   // secondaryDataDirectories
   virtual void setGamePath(const QString& path) override;
+#ifdef __unix__
+  void setPrefixPath(const QString& path) override;
+#endif
   virtual QDir documentsDirectory() const override;
   virtual QDir savesDirectory() const override;
   // executables
@@ -109,12 +112,7 @@ protected:
   QString selectedVariant() const;
   uint16_t getArch(QString const& program) const;
 
-  static QString localAppFolder();
-
-#ifdef __unix__
-  // get location inside the wine prefix
-  static QString localAppFolder(const QString& appID);
-#endif
+  QString localAppFolder() const;
 
   // Arguably this shouldn't really be here but every gamebryo program seems to
   // use it
@@ -162,6 +160,11 @@ protected:
   friend class GamebryoSaveGame;
 
   QString m_GamePath;
+#ifdef __unix__
+  QString m_PrefixPath;
+  QString m_User;
+  bool m_isProton;
+#endif
   QString m_MyGamesPath;
   QString m_GameVariant;
   MOBase::IOrganizer* m_Organizer;
