@@ -110,7 +110,7 @@ QList<PluginSetting> GameNehrim::settings() const
 void GameNehrim::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/Oblivion", path, "plugins.txt");
+    copyToProfile(localAppFolder() + "/Oblivion", path, "Plugins.txt");
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {

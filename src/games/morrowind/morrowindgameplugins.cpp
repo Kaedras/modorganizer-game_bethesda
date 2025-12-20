@@ -39,15 +39,14 @@ void MorrowindGamePlugins::writePluginLists(const IPluginList* pluginList)
                         "/Morrowind.ini");
   }
 
-  writeLoadOrderList(pluginList,
-                     organizer()->profile()->absolutePath() + "/loadorder.txt");
+  writeLoadOrderList(pluginList, getLoadOrderPath());
 
   m_LastRead = QDateTime::currentDateTime();
 }
 
 void MorrowindGamePlugins::readPluginLists(MOBase::IPluginList* pluginList)
 {
-  QString loadOrderPath = organizer()->profile()->absolutePath() + "/loadorder.txt";
+  QString loadOrderPath = getLoadOrderPath();
 
   QString pluginsPath = organizer()->profile()->absolutePath() + "/Morrowind.ini";
   if (!organizer()->profile()->localSettingsEnabled()) {

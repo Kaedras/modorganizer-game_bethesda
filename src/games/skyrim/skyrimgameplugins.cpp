@@ -20,8 +20,8 @@ SkyrimGamePlugins::SkyrimGamePlugins(IOrganizer* organizer)
 
 void SkyrimGamePlugins::readPluginLists(MOBase::IPluginList* pluginList)
 {
-  QString loadOrderPath = organizer()->profile()->absolutePath() + "/loadorder.txt";
-  QString pluginsPath   = organizer()->profile()->absolutePath() + "/plugins.txt";
+  QString loadOrderPath = getLoadOrderPath();
+  QString pluginsPath   = getPluginsPath();
 
   bool loadOrderIsNew = !m_LastRead.isValid() || !QFileInfo(loadOrderPath).exists() ||
                         QFileInfo(loadOrderPath).lastModified() > m_LastRead;
@@ -75,7 +75,7 @@ QStringList SkyrimGamePlugins::readPluginList(MOBase::IPluginList* pluginList)
 
   // Determine plugin active state by the plugins.txt file.
   bool pluginsTxtExists = true;
-  QString filePath      = organizer()->profile()->absolutePath() + "/plugins.txt";
+  QString filePath      = getPluginsPath();
   QFile file(filePath);
   if (!file.open(QIODevice::ReadOnly)) {
     pluginsTxtExists = false;
