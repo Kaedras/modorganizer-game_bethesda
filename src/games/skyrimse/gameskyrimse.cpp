@@ -212,7 +212,7 @@ QList<PluginSetting> GameSkyrimSE::settings() const
 void GameSkyrimSE::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + "/" + gameDirectoryName(), path, "plugins.txt");
+    copyToProfile(localAppFolder() + "/" + gameDirectoryName(), path, "Plugins.txt");
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
@@ -340,7 +340,7 @@ MappingType GameSkyrimSE::mappings() const
   MappingType result;
 
   for (const QString& profileFile :
-       {QStringLiteral("plugins.txt"), QStringLiteral("loadorder.txt")}) {
+       {QStringLiteral("Plugins.txt"), QStringLiteral("loadorder.txt")}) {
     result.push_back({m_Organizer->profilePath() + "/" + profileFile,
                       localAppFolder() + "/" + gameDirectoryName() + "/" + profileFile,
                       false});

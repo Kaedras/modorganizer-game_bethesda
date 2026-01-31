@@ -111,7 +111,7 @@ bool GameEnderalSE::init(IOrganizer* moInfo)
   auto dataArchives = std::make_shared<EnderalSEDataArchives>(this);
   registerFeature(std::make_shared<EnderalSEScriptExtender>(this));
   registerFeature(dataArchives);
-  registerFeature(std::make_shared<EnderalSELocalSavegames>(this, "enderal.ini"));
+  registerFeature(std::make_shared<EnderalSELocalSavegames>(this, "Enderal.ini"));
   registerFeature(std::make_shared<EnderalSEModDataChecker>(this));
   registerFeature(std::make_shared<EnderalSEModDataContent>(moInfo->gameFeatures()));
   registerFeature(std::make_shared<GamebryoSaveGameInfo>(this));
@@ -214,7 +214,7 @@ QList<PluginSetting> GameEnderalSE::settings() const
 void GameEnderalSE::initializeProfile(const QDir& path, ProfileSettings settings) const
 {
   if (settings.testFlag(IPluginGame::MODS)) {
-    copyToProfile(localAppFolder() + gameDirectoryName(), path, "plugins.txt");
+    copyToProfile(localAppFolder() + gameDirectoryName(), path, "Plugins.txt");
   }
 
   if (settings.testFlag(IPluginGame::CONFIGURATION)) {
@@ -328,7 +328,7 @@ MappingType GameEnderalSE::mappings() const
   MappingType result;
 
   for (const QString& profileFile :
-       {QStringLiteral("plugins.txt"), QStringLiteral("loadorder.txt")}) {
+       {QStringLiteral("Plugins.txt"), QStringLiteral("loadorder.txt")}) {
     result.push_back({m_Organizer->profilePath() + "/" + profileFile,
                       localAppFolder() + "/" + gameDirectoryName() + "/" + profileFile,
                       false});
