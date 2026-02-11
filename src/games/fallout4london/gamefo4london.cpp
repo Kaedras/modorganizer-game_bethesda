@@ -14,6 +14,7 @@
 #include <gamebryolocalsavegames.h>
 #include <gamebryosavegameinfo.h>
 #include <pluginsetting.h>
+#include <registry.h>
 
 #include <QCoreApplication>
 #include <QDir>
@@ -28,11 +29,11 @@
 #include "scopeguard.h"
 
 #ifdef __unix__
-#include <registry.h>
 #include <steamutility.h>
 #endif
 
 using namespace MOBase;
+using namespace Qt::StringLiterals;
 
 GameFallout4London::GameFallout4London() {}
 
@@ -198,14 +199,9 @@ QStringList GameFallout4London::testFilePlugins() const
       for (int i = 1; i <= 10; ++i) {
         QString setting("sTestFile");
         setting += std::to_string(i);
-        WCHAR value[MAX_PATH];
-        DWORD length = ::GetPrivateProfileStringW(
-            L"General", setting.toStdWString().c_str(), L"", value, MAX_PATH,
-            customIni.toStdWString().c_str());
-        if (length && wcscmp(value, L"") != 0) {
-          QString plugin = QString::fromWCharArray(value, length);
-          if (!plugin.isEmpty() && !plugins.contains(plugin))
-            plugins.append(plugin);
+        QString plugin = ReadRegistryValue(u"General"_s, setting, u""_s, customIni);
+        if (!plugin.isEmpty() && !plugins.contains(plugin)) {
+          plugins.append(plugin);
         }
       }
     }

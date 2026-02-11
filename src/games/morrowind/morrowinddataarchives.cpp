@@ -5,6 +5,7 @@
 #include "gamegamebryo.h"
 
 using namespace MOBase;
+using namespace Qt::StringLiterals;
 
 QStringList MorrowindDataArchives::vanillaArchives() const
 {
@@ -13,18 +14,14 @@ QStringList MorrowindDataArchives::vanillaArchives() const
 
 QStringList MorrowindDataArchives::getArchives(const QString& iniFile) const
 {
-  wchar_t buffer[256];
   QStringList result;
-  std::wstring iniFileW = QDir::toNativeSeparators(iniFile).toStdWString();
-
-  errno = 0;
 
   QString key = "Archive ";
   int i       = 0;
-  while (::GetPrivateProfileStringW(L"Archives",
-                                    (key + QString::number(i)).toStdWString().c_str(),
-                                    L"", buffer, 256, iniFileW.c_str()) != 0) {
-    result.append(QString::fromStdWString(buffer).trimmed());
+  QString value;
+  while ((value = ReadRegistryValue(u"Archives"_s, key % QString::number(i), u""_s,
+                                    iniFile)) != ""_L1) {
+    result.append(value.trimmed());
     i++;
   }
 
@@ -33,14 +30,13 @@ QStringList MorrowindDataArchives::getArchives(const QString& iniFile) const
 
 void MorrowindDataArchives::setArchives(const QString& iniFile, const QStringList& list)
 {
-  ::WritePrivateProfileSectionW(L"Archives", NULL, iniFile.toStdWString().c_str());
+  WriteRegistryValue(u"Archives"_s, QString(), QString(), iniFile);
 
   QString key      = "Archive ";
   int writtenCount = 0;
-  foreach (const QString& value, list) {
-    if (!MOBase::WriteRegistryValue(
-            L"Archives", (key + QString::number(writtenCount)).toStdWString().c_str(),
-            value.toStdWString().c_str(), iniFile.toStdWString().c_str())) {
+  for (const QString& value : list) {
+    if (!WriteRegistryValue(u"Archives"_s, key % QString::number(writtenCount), value,
+                            iniFile)) {
       qWarning("failed to set archives in \"%s\"", qUtf8Printable(iniFile));
     }
     ++writtenCount;

@@ -8,6 +8,7 @@
 #include <utility.h>
 
 using namespace MOBase;
+using namespace Qt::StringLiterals;
 
 StarfieldBSAInvalidation::StarfieldBSAInvalidation(MOBase::DataArchives* dataArchives,
                                                    MOBase::IPluginGame const* game)
@@ -39,27 +40,26 @@ bool StarfieldBSAInvalidation::prepareProfile(MOBase::IProfile* profile)
                             ? profile->absolutePath()
                             : m_Game->documentsDirectory().absolutePath();
   QString iniFilePath = basePath + "/" + m_IniFileName;
-  WCHAR setting[MAX_PATH];
 
   if (profile->invalidationActive(nullptr)) {
     // write bInvalidateOlderFiles = 1, if needed
-    if (!::GetPrivateProfileStringW(L"Archive", L"bInvalidateOlderFiles", L"0", setting,
-                                    MAX_PATH, iniFilePath.toStdWString().c_str()) ||
-        wcstol(setting, nullptr, 10) != 1) {
+    QString setting = ReadRegistryValue(u"Archive"_s, u"bInvalidateOlderFiles"_s,
+                                        u"0"_s, iniFilePath);
+    if (setting != "1"_L1) {
       dirty = true;
-      if (!MOBase::WriteRegistryValue(L"Archive", L"bInvalidateOlderFiles", L"1",
-                                      iniFilePath.toStdWString().c_str())) {
+      if (!WriteRegistryValue(u"Archive"_s, u"bInvalidateOlderFiles"_s, u"1"_s,
+                              iniFilePath)) {
         qWarning("failed to override data directory in \"%s\"",
                  qUtf8Printable(m_IniFileName));
       }
     }
-    if (!::GetPrivateProfileStringW(L"Archive", L"sResourceDataDirsFinal", L"STRINGS\\",
-                                    setting, MAX_PATH,
-                                    iniFilePath.toStdWString().c_str()) ||
-        wcscmp(setting, L"") != 0) {
+    setting = ReadRegistryValue(u"Archive"_s, u"sResourceDataDirsFinal"_s,
+                                u"STRINGS\\"_s, iniFilePath);
+
+    if (setting != "0"_L1) {
       dirty = true;
-      if (!MOBase::WriteRegistryValue(L"Archive", L"sResourceDataDirsFinal", L"",
-                                      iniFilePath.toStdWString().c_str())) {
+      if (!WriteRegistryValue(u"Archive"_s, u"sResourceDataDirsFinal"_s, u""_s,
+                              iniFilePath)) {
         qWarning("failed to override data directory in \"%s\"",
                  qUtf8Printable(m_IniFileName));
       }

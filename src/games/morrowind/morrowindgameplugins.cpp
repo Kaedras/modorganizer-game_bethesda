@@ -13,11 +13,8 @@
 #include <QStringEncoder>
 #include <QStringList>
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 using namespace MOBase;
+using namespace Qt::StringLiterals;
 
 MorrowindGamePlugins::MorrowindGamePlugins(IOrganizer* organizer)
     : GamebryoGamePlugins(organizer)
@@ -87,7 +84,7 @@ void MorrowindGamePlugins::writeList(const IPluginList* pluginList,
                                ? QStringEncoder(QStringConverter::Encoding::Utf8)
                                : QStringEncoder(QStringConverter::Encoding::System);
 
-  ::WritePrivateProfileSectionW(L"Game Files", NULL, filePath.toStdWString().c_str());
+  WriteRegistryValue(u"Game Files"_s, {}, {}, filePath);
 
   bool invalidFileNames = false;
   int writtenCount      = 0;
@@ -105,10 +102,8 @@ void MorrowindGamePlugins::writeList(const IPluginList* pluginList,
         invalidFileNames = true;
         qCritical("invalid plugin name %s", qUtf8Printable(pluginName));
       } else {
-        if (!MOBase::WriteRegistryValue(
-                L"Game Files",
-                (key + QString::number(writtenCount)).toStdWString().c_str(),
-                pluginName.toStdWString().c_str(), filePath.toStdWString().c_str())) {
+        if (!WriteRegistryValue(u"Game Files"_s, key % QString::number(writtenCount),
+                                pluginName, filePath)) {
           qWarning("failed to set game files in \"%s\"", qUtf8Printable(filePath));
         }
       }
@@ -169,9 +164,6 @@ QStringList MorrowindGamePlugins::readPluginList(MOBase::IPluginList* pluginList
     filePath =
         organizer()->managedGame()->gameDirectory().absolutePath() + "/Morrowind.ini";
   }
-  wchar_t buffer[256];
-  QStringList result;
-  std::wstring iniFileW = QDir::toNativeSeparators(filePath).toStdWString();
 
   errno = 0;
 
@@ -179,11 +171,10 @@ QStringList MorrowindGamePlugins::readPluginList(MOBase::IPluginList* pluginList
   QStringList inactivePlugins;
   QString key = "GameFile";
   int i       = 0;
-  while (::GetPrivateProfileStringW(L"Game Files",
-                                    (key + QString::number(i)).toStdWString().c_str(),
-                                    L"", buffer, 256, iniFileW.c_str()) != 0) {
-    QString pluginName;
-    pluginName = QString::fromStdWString(buffer).trimmed();
+  QString value;
+  while ((value = ReadRegistryValue(u"Game Files"_s, key + QString::number(i), u""_s,
+                                    filePath)) != ""_L1) {
+    QString pluginName = value.trimmed();
     pluginList->setState(pluginName, IPluginList::STATE_ACTIVE);
     activePlugins.push_back(pluginName);
     i++;

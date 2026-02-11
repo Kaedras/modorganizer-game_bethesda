@@ -20,18 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "registry.h"
 #include <QtDebug>
 #include <iprofile.h>
-#include <stddef.h>
-#include <string>
-
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <linux/compatibility.h>
-#endif
 
 #include "gamegamebryo.h"
 
 using namespace MOBase;
+using namespace Qt::StringLiterals;
 
 GamebryoLocalSavegames::GamebryoLocalSavegames(const GameGamebryo* game,
                                                const QString& iniFileName)
@@ -70,17 +63,13 @@ bool GamebryoLocalSavegames::prepareProfile(MOBase::IProfile* profile)
   QString saveIni     = profile->absolutePath() + "/" + "savepath.ini";
 
   // Get the current sLocalSavePath
-  WCHAR currentPath[MAX_PATH];
-  GetPrivateProfileStringW(L"General", L"sLocalSavePath", L"SKIP_ME", currentPath,
-                           MAX_PATH, iniFilePath.toStdWString().c_str());
-  bool alreadyEnabled =
-      wcscmp(currentPath, localSavesDummy().toStdWString().c_str()) == 0;
+  QString currentPath =
+      ReadRegistryValue(u"General"_s, u"sLocalSavePath"_s, u"SKIP_ME"_s, iniFilePath);
+  bool alreadyEnabled = currentPath == localSavesDummy();
 
   // Get the current bUseMyGamesDirectory
-  WCHAR currentMyGames[MAX_PATH];
-  GetPrivateProfileStringW(L"General", L"bUseMyGamesDirectory", L"SKIP_ME",
-                           currentMyGames, MAX_PATH,
-                           iniFilePath.toStdWString().c_str());
+  QString currentMyGames = ReadRegistryValue(u"General"_s, u"bUseMyGamesDirectory"_s,
+                                             u"SKIP_ME"_s, iniFilePath);
 
   // Create the __MO_Saves directory if local saves are enabled and it doesn't exist
   if (enable) {
@@ -93,53 +82,46 @@ bool GamebryoLocalSavegames::prepareProfile(MOBase::IProfile* profile)
   // Set the path to __MO_Saves if it's not already
   if (enable && !alreadyEnabled) {
     // If the path is not blank, save it to savepath.ini
-    if (wcscmp(currentPath, L"SKIP_ME") != 0) {
-      MOBase::WriteRegistryValue(L"General", L"sLocalSavePath", currentPath,
-                                 saveIni.toStdWString().c_str());
+    if (currentPath == "SKIP_ME"_L1) {
+      WriteRegistryValue(u"General"_s, u"sLocalSavePath"_s, currentPath, saveIni);
     }
-    if (wcscmp(currentMyGames, L"SKIP_ME") != 0) {
-      MOBase::WriteRegistryValue(L"General", L"bUseMyGamesDirectory", currentMyGames,
-                                 saveIni.toStdWString().c_str());
+    if (currentMyGames == "SKIP_ME"_L1) {
+      WriteRegistryValue(u"General"_s, u"bUseMyGamesDirectory"_s, currentMyGames,
+                         saveIni);
     }
-    MOBase::WriteRegistryValue(L"General", L"sLocalSavePath",
-                               localSavesDummy().toStdWString().c_str(),
-                               iniFilePath.toStdWString().c_str());
-    MOBase::WriteRegistryValue(L"General", L"bUseMyGamesDirectory", L"1",
-                               iniFilePath.toStdWString().c_str());
+    WriteRegistryValue(u"General"_s, u"sLocalSavePath"_s, localSavesDummy(),
+                       iniFilePath);
+    WriteRegistryValue(u"General"_s, u"bUseMyGamesDirectory"_s, u"1"_s, iniFilePath);
   }
 
   // Get rid of the local saves setting if it's still there
   if (!enable && alreadyEnabled) {
     // If savepath.ini exists, use it and delete it
     if (QFile::exists(saveIni)) {
-      WCHAR savedPath[MAX_PATH];
-      WCHAR savedMyGames[MAX_PATH];
-      GetPrivateProfileStringW(L"General", L"sLocalSavePath", L"DELETE_ME", savedPath,
-                               MAX_PATH, saveIni.toStdWString().c_str());
-      GetPrivateProfileStringW(L"General", L"bUseMyGamesDirectory", L"DELETE_ME",
-                               savedMyGames, MAX_PATH, saveIni.toStdWString().c_str());
-      if (wcscmp(savedPath, L"DELETE_ME") != 0) {
-        MOBase::WriteRegistryValue(L"General", L"sLocalSavePath", savedPath,
-                                   iniFilePath.toStdWString().c_str());
+      QString savedPath =
+          ReadRegistryValue(u"General"_s, u"sLocalSavePath"_s, u"DELETE_ME"_s, saveIni);
+      QString savedMyGames = ReadRegistryValue(u"General"_s, u"bUseMyGamesDirectory"_s,
+                                               u"DELETE_ME"_s, saveIni);
+      if (savedPath == "DELETE_ME"_L1) {
+        WriteRegistryValue(u"General"_s, u"sLocalSavePath"_s, savedPath, iniFilePath);
       } else {
-        MOBase::WriteRegistryValue(L"General", L"sLocalSavePath", NULL,
-                                   iniFilePath.toStdWString().c_str());
+        WriteRegistryValue(u"General"_s, u"sLocalSavePath"_s, QString(), iniFilePath);
       }
-      if (wcscmp(savedMyGames, L"DELETE_ME") != 0) {
-        MOBase::WriteRegistryValue(L"General", L"bUseMyGamesDirectory", savedMyGames,
-                                   iniFilePath.toStdWString().c_str());
+
+      if (savedMyGames == "DELETE_ME"_L1) {
+        WriteRegistryValue(u"General"_s, u"bUseMyGamesDirectory"_s, savedMyGames,
+                           iniFilePath);
       } else {
-        MOBase::WriteRegistryValue(L"General", L"bUseMyGamesDirectory", NULL,
-                                   iniFilePath.toStdWString().c_str());
+        WriteRegistryValue(u"General"_s, u"bUseMyGamesDirectory"_s, QString(),
+                           iniFilePath);
       }
       QFile::remove(saveIni);
     }
     // Otherwise just delete the setting
     else {
-      MOBase::WriteRegistryValue(L"General", L"sLocalSavePath", NULL,
-                                 iniFilePath.toStdWString().c_str());
-      MOBase::WriteRegistryValue(L"General", L"bUseMyGamesDirectory", NULL,
-                                 iniFilePath.toStdWString().c_str());
+      WriteRegistryValue(u"General"_s, u"sLocalSavePath"_s, QString(), iniFilePath);
+      WriteRegistryValue(u"General"_s, u"bUseMyGamesDirectory"_s, QString(),
+                         iniFilePath);
     }
   }
 

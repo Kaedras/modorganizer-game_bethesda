@@ -31,6 +31,7 @@
 #include <vector>
 
 using namespace MOBase;
+using namespace Qt::StringLiterals;
 
 void GameGamebryo::detectGame()
 {
@@ -221,15 +222,13 @@ bool GameGamebryo::prepareIni(const QString&)
                          : documentsDirectory().absolutePath();
 
   if (!iniFiles().isEmpty()) {
-
     QString profileIni = basePath + "/" + iniFiles()[0];
 
-    WCHAR setting[512];
-    if (!GetPrivateProfileStringW(L"Launcher", L"bEnableFileSelection", L"0", setting,
-                                  512, profileIni.toStdWString().c_str()) ||
-        wcstol(setting, nullptr, 10) != 1) {
-      MOBase::WriteRegistryValue(L"Launcher", L"bEnableFileSelection", L"1",
-                                 profileIni.toStdWString().c_str());
+    QString setting =
+        ReadRegistryValue(u"Launcher"_s, u"bEnableFileSelection"_s, u"0"_s, profileIni);
+
+    if (setting != "1"_L1) {
+      WriteRegistryValue(u"Launcher"_s, u"bEnableFileSelection"_s, u"1"_s, profileIni);
     }
   }
 
