@@ -18,7 +18,9 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "dummybsa.h"
+
 #include <QFile>
+#include <log.h>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -181,7 +183,10 @@ void DummyBSA::writeFileRecordBlocks(QFile& file, const std::string& folderName)
 void DummyBSA::write(const QString& fileName)
 {
   QFile file(fileName);
-  file.open(QIODevice::WriteOnly);
+  if (!file.open(QIODevice::WriteOnly)) {
+    MOBase::log::error("Error opening file {}, {}", fileName, file.errorString());
+    return;
+  }
 
   m_TotalFileNameLength = static_cast<uint32_t>(m_FileName.length() + 1);
 

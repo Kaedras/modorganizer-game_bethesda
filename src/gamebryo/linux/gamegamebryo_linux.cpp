@@ -91,7 +91,10 @@ void GameGamebryo::copyToProfile(QString const& sourcePath,
   if (!QFileInfo::exists(filePath)) {
     if (!MOBase::shellCopy(sourcePath % "/"_L1 % srcName, filePath)) {
       // if copy file fails, create the file empty
-      QFile(filePath).open(QIODevice::WriteOnly);
+      QFile file(filePath);
+      if (!file.open(QIODevice::WriteOnly)) {
+        log::error("Error creating file {}, {}", filePath, file.errorString());
+      }
     }
   }
 }
