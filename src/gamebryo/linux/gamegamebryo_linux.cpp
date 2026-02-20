@@ -17,7 +17,9 @@ using namespace MOBase;
 using namespace Qt::StringLiterals;
 
 // set the default variant to steam to enable getting the appid earlier
-GameGamebryo::GameGamebryo() : m_GameVariant(u"Steam"_s) {}
+GameGamebryo::GameGamebryo()
+    : m_isProton(true), m_GameVariant(u"Steam"_s), m_Organizer(nullptr)
+{}
 
 void GameGamebryo::setPrefixPath(const QString& path)
 {
