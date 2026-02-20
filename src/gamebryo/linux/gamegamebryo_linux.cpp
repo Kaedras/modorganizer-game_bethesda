@@ -69,14 +69,11 @@ QString GameGamebryo::identifyGamePath() const
 
 QString GameGamebryo::getLootPath()
 {
-  // look for io.github.loot.loot.desktop
-  auto desktopFile = "/applications/io.github.loot.loot.desktop"_L1;
+  constexpr auto desktopFile = "/io.github.loot.loot.desktop"_L1;
 
-  QString xdgDataDirs = qEnvironmentVariable("XDG_DATA_DIRS");
-  auto dataDirs       = xdgDataDirs.split(':');
-  dataDirs.emplaceFront(QDir::homePath() % "/.local/share"_L1);
-
-  for (const auto& dir : dataDirs) {
+  const QStringList applicationDirs =
+      QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
+  for (const auto& dir : applicationDirs) {
     QString path = dir % desktopFile;
     if (QFileInfo::exists(path)) {
       return path;
