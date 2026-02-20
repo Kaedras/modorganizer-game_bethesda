@@ -63,7 +63,7 @@ void GameGamebryo::setPrefixPath(const QString& path)
 
   m_PrefixUserPath = m_PrefixPath % "/drive_c/users/"_L1 % user;
   // update m_MyGamesPath
-  m_MyGamesPath = m_PrefixUserPath % "/Documents/My Games"_L1;
+  m_MyGamesPath = m_PrefixUserPath % "/Documents/My Games/"_L1 % gameName();
 }
 
 QString GameGamebryo::identifyGamePath() const
