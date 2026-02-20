@@ -165,7 +165,7 @@ QString GameGamebryo::determineMyGamesPath(const QString& gameName)
     return path;
   };
 
-  // check inside user directory
+  // check inside the user directory
   if (auto d =
           tryDir(QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)
                      .first())) {
@@ -207,7 +207,7 @@ QString GameGamebryo::determineMyGamesPath(const QString& gameName,
     return *d;
   }
 
-  // check inside user directory
+  // check inside the user directory
   if (auto d =
           tryDir(QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)
                      .first())) {
