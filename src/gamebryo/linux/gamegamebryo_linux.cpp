@@ -22,6 +22,7 @@ GameGamebryo::GameGamebryo() : m_GameVariant(u"Steam"_s) {}
 void GameGamebryo::setPrefixPath(const QString& path)
 {
   m_PrefixPath = path;
+  QString user;
 
   // determine whether this prefix is for wine or proton
   // this is required because of minor differences, e.g. username
@@ -29,7 +30,7 @@ void GameGamebryo::setPrefixPath(const QString& path)
   if (re.match(m_PrefixPath).hasMatch()) {
     // assume proton if path contains "/steamapps/compatdata/<appid>"
     m_isProton = true;
-    m_User     = u"steamuser"_s;
+    user       = u"steamuser"_s;
 
     // append /pfx to the prefix path
     if (!m_PrefixPath.endsWith("pfx"_L1) && !m_PrefixPath.endsWith("pfx/"_L1)) {
@@ -39,10 +40,10 @@ void GameGamebryo::setPrefixPath(const QString& path)
     m_isProton = false;
 
     // there are usually only two user dirs: Public and the normal user
-    QDir usersDir(m_PrefixPath % "/drive_c/users");
-    for (const QString& user : usersDir.entryList(QDir::Dirs)) {
-      if (user != "Public") {
-        m_User = user;
+    QDir usersDir(m_PrefixPath % "/drive_c/users"_L1);
+    for (const QString& dir : usersDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+      if (dir != "Public"_L1) {
+        user = dir;
         break;
       }
     }
@@ -51,15 +52,16 @@ void GameGamebryo::setPrefixPath(const QString& path)
     // TODO: remove this later as it is mainly for testing
     const passwd* pwd = getpwuid(getuid());
     if (pwd != nullptr) {
-      if (m_User != pwd->pw_name) {
+      if (user != pwd->pw_name) {
         log::warn("Username mismatch: got {} from wine prefix and {} from getpwuid()",
-                  m_User, pwd->pw_name);
+                  user, pwd->pw_name);
       }
     }
   }
 
+  m_PrefixUserPath = m_PrefixPath % "/drive_c/users/"_L1 % user;
   // update m_MyGamesPath
-  m_MyGamesPath = m_PrefixPath % "/drive_c/users/" % m_User % "/Documents/My Games";
+  m_MyGamesPath = m_PrefixUserPath % "/Documents/My Games"_L1;
 }
 
 QString GameGamebryo::identifyGamePath() const
@@ -111,7 +113,10 @@ void GameGamebryo::copyToProfile(QString const& sourcePath,
 
 QString GameGamebryo::localAppFolder() const
 {
-  return QStringLiteral("%1/drive_c/users/%2/AppData/Local").arg(m_PrefixPath, m_User);
+  if (m_PrefixUserPath.isEmpty()) {
+    return {};
+  }
+  return QStringLiteral("%1/AppData/Local").arg(m_PrefixUserPath);
 }
 
 std::unique_ptr<BYTE[]> GameGamebryo::getRegValue(HKEY, LPCWSTR, LPCWSTR, DWORD,
