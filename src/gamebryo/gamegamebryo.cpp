@@ -215,7 +215,7 @@ QFileInfo GameGamebryo::findInGameFolder(const QString& relativePath) const
 
 bool GameGamebryo::prepareIni(const QString&)
 {
-  MOBase::IProfile* profile = m_Organizer->profile();
+  auto profile = m_Organizer->profile();
 
   QString basePath = profile->localSettingsEnabled()
                          ? profile->absolutePath()
