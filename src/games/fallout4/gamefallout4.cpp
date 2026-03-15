@@ -126,7 +126,7 @@ MappingType GameFallout4::mappings() const
          {QStringLiteral("plugins.txt"), QStringLiteral("loadorder.txt")}) {
       result.push_back({m_Organizer->profilePath() + "/" + profileFile,
                         localAppFolder() + "/" + gameShortName() + "/" + profileFile,
-                        false});
+                        false, false});
     }
   }
   return result;

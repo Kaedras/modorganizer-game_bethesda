@@ -331,7 +331,7 @@ MappingType GameEnderalSE::mappings() const
        {QStringLiteral("Plugins.txt"), QStringLiteral("loadorder.txt")}) {
     result.push_back({m_Organizer->profilePath() + "/" + profileFile,
                       localAppFolder() + "/" + gameDirectoryName() + "/" + profileFile,
-                      false});
+                      false, false});
   }
 
   return result;

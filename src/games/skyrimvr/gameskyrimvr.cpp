@@ -299,7 +299,8 @@ MappingType GameSkyrimVR::mappings() const
   for (const QString& profileFile :
        {QStringLiteral("plugins.txt"), QStringLiteral("loadorder.txt")}) {
     result.push_back({m_Organizer->profilePath() + "/" + profileFile,
-                      localAppFolder() + "/" + gameName() + "/" + profileFile, false});
+                      localAppFolder() + "/" + gameName() + "/" + profileFile, false,
+                      false});
   }
 
   return result;
