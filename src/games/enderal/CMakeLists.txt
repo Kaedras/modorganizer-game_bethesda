@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_enderal SHARED
 	enderalbsainvalidation.cpp
 	enderalbsainvalidation.h
@@ -16,6 +22,7 @@ add_library(game_enderal SHARED
 	enderalscriptextender.cpp
 	enderalscriptextender.h
 	gameenderal.cpp
+	${os_name}/gameenderal_${os_name}.cpp
 	gameenderal.h
 )
 mo2_configure_plugin(game_enderal NO_SOURCES WARNINGS 4)

@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_skyrimse SHARED
 	gameskyrimse.cpp
+	${os_name}/gameskyrimse_${os_name}.cpp
 	gameskyrimse.h
 	skyrimsedataarchives.cpp
 	skyrimsedataarchives.h

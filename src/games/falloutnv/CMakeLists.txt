@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_falloutnv SHARED
 	falloutnvbsainvalidation.cpp
 	falloutnvbsainvalidation.h
@@ -12,6 +18,7 @@ add_library(game_falloutnv SHARED
 	falloutnvscriptextender.cpp
 	falloutnvscriptextender.h
 	gamefalloutnv.cpp
+	${os_name}/gamefalloutnv_${os_name}.cpp
 	gamefalloutnv.h
 )
 mo2_configure_plugin(game_falloutnv NO_SOURCES WARNINGS 4)

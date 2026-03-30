@@ -4,12 +4,12 @@
 <context>
     <name>GameSkyrimVR</name>
     <message>
-        <location filename="gameskyrimvr.cpp" line="122"/>
+        <location filename="gameskyrimvr.cpp" line="98"/>
         <source>Skyrim VR Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gameskyrimvr.cpp" line="132"/>
+        <location filename="gameskyrimvr.cpp" line="108"/>
         <source>Adds support for the game Skyrim VR.</source>
         <translation type="unfinished"></translation>
     </message>

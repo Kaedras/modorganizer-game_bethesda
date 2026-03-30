@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_starfield SHARED
 	gamestarfield.cpp
+	${os_name}/gamestarfield_${os_name}.cpp
 	gamestarfield.h
 	starfieldbsainvalidation.cpp
 	starfieldbsainvalidation.h

@@ -58,33 +58,6 @@ void GameEnderalSE::detectGame()
   m_MyGamesPath = determineMyGamesPath(gameDirectoryName());
 }
 
-QString GameEnderalSE::identifyGamePath() const
-{
-#ifdef _WIN32
-  QMap<QString, QString> paths = {
-      {"Software\\Bethesda Softworks\\" + gameName(), "Installed Path"},
-      {"Software\\GOG.com\\Games\\1708684988", "path"},
-  };
-  QString result;
-  try {
-    for (auto& path : paths.toStdMap()) {
-      result = findInRegistry(HKEY_LOCAL_MACHINE, path.first.toStdWString().c_str(),
-                              path.second.toStdWString().c_str());
-      if (!result.isEmpty())
-        break;
-    }
-  } catch (MOBase::MyException) {
-    result = MOBase::findSteamGame("Enderal Special Edition",
-                                   "Data/Enderal - Forgotten Stories.esm");
-  }
-  return result;
-#else
-  // TODO: add gog support
-  return MOBase::findSteamGame("Enderal Special Edition",
-                               "Data/Enderal - Forgotten Stories.esm");
-#endif
-}
-
 void GameEnderalSE::setGamePath(const QString& path)
 {
   m_GamePath = path;
@@ -137,21 +110,6 @@ QString GameEnderalSE::gameDirectoryName() const
 QIcon GameEnderalSE::gameIcon() const
 {
   return MOBase::iconForExecutable(gameDirectory().absoluteFilePath(getLauncherName()));
-}
-
-QList<ExecutableInfo> GameEnderalSE::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("Enderal Special Edition (SKSE)",
-                           findInGameFolder(m_Organizer->gameFeatures()
-                                                ->gameFeature<MOBase::ScriptExtender>()
-                                                ->loaderName()))
-         << ExecutableInfo("Enderal Special Edition Launcher",
-                           findInGameFolder(getLauncherName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("1946180")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Enderal Special Edition\"");
 }
 
 QList<ExecutableForcedLoadSetting> GameEnderalSE::executableForcedLoads() const

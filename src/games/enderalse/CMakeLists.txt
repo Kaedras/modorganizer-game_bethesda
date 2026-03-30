@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_enderalse SHARED
 	enderalsedataarchives.cpp
 	enderalsedataarchives.h
@@ -16,6 +22,7 @@ add_library(game_enderalse SHARED
 	enderalseunmanagedmods.cpp
 	enderalseunmanagedmods.h
 	gameenderalse.cpp
+	${os_name}/gameenderalse_${os_name}.cpp
 	gameenderalse.h
 )
 mo2_configure_plugin(game_enderalse NO_SOURCES WARNINGS 4)

@@ -28,10 +28,6 @@
 #include "scopeguard.h"
 #include <memory>
 
-#ifdef __unix__
-#include <steamutility.h>
-#endif
-
 using namespace MOBase;
 
 GameSkyrimSE::GameSkyrimSE() {}
@@ -63,37 +59,6 @@ void GameSkyrimSE::detectGame()
   m_GamePath = identifyGamePath();
   checkVariants();
   m_MyGamesPath = determineMyGamesPath(gameDirectoryName());
-}
-
-QString GameSkyrimSE::identifyGamePath() const
-{
-#ifdef _WIN32
-  QMap<QString, QString> paths = {
-      {"Software\\Bethesda Softworks\\" + gameName(), "Installed Path"},
-      {"Software\\GOG.com\\Games\\1162721350", "path"},
-      {"Software\\GOG.com\\Games\\1711230643", "path"},
-  };
-
-  QString result;
-  for (auto& path : paths.toStdMap()) {
-    result = findInRegistry(HKEY_LOCAL_MACHINE, path.first.toStdWString().c_str(),
-                            path.second.toStdWString().c_str());
-    if (!result.isEmpty())
-      break;
-  }
-#else
-  QString result = findSteamGame(gameName(), "Data/Skyrim.esm");
-#endif
-
-  // Check Epic Games Manifests
-  // AppName: ac82db5035584c7f8a2c548d98c86b2c
-  //      AE Update: 5d600e4f59974aeba0259c7734134e27
-  if (result.isEmpty()) {
-    result = parseEpicGamesLocation(
-        {"ac82db5035584c7f8a2c548d98c86b2c", "5d600e4f59974aeba0259c7734134e27"});
-  }
-
-  return result;
 }
 
 void GameSkyrimSE::setGamePath(const QString& path)
@@ -150,22 +115,6 @@ QString GameSkyrimSE::gameDirectoryName() const
     return "Skyrim Special Edition EPIC";
   else
     return "Skyrim Special Edition";
-}
-
-QList<ExecutableInfo> GameSkyrimSE::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("SKSE",
-                           findInGameFolder(m_Organizer->gameFeatures()
-                                                ->gameFeature<MOBase::ScriptExtender>()
-                                                ->loaderName()))
-         << ExecutableInfo("Skyrim Special Edition", findInGameFolder(binaryName()))
-         << ExecutableInfo("Skyrim Special Edition Launcher",
-                           findInGameFolder(getLauncherName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("1946180")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Skyrim Special Edition\"");
 }
 
 QList<ExecutableForcedLoadSetting> GameSkyrimSE::executableForcedLoads() const

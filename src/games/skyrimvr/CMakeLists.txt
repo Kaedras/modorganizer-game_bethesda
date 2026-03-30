@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_skyrimvr SHARED
 	gameskyrimvr.cpp
+	${os_name}/gameskyrimvr_${os_name}.cpp
 	gameskyrimvr.h
 	skyrimvrdataarchives.cpp
 	skyrimvrdataarchives.h

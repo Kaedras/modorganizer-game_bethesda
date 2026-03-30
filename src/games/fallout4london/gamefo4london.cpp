@@ -28,10 +28,6 @@
 
 #include "scopeguard.h"
 
-#ifdef __unix__
-#include <steamutility.h>
-#endif
-
 using namespace MOBase;
 using namespace Qt::StringLiterals;
 
@@ -70,33 +66,6 @@ void GameFallout4London::detectGame()
 {
   m_GamePath    = identifyGamePath();
   m_MyGamesPath = determineMyGamesPath("Fallout4");
-}
-
-QString GameFallout4London::identifyGamePath() const
-{
-  // TODO: Add GOG support
-#ifdef _WIN32
-  QString path = "Software\\Bethesda Softworks\\Fallout4";
-  return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
-                        L"Installed Path");
-#else
-  return findSteamGame("Fallout 4", "Data/londonworldspace.esm");
-#endif
-}
-
-QList<ExecutableInfo> GameFallout4London::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("F4SE",
-                           findInGameFolder(m_Organizer->gameFeatures()
-                                                ->gameFeature<MOBase::ScriptExtender>()
-                                                ->loaderName()))
-         << ExecutableInfo("Fallout 4 London", findInGameFolder(binaryName()))
-         << ExecutableInfo("Fallout Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("1946160")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Fallout4\"");
 }
 
 QList<ExecutableForcedLoadSetting> GameFallout4London::executableForcedLoads() const

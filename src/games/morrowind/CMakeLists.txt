@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_morrowind SHARED
 	gamemorrowind.cpp
+	${os_name}/gamemorrowind_${os_name}.cpp
 	gamemorrowind.h
 	morrowindbsainvalidation.cpp
 	morrowindbsainvalidation.h

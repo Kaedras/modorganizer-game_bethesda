@@ -39,17 +39,6 @@ QDir GameSkyrimVR::documentsDirectory() const
   return m_MyGamesPath;
 }
 
-QString GameSkyrimVR::identifyGamePath() const
-{
-#ifdef _WIN32
-  QString path = "Software\\Bethesda Softworks\\" + gameName();
-  return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
-                        L"Installed Path");
-#else
-  return parseSteamLocation(steamAPPId(), gameShortName());
-#endif
-}
-
 QDir GameSkyrimVR::savesDirectory() const
 {
   return QDir(m_MyGamesPath + "/Saves");
@@ -87,19 +76,6 @@ bool GameSkyrimVR::init(IOrganizer* moInfo)
 QString GameSkyrimVR::gameName() const
 {
   return "Skyrim VR";
-}
-
-QList<ExecutableInfo> GameSkyrimVR::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("SKSE",
-                           findInGameFolder(m_Organizer->gameFeatures()
-                                                ->gameFeature<MOBase::ScriptExtender>()
-                                                ->loaderName()))
-         << ExecutableInfo("Skyrim VR", findInGameFolder(binaryName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Skyrim VR\"");
 }
 
 QList<ExecutableForcedLoadSetting> GameSkyrimVR::executableForcedLoads() const

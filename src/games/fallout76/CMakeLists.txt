@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_fallout76 SHARED
 	fallout76dataarchives.cpp
 	fallout76dataarchives.h
@@ -14,6 +20,7 @@ add_library(game_fallout76 SHARED
 	fallout76unmanagedmods.cpp
 	fallout76unmanagedmods.h
 	gamefallout76.cpp
+	${os_name}/gamefallout76_${os_name}.cpp
 	gamefallout76.h
 )
 mo2_configure_plugin(game_fallout76 NO_SOURCES WARNINGS 4)

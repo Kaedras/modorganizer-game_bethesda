@@ -4,12 +4,12 @@
 <context>
     <name>GameNehrim</name>
     <message>
-        <location filename="gamenehrim.cpp" line="87"/>
+        <location filename="gamenehrim.cpp" line="70"/>
         <source>Nehrim Support Plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gamenehrim.cpp" line="97"/>
+        <location filename="gamenehrim.cpp" line="80"/>
         <source>Adds support for the game Nehrim</source>
         <translation type="unfinished"></translation>
     </message>

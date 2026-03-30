@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_fallout3 SHARED
 	fallout3bsainvalidation.cpp
 	fallout3bsainvalidation.h
@@ -12,6 +18,7 @@ add_library(game_fallout3 SHARED
 	fallout3scriptextender.cpp
 	fallout3scriptextender.h
 	gamefallout3.cpp
+	${os_name}/gamefallout3_${os_name}.cpp
 	gamefallout3.h
 )
 mo2_configure_plugin(game_fallout3 NO_SOURCES WARNINGS 4)

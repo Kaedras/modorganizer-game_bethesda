@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_fallout4 SHARED
 	fallout4bsainvalidation.cpp
 	fallout4bsainvalidation.h
@@ -14,6 +20,7 @@ add_library(game_fallout4 SHARED
 	fallout4unmanagedmods.cpp
 	fallout4unmanagedmods.h
 	gamefallout4.cpp
+	${os_name}/gamefallout4_${os_name}.cpp
 	gamefallout4.h
 )
 mo2_configure_plugin(game_fallout4 NO_SOURCES WARNINGS 4)

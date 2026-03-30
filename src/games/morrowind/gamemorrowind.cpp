@@ -21,12 +21,6 @@
 
 #include <QtDebug>
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <linux/compatibility.h>
-#endif
-
 #include <exception>
 #include <memory>
 #include <stdexcept>
@@ -80,18 +74,6 @@ QDir GameMorrowind::savesDirectory() const
 QDir GameMorrowind::documentsDirectory() const
 {
   return gameDirectory();
-}
-
-QList<ExecutableInfo> GameMorrowind::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("MWSE (Launcher Method)",
-                           findInGameFolder("MWSE Launcher.exe"))
-         << ExecutableInfo("Morrowind", findInGameFolder(binaryName()))
-         << ExecutableInfo("Morrowind Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("MGE XE", findInGameFolder("MGEXEgui.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Morrowind\"");
 }
 
 QList<ExecutableForcedLoadSetting> GameMorrowind::executableForcedLoads() const

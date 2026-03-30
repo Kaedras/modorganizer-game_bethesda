@@ -107,22 +107,6 @@ void GameFallout3::detectGame()
   m_MyGamesPath = determineMyGamesPath("Fallout3");
 }
 
-QList<ExecutableInfo> GameFallout3::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("FOSE",
-                           findInGameFolder(m_Organizer->gameFeatures()
-                                                ->gameFeature<MOBase::ScriptExtender>()
-                                                ->loaderName()))
-         << ExecutableInfo("Fallout 3", findInGameFolder(binaryName()))
-         << ExecutableInfo("Fallout Mod Manager", findInGameFolder("fomm/fomm.exe"))
-         << ExecutableInfo("Construction Kit", findInGameFolder("geck.exe"))
-         << ExecutableInfo("Fallout Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("BOSS", findInGameFolder("BOSS/BOSS.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Fallout3\"");
-}
-
 QList<ExecutableForcedLoadSetting> GameFallout3::executableForcedLoads() const
 {
   return QList<ExecutableForcedLoadSetting>();

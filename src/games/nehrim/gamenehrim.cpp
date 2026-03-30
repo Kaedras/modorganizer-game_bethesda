@@ -19,9 +19,6 @@
 #include <QFileInfo>
 
 #include <memory>
-#ifdef __unix__
-#include <steamutility.h>
-#endif
 
 using namespace MOBase;
 
@@ -49,20 +46,6 @@ bool GameNehrim::init(IOrganizer* moInfo)
 QString GameNehrim::gameName() const
 {
   return "Nehrim";
-}
-
-QList<ExecutableInfo> GameNehrim::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("Nehrim", findInGameFolder("Oblivion.exe"))
-         << ExecutableInfo("Nehrim Launcher", findInGameFolder("NehrimLauncher.exe"))
-         << ExecutableInfo("Oblivion Mod Manager",
-                           findInGameFolder("OblivionModManager.exe"))
-         << ExecutableInfo("BOSS", findInGameFolder("BOSS/BOSS.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Nehrim\"")
-         << ExecutableInfo("Construction Set",
-                           findInGameFolder("TESConstructionSet.exe"));
 }
 
 QList<ExecutableForcedLoadSetting> GameNehrim::executableForcedLoads() const
@@ -189,22 +172,6 @@ QStringList GameNehrim::primarySources() const
 QStringList GameNehrim::validShortNames() const
 {
   return {"Oblivion"};
-}
-
-QString GameNehrim::identifyGamePath() const
-{
-#ifdef _WIN32
-  QString path     = "Software\\Bethesda Softworks\\Oblivion";
-  QString location = findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
-                                    L"Installed Path");
-#else
-  QString location = findSteamGame("Nehrim", "NehrimFiles/Data/Nehrim.esm");
-#endif
-
-  if (!location.isEmpty()) {
-    location.append("/NehrimFiles");
-  }
-  return location;
 }
 
 QString GameNehrim::binaryName() const

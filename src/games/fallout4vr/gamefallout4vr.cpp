@@ -25,10 +25,6 @@
 
 #include "scopeguard.h"
 
-#ifdef __unix__
-#include <steamutility.h>
-#endif
-
 using namespace MOBase;
 
 GameFallout4VR::GameFallout4VR() {}
@@ -60,15 +56,6 @@ void GameFallout4VR::detectGame()
 {
   m_GamePath    = identifyGamePath();
   m_MyGamesPath = determineMyGamesPath("Fallout4VR");
-}
-
-QList<ExecutableInfo> GameFallout4VR::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("Fallout 4 VR", findInGameFolder(binaryName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Fallout4VR\"");
 }
 
 QList<ExecutableForcedLoadSetting> GameFallout4VR::executableForcedLoads() const
@@ -241,15 +228,4 @@ QString GameFallout4VR::getLauncherName() const
 {
   return binaryName();  // Fallout 4 VR has no Launcher, so we just return the name of
                         // the game binary
-}
-
-QString GameFallout4VR::identifyGamePath() const
-{
-#ifdef _WIN32
-  QString path = "Software\\Bethesda Softworks\\" + gameName();
-  return findInRegistry(HKEY_LOCAL_MACHINE, path.toStdWString().c_str(),
-                        L"Installed Path");
-#else
-  return findSteamGame(gameName(), "Data/Fallout4.esm");
-#endif
 }

@@ -53,12 +53,6 @@ void GameFallout76::detectGame()
   m_MyGamesPath = determineMyGamesPath(gameName());
 }
 
-QList<ExecutableInfo> GameFallout76::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("Fallout 76", findInGameFolder(binaryName()));
-}
-
 QList<ExecutableForcedLoadSetting> GameFallout76::executableForcedLoads() const
 {
   return {};

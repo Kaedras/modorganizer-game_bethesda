@@ -89,20 +89,6 @@ QMap<QString, QDir> GameStarfield::secondaryDataDirectories() const
   return directories;
 }
 
-QList<ExecutableInfo> GameStarfield::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("SFSE",
-                           findInGameFolder(m_Organizer->gameFeatures()
-                                                ->gameFeature<MOBase::ScriptExtender>()
-                                                ->loaderName()))
-         << ExecutableInfo("Starfield", findInGameFolder(binaryName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("2722710")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Starfield\"");
-}
-
 QList<ExecutableForcedLoadSetting> GameStarfield::executableForcedLoads() const
 {
   return QList<ExecutableForcedLoadSetting>();

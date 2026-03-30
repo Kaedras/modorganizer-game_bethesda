@@ -66,21 +66,6 @@ void GameFallout4::detectGame()
   m_MyGamesPath = determineMyGamesPath("Fallout4");
 }
 
-QList<ExecutableInfo> GameFallout4::executables() const
-{
-  return QList<ExecutableInfo>()
-         << ExecutableInfo("F4SE",
-                           findInGameFolder(m_Organizer->gameFeatures()
-                                                ->gameFeature<MOBase::ScriptExtender>()
-                                                ->loaderName()))
-         << ExecutableInfo("Fallout 4", findInGameFolder(binaryName()))
-         << ExecutableInfo("Fallout Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("1946160")
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Fallout4\"");
-}
-
 QList<ExecutableForcedLoadSetting> GameFallout4::executableForcedLoads() const
 {
   return QList<ExecutableForcedLoadSetting>();

@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (UNIX)
+	set(os_name linux)
+else()
+	set(os_name win32)
+endif()
+
 add_library(game_fallout4vr SHARED
 	fallout4vrdataarchives.cpp
 	fallout4vrdataarchives.h
@@ -14,6 +20,7 @@ add_library(game_fallout4vr SHARED
 	fallout4vrunmanagedmods.cpp
 	fallout4vrunmanagedmods.h
 	gamefallout4vr.cpp
+	${os_name}/gamefallout4vr_${os_name}.cpp
 	gamefallout4vr.h
 )
 mo2_configure_plugin(game_fallout4vr NO_SOURCES WARNINGS 4)

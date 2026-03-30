@@ -60,21 +60,6 @@ QString GameEnderal::gameName() const
   return "Enderal";
 }
 
-QList<ExecutableInfo> GameEnderal::executables() const
-{
-  return QList<ExecutableInfo>()
-         //<< ExecutableInfo("SKSE",
-         // findInGameFolder(feature<ScriptExtender>()->loaderName()))
-         //<< ExecutableInfo("SBW", findInGameFolder("SBW.exe"))
-         << ExecutableInfo("Enderal (SKSE)", findInGameFolder(binaryName()))
-         << ExecutableInfo("Enderal Launcher", findInGameFolder(getLauncherName()))
-         << ExecutableInfo("BOSS", findInGameFolder("BOSS/BOSS.exe"))
-         << ExecutableInfo("LOOT", QFileInfo(getLootPath()))
-                .withArgument("--game=\"Enderal\"")
-         << ExecutableInfo("Creation Kit", findInGameFolder("CreationKit.exe"))
-                .withSteamAppId("202480");
-}
-
 QList<ExecutableForcedLoadSetting> GameEnderal::executableForcedLoads() const
 {
   return QList<ExecutableForcedLoadSetting>();
