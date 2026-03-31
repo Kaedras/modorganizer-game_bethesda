@@ -7,6 +7,7 @@
 #include <gamebryosavegameinfo.h>
 #include <ipluginlist.h>
 #include <pluginsetting.h>
+#include <scriptextender.h>
 #include <utility.h>
 
 #include <QCoreApplication>
