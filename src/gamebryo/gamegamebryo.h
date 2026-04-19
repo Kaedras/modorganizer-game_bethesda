@@ -85,6 +85,7 @@ public:  // IPluginGame interface
   // iniFiles
   // DLCPlugins
   // CCPlugins
+  // blueprintPrefix
   virtual LoadOrderMechanism loadOrderMechanism() const override;
   virtual SortMechanism sortMechanism() const override;
   // nexusModOrganizerID
