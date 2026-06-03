@@ -6,6 +6,7 @@
 #include <Knownfolders.h>
 #include <QDirIterator>
 #include <QJsonDocument>
+#include <QJsonValue>
 #include <QStandardPaths>
 #include <Shlobj.h>
 #include <Windows.h>
