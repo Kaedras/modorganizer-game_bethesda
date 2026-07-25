@@ -164,7 +164,6 @@ protected:
 #ifdef __unix__
   QString m_PrefixPath;
   QString m_PrefixUserPath;
-  bool m_isProton;
 #endif
   QString m_MyGamesPath;
   QString m_GameVariant;

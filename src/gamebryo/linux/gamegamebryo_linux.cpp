@@ -17,51 +17,59 @@ using namespace MOBase;
 using namespace Qt::StringLiterals;
 
 // set the default variant to steam to enable getting the appid earlier
-GameGamebryo::GameGamebryo()
-    : m_isProton(true), m_GameVariant(u"Steam"_s), m_Organizer(nullptr)
-{}
+GameGamebryo::GameGamebryo() : m_GameVariant(u"Steam"_s), m_Organizer(nullptr) {}
 
 void GameGamebryo::setPrefixPath(const QString& path)
 {
-  m_PrefixPath = path;
-  QString user;
-
-  // determine whether this prefix is for wine or proton
-  // this is required because of minor differences, e.g. username
-  static const QRegularExpression re(u"/steamapps/compatdata/[0-9]+"_s);
-  if (re.match(m_PrefixPath).hasMatch()) {
-    // assume proton if path contains "/steamapps/compatdata/<appid>"
-    m_isProton = true;
-    user       = u"steamuser"_s;
-
-    // append /pfx to the prefix path
-    if (!m_PrefixPath.endsWith("pfx"_L1) && !m_PrefixPath.endsWith("pfx/"_L1)) {
-      m_PrefixPath += "/pfx"_L1;
-    }
+  // get username
+  // this is steamuser in proton, and the normal username in wine
+  if (QFile::exists(path % "/pfx"_L1)) {
+    m_PrefixUserPath = path % "/pfx/drive_c/users/steamuser"_L1;
   } else {
-    m_isProton = false;
+    bool found = false;
+    QDir usersDir(path % "/drive_c/users"_L1);
+    QStringList userDirs = usersDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    // there are usually two user dirs: Public and the normal user
+    if (userDirs.size() == 2) {
+      for (const QString& dir : userDirs) {
+        if (dir != "Public"_L1) {
+          m_PrefixUserPath = path % "/drive_c/users/"_L1 % dir;
+          found            = true;
+          break;
+        }
+      }
+    } else {
+      // parse user.reg as fallback
+      QFile userReg(path % "/user.reg");
+      if (!userReg.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        log::error("Cannot set prefix path: Error opening {}, {}", userReg.fileName(),
+                   userReg.errorString());
+        return;
+      }
 
-    // there are usually only two user dirs: Public and the normal user
-    QDir usersDir(m_PrefixPath % "/drive_c/users"_L1);
-    for (const QString& dir : usersDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-      if (dir != "Public"_L1) {
-        user = dir;
-        break;
+      const QByteArray data = userReg.readAll();
+      QTextStream in(data);
+      QString line;
+      while (in.readLineInto(&line)) {
+        if (line.startsWith("\"USERPROFILE\"="_L1)) {
+          line.remove(0, 15);
+          line.removeLast();
+          line.replace("\\\\"_L1, "/"_L1);
+          line.replace("C:"_L1, "/drive_c"_L1);
+          m_PrefixUserPath = path % line;
+          found            = true;
+          break;
+        }
       }
     }
-
-    // check if getpwuid() returns something else
-    // TODO: remove this later as it is mainly for testing
-    const passwd* pwd = getpwuid(getuid());
-    if (pwd != nullptr) {
-      if (user != pwd->pw_name) {
-        log::warn("Username mismatch: got {} from wine prefix and {} from getpwuid()",
-                  user, pwd->pw_name);
-      }
+    if (!found) {
+      log::error(
+          "Error setting prefix path: could not find user directory inside prefix");
+      return;
     }
   }
 
-  m_PrefixUserPath = m_PrefixPath % "/drive_c/users/"_L1 % user;
+  m_PrefixPath = path;
   // update m_MyGamesPath
   m_MyGamesPath = m_PrefixUserPath % "/Documents/My Games/"_L1 % gameName();
 }
