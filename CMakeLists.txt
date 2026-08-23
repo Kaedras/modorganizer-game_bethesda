@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 3.16)
 # TODO: clean include directives
 set(MO2_CMAKE_DEPRECATED_UIBASE_INCLUDE ON)
 
-project(game_bethesda)
+project(game_bethesda LANGUAGES CXX)
+
+# for ${CMAKE_INSTALL_LIBDIR}
+include(GNUInstallDirs)
 
 find_package(mo2-cmake CONFIG REQUIRED)
 find_package(Qt6 COMPONENTS Widgets)

@@ -56,4 +56,4 @@ if(UNIX)
 	target_compile_options(game_gamebryo PRIVATE -fPIC)
 endif()
 
-install(FILES $<TARGET_FILE:game_gamebryo> DESTINATION lib)
+install(FILES $<TARGET_FILE:game_gamebryo> DESTINATION ${CMAKE_INSTALL_LIBDIR})

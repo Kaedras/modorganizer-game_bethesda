@@ -12,4 +12,4 @@ if(UNIX)
     target_compile_options(game_creation PRIVATE -fPIC)
 endif()
 
-install(FILES $<TARGET_FILE:game_creation> DESTINATION lib)
+install(FILES $<TARGET_FILE:game_creation> DESTINATION ${CMAKE_INSTALL_LIBDIR})
