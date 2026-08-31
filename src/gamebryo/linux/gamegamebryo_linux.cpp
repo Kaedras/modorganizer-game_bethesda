@@ -2,16 +2,14 @@
 #include "util.h"
 #include "vdf_parser.h"
 
-#include <steamutility.h>
-
+#include <QJsonDocument>
+#include <QJsonValue>
 #include <QRegularExpression>
 #include <QString>
 #include <iostream>
 #include <pwd.h>
 #include <sys/types.h>
 #include <utility.h>
-
-#define STUB() std::cout << __FUNCTION__ << ": STUB\n"
 
 using namespace MOBase;
 using namespace Qt::StringLiterals;
@@ -226,6 +224,34 @@ QString GameGamebryo::determineMyGamesPath(const QString& gameName,
 
 QString GameGamebryo::parseEpicGamesLocation(const QStringList& manifests)
 {
-  STUB();
+  /*
+   * TODO:
+   *  - support native EGS once it's available
+   *  - check for other applications that should be supported besides heroic
+   */
+
+  QString heroicDir =
+      QStandardPaths::locate(QStandardPaths::GenericConfigLocation, u"heroic"_s,
+                             QStandardPaths::LocateDirectory);
+  if (heroicDir.isEmpty()) {
+    return {};
+  }
+
+  QFile installed(heroicDir % "/legendaryConfig/legendary/installed.json"_L1);
+  if (!installed.open(QIODevice::ReadOnly)) {
+    qWarning("Couldn't open Heroic installed.json file.");
+    return {};
+  }
+
+  const QByteArray installedData = installed.readAll();
+  const QJsonDocument installedJson(QJsonDocument::fromJson(installedData));
+
+  for (const auto& manifest : manifests) {
+    const QJsonValue value = installedJson[manifest];
+    if (!value.isUndefined()) {
+      return value["install_path"_L1].toString();
+    }
+  }
+
   return {};
 }
